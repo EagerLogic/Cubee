@@ -16,12 +16,13 @@ public final class EventQueue {
     private static EventQueue instance;
 
     public static EventQueue getInstance() {
-        if (instance != null) {
+        if (instance == null) {
             instance = new EventQueue();
         }
 
         return instance;
     }
+    
     private final LinkedList<Runnable> queue = new LinkedList<Runnable>();
     private final Timer timer;
 
@@ -39,8 +40,8 @@ public final class EventQueue {
                             t.printStackTrace();
                         }
                     }
-                    timer.schedule(1);
                 }
+                timer.schedule(1);
             }
         };
         timer.schedule(10);
