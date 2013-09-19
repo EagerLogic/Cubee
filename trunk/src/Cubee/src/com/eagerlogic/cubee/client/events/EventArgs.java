@@ -16,7 +16,7 @@ public class EventArgs {
         this.sender = sender;
     }
 
-    public Object getSender() {
+    public final Object getSender() {
         return sender;
     }
     
