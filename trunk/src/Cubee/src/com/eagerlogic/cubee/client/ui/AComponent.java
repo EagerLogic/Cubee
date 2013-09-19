@@ -26,6 +26,11 @@ public abstract class AComponent {
     
     private int measuredWidth;
     private int measuredHeight;
+    private int transformedX;
+    private int transformedY;
+    private int transformedWidth;
+    private int transformedHeight;
+    
     
     private ALayout parent;
     private CubeePanel cubeePanel;
@@ -72,8 +77,50 @@ public abstract class AComponent {
     public final CubeePanel getCubeePanel() {
         return cubeePanel;
     }
+
+    public int getClientWidth() {
+        return transformedWidth;
+    }
+
+    public int getClientHeight() {
+        return transformedHeight;
+    }
+
+    public int getClientX() {
+        return transformedX;
+    }
+
+    public int getClientY() {
+        return transformedY;
+    }
     
-    protected abstract void measure();
+    private void calculateTransformedBounds() {
+        // TODO implementálni
+        // TODO calculate transformed bounds
+        this.transformedX = 0;
+        this.transformedY = 0;
+        this.transformedWidth = measuredWidth;
+        this.transformedHeight = measuredHeight;
+    }
+    
+    void setParent(ALayout parent) {
+        this.parent = parent;
+    }
+    
+    void setCubeePanel(CubeePanel cubeePanel) {
+        this.cubeePanel = cubeePanel;
+    }
+    
+    protected void measure() {
+        onMeasure();
+        calculateTransformedBounds();
+    }
+    
+    public final void requestLayout() {
+        
+    }
+    
+    protected abstract void onMeasure();
     public abstract void draw(Context2d ctx);
     
 }
