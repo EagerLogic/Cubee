@@ -11,7 +11,11 @@ package com.eagerlogic.cubee.client.ui;
 public abstract class ALayout extends AComponent {
     
     private final LayoutChildren children = new LayoutChildren(this);
+
+    protected LayoutChildren getChildren() {
+        return children;
+    }
     
-    public abstract void onChildrenChanged();
+    protected abstract void onChildrenChanged();
     
 }

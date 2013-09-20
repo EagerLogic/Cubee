@@ -21,27 +21,41 @@ public final class LayoutChildren implements Iterable<AComponent> {
     }
     
     public void add(AComponent component) {
-        if (component == null) {
-            throw new NullPointerException("The component can not be null.");
-        }
-        
         if (component.getParent() != null || component.getCubeePanel() != null) {
             throw new IllegalStateException("The component is already a child of a layout.");
         }
         
-        component.setParent(parent);
+        if (component != null) {
+            component.setParent(parent);
+        }
         children.add(component);
         parent.onChildrenChanged();
     }
     
     public void remove(AComponent component) {
-        children.remove(component);
+        if (children.remove(component)) {
+            if (component != null) {
+                component.setParent(null);
+            }
+        }
         parent.onChildrenChanged();
     }
     
     public void remove(int index) {
-        children.remove(index);
+        AComponent removedComponent = children.remove(index);
+        if (removedComponent != null) {
+            removedComponent.setParent(null);
+        }
         parent.onChildrenChanged();
+    }
+    
+    public void clear() {
+        for (AComponent component : children) {
+            if (component != null) {
+                component.setParent(null);
+            }
+        }
+        children.clear();
     }
     
     public void get(int index) {

@@ -32,7 +32,9 @@ public final class EventQueue {
             public void run() {
                 int size = queue.size();
                 for (int i = 0; i < size; i++) {
-                    Runnable task = queue.pollFirst();
+                    Runnable task = null;
+                    task = queue.get(0);
+                    queue.remove(0);
                     if (task != null) {
                         try {
                             task.run();
@@ -41,7 +43,7 @@ public final class EventQueue {
                         }
                     }
                 }
-                timer.schedule(1);
+                timer.schedule(2000);
             }
         };
         timer.schedule(10);
