@@ -11,7 +11,7 @@ import java.util.LinkedList;
  *
  * @author dipacs
  */
-public abstract class AExpression<T> implements IProperty, IObservable {
+public abstract class AExpression<T> implements IProperty<T>, IObservable {
     
     private LinkedList<IProperty> bindingSources = new LinkedList<IProperty>();
     private IChangeListener bindingListener = new IChangeListener() {

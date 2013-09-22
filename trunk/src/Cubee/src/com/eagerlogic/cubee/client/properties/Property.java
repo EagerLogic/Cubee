@@ -11,7 +11,7 @@ import java.util.LinkedList;
  *
  * @author dipacs
  */
-public class Property<T> implements IProperty, IAnimateable<T>, IBindable<Property<T>> {
+public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<Property<T>> {
     
     private LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
     private T value;
@@ -20,6 +20,7 @@ public class Property<T> implements IProperty, IAnimateable<T>, IBindable<Proper
     private final boolean readonly;
     private Property<T> bindingSource;
     private IChangeListener bindListener;
+    private IProperty<T> readonlyBind;
 
     public Property(T defaultValue, boolean nullable, boolean readonly) {
         this.value = defaultValue;
@@ -29,13 +30,22 @@ public class Property<T> implements IProperty, IAnimateable<T>, IBindable<Proper
         if (value == null && nullable == false) {
             throw new IllegalArgumentException("A nullable property can not be null.");
         }
-        
-        // TODO readonly bind
+    }
+    
+    public final void initReadonlyBind(IProperty<T> readonlyBind) {
+        if (this.readonlyBind != null) {
+            throw new IllegalStateException("The readonly bind is already initialized.");
+        }
+        this.readonlyBind = readonlyBind;
     }
     
     public final T get() {
         if (bindingSource != null) {
             return bindingSource.get();
+        }
+        
+        if (readonlyBind != null) {
+            return (T) readonlyBind.getObjectValue();
         }
         
         return this.value;
@@ -135,6 +145,10 @@ public class Property<T> implements IProperty, IAnimateable<T>, IBindable<Proper
         
         if (this.bindingSource != null) {
             this.bindingSource.removeChangeListener(this.bindListener);
+        }
+        
+        if (readonly) {
+            throw new IllegalStateException("Can't bind a readonly property.");
         }
         
         this.bindingSource = source;
