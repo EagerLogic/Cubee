@@ -4,6 +4,7 @@ import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.DoubleProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
+import com.eagerlogic.cubee.client.utils.Point2D;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 
@@ -22,14 +23,25 @@ public abstract class AComponent {
 	private final DoubleProperty transformCenterY = new DoubleProperty(0.5, false, false);
 	private final PaddingProperty padding = new PaddingProperty(null, true, false);
 	private final BorderProperty border = new BorderProperty(null, true, false);
+	private final IntegerProperty measuredWidth = new IntegerProperty(0, false, true);
+	private final IntegerProperty measuredHeight = new IntegerProperty(0, false, true);
+	private final IntegerProperty clientWidth = new IntegerProperty(0, false, true);
+	private final IntegerProperty clientHeight = new IntegerProperty(0, false, true);
+	private final IntegerProperty boundsWidth = new IntegerProperty(0, false, true);
+	private final IntegerProperty boundsHeight = new IntegerProperty(0, false, true);
+	private final IntegerProperty boundsLeft = new IntegerProperty(0, false, true);
+	private final IntegerProperty boundsTop = new IntegerProperty(0, false, true);
+	private final IntegerProperty measuredWidthSetter = new IntegerProperty(0, false, false);
+	private final IntegerProperty measuredHeightSetter = new IntegerProperty(0, false, false);
+	private final IntegerProperty clientWidthSetter = new IntegerProperty(0, false, false);
+	private final IntegerProperty clientHeightSetter = new IntegerProperty(0, false, false);
+	private final IntegerProperty boundsWidthSetter = new IntegerProperty(0, false, false);
+	private final IntegerProperty boundsHeightSetter = new IntegerProperty(0, false, false);
+	private final IntegerProperty boundsLeftSetter = new IntegerProperty(0, false, false);
+	private final IntegerProperty boundsTopSetter = new IntegerProperty(0, false, false);
 	
 	private final Element element;
 	private ALayout parent;
-	
-	private int measuredLeft;
-	private int measuredTop;
-	private int measuredWidth;
-	private int measuredHeight;
 	
 	private boolean needsLayout = true;
 	
@@ -99,6 +111,14 @@ public abstract class AComponent {
 				requestLayout();
 			}
 		});
+		measuredWidth.initReadonlyBind(measuredWidthSetter);
+		measuredHeight.initReadonlyBind(measuredHeightSetter);
+		clientWidth.initReadonlyBind(clientWidthSetter);
+		clientHeight.initReadonlyBind(clientHeightSetter);
+		boundsWidth.initReadonlyBind(boundsWidthSetter);
+		boundsHeight.initReadonlyBind(boundsHeightSetter);
+		boundsLeft.initReadonlyBind(boundsLeftSetter);
+		boundsTop.initReadonlyBind(boundsTopSetter);
 	}
 
 	private void updateTransform() {
@@ -132,28 +152,64 @@ public abstract class AComponent {
 		this.needsLayout = false;
 	}
 	
-	protected void onMeasure() {
-		int ow = element.getOffsetWidth();
-		int oh = element.getOffsetHeight();
+	private final void onMeasure() {
+		// calculating client bounds
+		int cw = element.getClientWidth();
+		int ch = element.getClientHeight();
+		Padding p = padding.get();
+		if (p != null) {
+			cw = cw - p.getLeftPadding() - p.getRightPadding();
+			ch = ch - p.getTopPadding() - p.getBottomPadding();
+		}
+		clientWidthSetter.set(cw);
+		clientHeightSetter.set(ch);
 		
+		// calculating measured bounds
+		int mw = element.getOffsetWidth();
+		int mh = element.getOffsetHeight();
+		measuredWidthSetter.set(mw);
+		measuredHeightSetter.set(mh);
+		
+		// calculating parent bounds
 		double tcx = transformCenterX.get();
 		double tcy = transformCenterY.get();
 		
 		double sx = scaleX.get();
 		double sy = scaleY.get();
 		
-		int width = (int) (ow * sx);
-		int height = (int) (oh * sy);
-		
-		int ox = (int) (0 - ((width - ow) * tcx));
-		int oy = (int) (0 - ((height - oh) * tcy));
-		
-		// TODO calculate rotated bounds
-		
-		this.measuredLeft = ox;
-		this.measuredTop = oy;
-		this.measuredWidth = width;
-		this.measuredHeight = height;
+		int bw = (int) (mw * sx);
+		int bh = (int) (mh * sy);
+		int bx = (int) (0 - ((bw - mw) * tcx));
+		int by = (int) (0 - ((bh - mh) * tcy));
+		double rot = rotate.get();
+		if (rot != 0.0) {
+			rot = rot * 360;
+			Point2D tr = rotatePoint(bw, 0, rot);
+			Point2D br = rotatePoint(bw, bh, rot);
+			Point2D bl = rotatePoint(0, bh, rot);
+			int minX = Math.min(Math.min(0, tr.getX()), Math.min(br.getX(), bl.getX()));
+			int minY = Math.min(Math.min(0, tr.getY()), Math.min(br.getY(), bl.getY()));
+			int maxX = Math.max(Math.max(0, tr.getX()), Math.max(br.getX(), bl.getX()));
+			int maxY = Math.max(Math.max(0, tr.getY()), Math.max(br.getY(), bl.getY()));
+			bw = maxX - minX;
+			bh = maxY - minY;
+			bx = minX;
+			by = minY;
+		}
+		boundsLeftSetter.set(bx);
+		boundsTopSetter.set(by);
+		boundsWidthSetter.set(bw);
+		boundsHeightSetter.set(bh);
+	}
+	
+	private Point2D rotatePoint(int x, int y, double angle) {
+		angle = ((angle/180)*Math.PI);
+		double cosAngle = Math.cos(angle);
+		double sinAngle = Math.sin(angle);
+
+		int resX = (int) ((x * cosAngle) - (y * sinAngle));
+		int resY = (int) ((x * sinAngle) + (y * cosAngle));
+		return new Point2D(resX, resY);
 	}
 	
 	public final Element getElement() {
@@ -170,22 +226,6 @@ public abstract class AComponent {
 	
 	public void layout() {
 		measure();
-	}
-
-	public final int getMeasuredLeft() {
-		return measuredLeft;
-	}
-
-	public final int getMeasuredTop() {
-		return measuredTop;
-	}
-
-	public final int getMeasuredWidth() {
-		return measuredWidth;
-	}
-
-	public final int getMeasuredHeight() {
-		return measuredHeight;
 	}
 
 	public boolean isNeedsLayout() {
@@ -226,6 +266,38 @@ public abstract class AComponent {
 
 	protected BorderProperty getBorder() {
 		return border;
+	}
+
+	public IntegerProperty getMeasuredWidth() {
+		return measuredWidth;
+	}
+
+	public IntegerProperty getMeasuredHeight() {
+		return measuredHeight;
+	}
+
+	public IntegerProperty getClientWidth() {
+		return clientWidth;
+	}
+
+	public IntegerProperty getClientHeight() {
+		return clientHeight;
+	}
+
+	public IntegerProperty getBoundsWidth() {
+		return boundsWidth;
+	}
+
+	public IntegerProperty getBoundsHeight() {
+		return boundsHeight;
+	}
+
+	public IntegerProperty getBoundsLeft() {
+		return boundsLeft;
+	}
+
+	public IntegerProperty getBoundsTop() {
+		return boundsTop;
 	}
 	
 }
