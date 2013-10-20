@@ -43,7 +43,7 @@ public final class EventQueue {
                         }
                     }
                 }
-                timer.schedule(2000);
+                timer.schedule(1);
             }
         };
         timer.schedule(10);

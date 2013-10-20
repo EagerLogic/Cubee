@@ -30,6 +30,8 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<Pro
         if (value == null && nullable == false) {
             throw new IllegalArgumentException("A nullable property can not be null.");
         }
+		
+		invalidate();
     }
     
     public final void initReadonlyBind(IProperty<T> readonlyBind) {
@@ -40,6 +42,8 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<Pro
     }
     
     public final T get() {
+		this.valid = true;
+		
         if (bindingSource != null) {
             return bindingSource.get();
         }
@@ -71,10 +75,10 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<Pro
         if (this.value != null && this.value.equals(newValue)) {
             return;
         }
+		
+		this.value = newValue;
         
-        if (valid) {
-            invalidate();
-        }
+        invalidate();
     }
     
     @Override

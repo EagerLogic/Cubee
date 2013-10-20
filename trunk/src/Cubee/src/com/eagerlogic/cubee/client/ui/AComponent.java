@@ -1,212 +1,230 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.eagerlogic.cubee.client.ui;
 
 import com.eagerlogic.cubee.client.properties.DoubleProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
-import com.eagerlogic.cubee.client.properties.Property;
-import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 
 /**
  *
  * @author dipacs
  */
 public abstract class AComponent {
-    
-    private final IntegerProperty x = new IntegerProperty(0, false, false);
-    private final IntegerProperty y = new IntegerProperty(0, false, false);
-    private final DoubleProperty alpha = new DoubleProperty(1.0, false, false);
-    private final DoubleProperty rotate = new DoubleProperty(0.0, false, false);
-    private final IntegerProperty rotateCenterX = new IntegerProperty(0, false, false);
-    private final IntegerProperty rotateCenterY = new IntegerProperty(0, false, false);
-    private final DoubleProperty scaleX = new DoubleProperty(1.0, false, false);
-    private final DoubleProperty scaleY = new DoubleProperty(1.0, false, false);
-    private final IntegerProperty scaleCenterX = new IntegerProperty(0, false, false);
-    private final IntegerProperty scaleCenterY = new IntegerProperty(0, false, false);
-    
-    private int measuredWidth;
-    private int measuredHeight;
-    private int transformedX;
-    private int transformedY;
-    private int transformedWidth;
-    private int transformedHeight;
-    
-    private final IChangeListener invalidateListener = new IChangeListener() {
 
-        @Override
-        public void onChanged(Object sender) {
-            invalidate();
-        }
-    };
-    private final IChangeListener invalidateAndLayoutListener = new IChangeListener() {
+	private final IntegerProperty translateX = new IntegerProperty(0, false, false);
+	private final IntegerProperty translateY = new IntegerProperty(0, false, false);
+	private final DoubleProperty rotate = new DoubleProperty(0.0, false, false);
+	private final DoubleProperty scaleX = new DoubleProperty(1.0, false, false);
+	private final DoubleProperty scaleY = new DoubleProperty(1.0, false, false);
+	private final DoubleProperty transformCenterX = new DoubleProperty(0.5, false, false);
+	private final DoubleProperty transformCenterY = new DoubleProperty(0.5, false, false);
+	private final PaddingProperty padding = new PaddingProperty(null, true, false);
+	private final BorderProperty border = new BorderProperty(null, true, false);
+	
+	private final Element element;
+	private ALayout parent;
+	
+	private int measuredLeft;
+	private int measuredTop;
+	private int measuredWidth;
+	private int measuredHeight;
+	
+	private boolean needsLayout = true;
+	
+	private IChangeListener transformChangedListener = new IChangeListener() {
 
-        @Override
-        public void onChanged(Object sender) {
-            invalidate();
-            requestLayout();
-        }
-    };
-    
-    
-    private ALayout parent;
-    private CubeePanel cubeePanel;
-    
-    private boolean valid = false;
-    private boolean needLayout = true;
+		@Override
+		public void onChanged(Object sender) {
+			updateTransform();
+			requestLayout();
+		}
+	};
+	
+	
+	
 
-    public AComponent() {
-        x.addChangeListener(invalidateAndLayoutListener);
-        y.addChangeListener(invalidateAndLayoutListener);
-        alpha.addChangeListener(invalidateListener);
-        rotate.addChangeListener(invalidateAndLayoutListener);
-        rotateCenterX.addChangeListener(invalidateAndLayoutListener);
-        rotateCenterY.addChangeListener(invalidateAndLayoutListener);
-        scaleX.addChangeListener(invalidateAndLayoutListener);
-        scaleY.addChangeListener(invalidateAndLayoutListener);
-        scaleCenterX.addChangeListener(invalidateAndLayoutListener);
-        scaleCenterY.addChangeListener(invalidateAndLayoutListener);
-    }
+	public AComponent(Element rootElement) {
+		this.element = rootElement;
+		this.element.getStyle().setPosition(Style.Position.ABSOLUTE);
+		translateX.addChangeListener(transformChangedListener);
+		translateY.addChangeListener(transformChangedListener);
+		rotate.addChangeListener(transformChangedListener);
+		scaleX.addChangeListener(transformChangedListener);
+		scaleY.addChangeListener(transformChangedListener);
+		transformCenterX.addChangeListener(transformChangedListener);
+		transformCenterY.addChangeListener(transformChangedListener);
+		padding.addChangeListener(new IChangeListener() {
 
-    protected final int getMeasuredWidth() {
-        return measuredWidth;
-    }
+			@Override
+			public void onChanged(Object sender) {
+				Padding p = padding.get();
+				if (p == null) {
+					getElement().getStyle().setPadding(0.0, Style.Unit.PX);
+				} else {
+					getElement().getStyle().setPaddingLeft(p.getLeftPadding(), Style.Unit.PX);
+					getElement().getStyle().setPaddingTop(p.getTopPadding(), Style.Unit.PX);
+					getElement().getStyle().setPaddingRight(p.getRightPadding(), Style.Unit.PX);
+					getElement().getStyle().setPaddingBottom(p.getBottomPadding(), Style.Unit.PX);
+				}
+				requestLayout();
+			}
+		});
+		border.addChangeListener(new IChangeListener() {
 
-    protected final void setMeasuredWidth(int measuredWidth) {
-        this.measuredWidth = measuredWidth;
-    }
+			@Override
+			public void onChanged(Object sender) {
+				Border b = border.get();
+				if (b == null) {
+					getElement().getStyle().clearBorderStyle();
+					getElement().getStyle().clearBorderColor();
+					getElement().getStyle().clearBorderWidth();
+				} else {
+					getElement().getStyle().setProperty("borderStyle", "solid");
+					getElement().getStyle().setProperty("borderLeftColor", b.getLeftBorderColor().toCSS());
+					getElement().getStyle().setProperty("borderLeftWidth", b.getLeftBorderSize() + "px");
+					getElement().getStyle().setProperty("borderTopColor", b.getTopBorderColor().toCSS());
+					getElement().getStyle().setProperty("borderTopWidth", b.getTopBorderSize() + "px");
+					getElement().getStyle().setProperty("borderRightColor", b.getRightBorderColor().toCSS());
+					getElement().getStyle().setProperty("borderRightWidth", b.getRightBorderSize() + "px");
+					getElement().getStyle().setProperty("borderBottomColor", b.getBottomBorderColor().toCSS());
+					getElement().getStyle().setProperty("borderBottomWidth", b.getBottomBorderSize() + "px");
+					
+					getElement().getStyle().setProperty("borderTopLeftRadius", b.getTopLeftBorderRadius() + "px");
+					getElement().getStyle().setProperty("borderTopRightRadius", b.getTopRightBorderRadius() + "px");
+					getElement().getStyle().setProperty("borderBottomLeftRadius", b.getBottomLeftBorderRadius() + "px");
+					getElement().getStyle().setProperty("borderBottomRightRadius", b.getBottomRightBorderRadius() + "px");
+				}
+				requestLayout();
+			}
+		});
+	}
 
-    protected final int getMeasuredHeight() {
-        return measuredHeight;
-    }
+	private void updateTransform() {
+		double angle = rotate.get();
+		angle = angle - ((int) angle);
+		angle = angle * 360;
+		String angleStr = angle + "deg";
 
-    protected final void setMeasuredHeight(int measuredHeight) {
-        this.measuredHeight = measuredHeight;
-    }
-    
-    public boolean isValid() {
-        return this.valid;
-    }
-    
-    public void invalidate() {
-        if (!this.valid) {
-            return;
-        }
-        this.valid = false;
-        
-        if (this.parent != null) {
-            this.parent.invalidate();
-        } else if (this.cubeePanel != null) {
-            this.cubeePanel.invalidate();
-        }
-    }
+		String centerX = (transformCenterX.get() * 100) + "%";
+		String centerY = (transformCenterY.get() * 100) + "%";
 
-    public final ALayout getParent() {
-        return parent;
-    }
+		String sX = scaleX.get().toString();
+		String sY = scaleY.get().toString();
 
-    public final CubeePanel getCubeePanel() {
-        return cubeePanel;
-    }
+		element.getStyle().setProperty("transformOrigin", centerX + " " + centerY);
+		element.getStyle().setProperty("transform", "translate(" + translateX.get() + "px, " + translateY.get() + "px) rotate(" + angleStr + ") scaleX( " + sX + ") scaleY(" + sY + ")");
+		element.getStyle().setProperty("msTransformOrigin", centerX + " " + centerY);
+		element.getStyle().setProperty("msTransform", "translate(" + translateX.get() + "px, " + translateY.get() + "px) rotate(" + angleStr + ") scaleX( " + sX + ") scaleY(" + sY + ")");
+		element.getStyle().setProperty("webkitTransformOrigin", centerX + " " + centerY);
+		element.getStyle().setProperty("webkitTransform", "translate(" + translateX.get() + "px, " + translateY.get() + "px) rotate(" + angleStr + ") scaleX( " + sX + ") scaleY(" + sY + ")");
+	}
+	
+	public void requestLayout() {
+		if (this.parent != null) {
+			this.parent.requestLayout();
+		}
+	}
+	
+	public final void measure() {
+		onMeasure();
+		this.needsLayout = false;
+	}
+	
+	protected void onMeasure() {
+		int ow = element.getOffsetWidth();
+		int oh = element.getOffsetHeight();
+		
+		double tcx = transformCenterX.get();
+		double tcy = transformCenterY.get();
+		
+		double sx = scaleX.get();
+		double sy = scaleY.get();
+		
+		int width = (int) (ow * sx);
+		int height = (int) (oh * sy);
+		
+		int ox = (int) (0 - ((width - ow) * tcx));
+		int oy = (int) (0 - ((height - oh) * tcy));
+		
+		// TODO calculate rotated bounds
+		
+		this.measuredLeft = ox;
+		this.measuredTop = oy;
+		this.measuredWidth = width;
+		this.measuredHeight = height;
+	}
+	
+	public final Element getElement() {
+		return this.element;
+	}
 
-    public int getTranslatedWidth() {
-        return transformedWidth;
-    }
+	public final ALayout getParent() {
+		return parent;
+	}
 
-    public int getTranslatedHeight() {
-        return transformedHeight;
-    }
+	final void setParent(ALayout parent) {
+		this.parent = parent;
+	}
+	
+	public void layout() {
+		measure();
+	}
 
-    public int getTranslatedX() {
-        return transformedX;
-    }
+	public final int getMeasuredLeft() {
+		return measuredLeft;
+	}
 
-    public int getTranslatedY() {
-        return transformedY;
-    }
-    
-    private void calculateTransformedBounds() {
-        // TODO implementálni
-        // TODO calculate transformed bounds
-        this.transformedX = 0;
-        this.transformedY = 0;
-        this.transformedWidth = measuredWidth;
-        this.transformedHeight = measuredHeight;
-    }
-    
-    void setParent(ALayout parent) {
-        this.parent = parent;
-    }
-    
-    void setCubeePanel(CubeePanel cubeePanel) {
-        this.cubeePanel = cubeePanel;
-    }
-    
-    protected void measure() {
-        onMeasure();
-        calculateTransformedBounds();
-        this.needLayout = false;
-    }
-    
-    public final void requestLayout() {
-        this.needLayout = true;
-        if (this.parent != null) {
-            this.parent.requestLayout();
-        }
-    }
-    
-    public final boolean isNeedLayout() {
-        return this.needLayout;
-    }
+	public final int getMeasuredTop() {
+		return measuredTop;
+	}
 
-    public final IntegerProperty xProperty() {
-        return x;
-    }
+	public final int getMeasuredWidth() {
+		return measuredWidth;
+	}
 
-    public final IntegerProperty yProperty() {
-        return y;
-    }
+	public final int getMeasuredHeight() {
+		return measuredHeight;
+	}
 
-    public final DoubleProperty alphaProperty() {
-        return alpha;
-    }
+	public boolean isNeedsLayout() {
+		return needsLayout;
+	}
 
-    public final DoubleProperty rotateProperty() {
-        return rotate;
-    }
+	public final IntegerProperty getTranslateX() {
+		return translateX;
+	}
 
-    public final IntegerProperty rotateCenterXProperty() {
-        return rotateCenterX;
-    }
+	public final IntegerProperty getTranslateY() {
+		return translateY;
+	}
 
-    public final IntegerProperty rotateCenterYProperty() {
-        return rotateCenterY;
-    }
+	public final DoubleProperty getRotate() {
+		return rotate;
+	}
 
-    public final DoubleProperty scaleXProperty() {
-        return scaleX;
-    }
+	public final DoubleProperty getScaleX() {
+		return scaleX;
+	}
 
-    public final DoubleProperty scaleYProperty() {
-        return scaleY;
-    }
+	public final DoubleProperty getScaleY() {
+		return scaleY;
+	}
 
-    public final IntegerProperty scaleCenterXProperty() {
-        return scaleCenterX;
-    }
+	public final DoubleProperty getTransformCenterX() {
+		return transformCenterX;
+	}
 
-    public final IntegerProperty scaleCenterYProperty() {
-        return scaleCenterY;
-    }
-    
-    public void draw(Context2d ctx) {
-        this.onDraw(ctx);
-        this.valid = true;
-    }
-    
-    protected abstract void onMeasure();
-    protected abstract void onDraw(Context2d ctx);
-    
+	public final DoubleProperty getTransformCenterY() {
+		return transformCenterY;
+	}
+
+	protected PaddingProperty getPadding() {
+		return padding;
+	}
+
+	protected BorderProperty getBorder() {
+		return border;
+	}
+	
 }

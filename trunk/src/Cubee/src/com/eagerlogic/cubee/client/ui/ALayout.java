@@ -1,21 +1,37 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.eagerlogic.cubee.client.ui;
+
+import com.google.gwt.dom.client.Element;
 
 /**
  *
  * @author dipacs
  */
 public abstract class ALayout extends AComponent {
-    
-    private final LayoutChildren children = new LayoutChildren(this);
+	
+	private final LayoutChildren children = new LayoutChildren(this);
 
-    protected LayoutChildren getChildren() {
-        return children;
-    }
-    
-    protected abstract void onChildrenChanged();
-    
+	public ALayout(Element element) {
+		super(element);
+	}
+
+	protected LayoutChildren getChildren() {
+		return children;
+	}
+	
+	protected abstract void onChildAdded(AComponent child);
+	protected abstract void onChildRemoved(AComponent child);
+	protected abstract void onChildrenCleared();
+	
+	@Override
+	public final void layout() {
+		for (AComponent child : getChildren()) {
+			if (child.isNeedsLayout()) {
+				child.layout();
+			}
+		}
+		this.measure();
+	}
+	
+	protected abstract void onLayout();
+
 }

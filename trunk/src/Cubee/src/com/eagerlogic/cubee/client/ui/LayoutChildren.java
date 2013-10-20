@@ -21,24 +21,22 @@ public final class LayoutChildren implements Iterable<AComponent> {
     }
     
     public void add(AComponent component) {
-        if (component.getParent() != null || component.getCubeePanel() != null) {
+        if (component.getParent() != null) {
             throw new IllegalStateException("The component is already a child of a layout.");
         }
         
-        if (component != null) {
-            component.setParent(parent);
-        }
+        component.setParent(parent);
+		
         children.add(component);
-        parent.onChildrenChanged();
+        parent.onChildAdded(component);
     }
     
     public void remove(AComponent component) {
-        if (children.remove(component)) {
-            if (component != null) {
-                component.setParent(null);
-            }
-        }
-        parent.onChildrenChanged();
+		int idx = children.indexOf(component);
+		if (idx < 0) {
+			throw new IllegalArgumentException("The given component isn't a child of this layout.");
+		}
+		remove(idx);
     }
     
     public void remove(int index) {
@@ -46,7 +44,7 @@ public final class LayoutChildren implements Iterable<AComponent> {
         if (removedComponent != null) {
             removedComponent.setParent(null);
         }
-        parent.onChildrenChanged();
+        parent.onChildRemoved(removedComponent);
     }
     
     public void clear() {
@@ -56,6 +54,7 @@ public final class LayoutChildren implements Iterable<AComponent> {
             }
         }
         children.clear();
+		parent.onChildrenCleared();
     }
     
     public void get(int index) {
@@ -72,6 +71,7 @@ public final class LayoutChildren implements Iterable<AComponent> {
 
     @Override
     public Iterator<AComponent> iterator() {
+		// TODO create iterator which notifies parent when element is removed.
         return children.iterator();
     }
     

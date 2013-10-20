@@ -1,91 +1,49 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.eagerlogic.cubee.client.ui;
 
-import com.eagerlogic.cubee.client.EventQueue;
-import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SimplePanel;
-import java.util.ArrayList;
+import com.eagerlogic.cubee.client.properties.IntegerProperty;
+import com.eagerlogic.cubee.client.utils.ARunOnce;
+import com.google.gwt.dom.client.Style;
 
 /**
  *
  * @author dipacs
  */
-public class CubeePanel extends SimplePanel implements Runnable {
+public final class CubeePanel extends AUserControl {
+	
+	private final ARunOnce layoutRunOnce = new ARunOnce() {
 
-    private final Canvas canvas;
-    private final AbsoluteLayout rootLayout = new AbsoluteLayout();
-    private AComponent root;
-    private boolean valid = false;
+		@Override
+		protected void onRun() {
+			layout();
+		}
+	};
 
-    public CubeePanel() {
-        if (!Canvas.isSupported()) {
-            throw new UnsupportedOperationException("The canvas isn't supported in this browser.");
-        }
+	public CubeePanel() {
+		getElement().getStyle().setLeft(0, Style.Unit.PX);
+		getElement().getStyle().setTop(0, Style.Unit.PX);
+		getElement().getStyle().setRight(0, Style.Unit.PX);
+		getElement().getStyle().setBottom(0, Style.Unit.PX);
+		requestLayout();
+	}
 
-        this.canvas = Canvas.createIfSupported();
-        Window.addResizeHandler(new ResizeHandler() {
-            @Override
-            public void onResize(ResizeEvent event) {
-                canvas.setWidth(event.getWidth() + "px");
-                canvas.setHeight(event.getHeight() + "px");
-            }
-        });
+	@Override
+	public void requestLayout() {
+		layoutRunOnce.run();
+	}
 
-        EventQueue.getInstance().invokeLater(new Runnable() {
+	@Override
+	public LayoutChildren getChildren() {
+		return super.getChildren();
+	}
 
-            @Override
-            public void run() {
-                canvas.setWidth(getElement().getClientWidth() + "px");
-                canvas.setHeight(getElement().getClientHeight() + "px");
-            }
-        });
-        
-        canvas.setWidth(this.getElement().getClientWidth() + "px");
-        canvas.setHeight(this.getElement().getClientHeight() + "px");
-        this.add(canvas);
+	@Override
+	protected IntegerProperty getWidth() {
+		return super.getWidth();
+	}
 
-        EventQueue.getInstance().invokeLater(this);
-    }
+	@Override
+	protected IntegerProperty getHeight() {
+		return super.getHeight();
+	}
 
-    public void setRoot(AComponent root) {
-        this.root = root;
-        this.rootLayout.getChildren().clear();
-        this.rootLayout.getChildren().add(root);
-    }
-
-    boolean isValid() {
-        return this.rootLayout.isValid();
-    }
-
-    void invalidate() {
-        this.rootLayout.invalidate();
-        this.rootLayout.requestLayout();
-    }
-
-    void draw(Context2d ctx) {
-        this.rootLayout.draw(ctx);
-    }
-
-    @Override
-    public void run() {
-        if (!isValid()) {
-            try {
-                this.rootLayout.measure();
-                draw(canvas.getContext2d());
-            } catch (Throwable t) {
-                t.printStackTrace();
-            } finally {
-                EventQueue.getInstance().invokeLater(this);
-            }
-        }
-    }
 }
