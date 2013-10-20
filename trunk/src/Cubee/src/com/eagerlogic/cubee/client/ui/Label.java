@@ -24,6 +24,7 @@ public final class Label extends AUserControl {
 	private final BooleanProperty italic = new BooleanProperty(false, false, false);
 	private final BooleanProperty underline = new BooleanProperty(false, false, false);
 	private final IntegerProperty fontSize = new IntegerProperty(12, false, false);
+	private final Property<FontFamily> fontFamily = new Property<FontFamily>(FontFamily.Arial, false, false);
 	
 	public Label() {
 		text.addChangeListener(new IChangeListener() {
@@ -136,6 +137,14 @@ public final class Label extends AUserControl {
 			}
 		});
 		fontSize.invalidate();
+		fontFamily.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				getElement().getStyle().setProperty("fontFamily", fontFamily.get().toCSS());
+			}
+		});
+		fontFamily.invalidate();
 	}
 
 	@Override
