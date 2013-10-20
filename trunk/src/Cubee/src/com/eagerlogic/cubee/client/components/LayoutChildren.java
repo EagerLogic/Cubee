@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.components;
 
 import java.util.Iterator;
 import java.util.LinkedList;

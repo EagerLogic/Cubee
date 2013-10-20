@@ -1,10 +1,12 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.styles;
+
+import com.google.gwt.dom.client.Element;
 
 /**
  *
  * @author dipacs
  */
-public class FontFamily {
+public class FontFamily implements IStyle {
 	
 	public static final FontFamily Georgia = new FontFamily("Georgia, serif");
     public static final FontFamily PalatinoLinotype = new FontFamily("'Palatino Linotype', 'Book Antiqua', Palatino, serif");
@@ -29,5 +31,10 @@ public class FontFamily {
     public String toCSS() {
         return this.css;
     }
+
+	@Override
+	public void apply(Element element) {
+		element.getStyle().setProperty("fontFamily", css);
+	}
 
 }

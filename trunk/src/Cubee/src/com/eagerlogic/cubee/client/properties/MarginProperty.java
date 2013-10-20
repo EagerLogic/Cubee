@@ -1,7 +1,7 @@
 package com.eagerlogic.cubee.client.properties;
 
 import com.eagerlogic.cubee.client.properties.Property;
-import com.eagerlogic.cubee.client.ui.Margin;
+import com.eagerlogic.cubee.client.styles.Margin;
 
 /**
  *

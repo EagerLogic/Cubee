@@ -1,5 +1,11 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.styles.Color;
+import com.eagerlogic.cubee.client.styles.EVAlign;
+import com.eagerlogic.cubee.client.styles.ETextOverflow;
+import com.eagerlogic.cubee.client.styles.ETextAlign;
+import com.eagerlogic.cubee.client.styles.FontFamily;
+import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.ColorProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
@@ -39,13 +45,8 @@ public final class Label extends AUserControl {
 
 			@Override
 			public void onChanged(Object sender) {
-				if (textOverFlow.get() == ETextOverflow.CLIP) {
-					getElement().getStyle().setTextOverflow(Style.TextOverflow.CLIP);
-				} else if (textOverFlow.get() == ETextOverflow.WRAP) {
-					getElement().getStyle().clearTextOverflow();
-				} else {
-					getElement().getStyle().setTextOverflow(Style.TextOverflow.ELLIPSIS);
-				}
+				textOverFlow.get().apply(getElement());
+				requestLayout();
 			}
 		});
 		textOverFlow.invalidate();
@@ -65,16 +66,7 @@ public final class Label extends AUserControl {
 
 			@Override
 			public void onChanged(Object sender) {
-				ETextAlign ta = textAlign.get();
-				if (ta == ETextAlign.LEFT) {
-					getElement().getStyle().setTextAlign(Style.TextAlign.LEFT);
-				} else if (ta == ETextAlign.CENTER) {
-					getElement().getStyle().setTextAlign(Style.TextAlign.CENTER);
-				} else if (ta == ETextAlign.RIGHT) {
-					getElement().getStyle().setTextAlign(Style.TextAlign.RIGHT);
-				} else if (ta == ETextAlign.JUSTIFY) {
-					getElement().getStyle().setTextAlign(Style.TextAlign.JUSTIFY);
-				}
+				textAlign.get().apply(getElement());
 			}
 		});
 		textAlign.invalidate();
@@ -102,6 +94,7 @@ public final class Label extends AUserControl {
 				} else {
 					getElement().getStyle().setTextDecoration(Style.TextDecoration.NONE);
 				}
+				requestLayout();
 			}
 		});
 		underline.invalidate();
@@ -114,6 +107,7 @@ public final class Label extends AUserControl {
 				} else {
 					getElement().getStyle().setFontWeight(Style.FontWeight.NORMAL);
 				}
+				requestLayout();
 			}
 		});
 		bold.invalidate();
@@ -126,6 +120,7 @@ public final class Label extends AUserControl {
 				} else {
 					getElement().getStyle().setFontStyle(Style.FontStyle.NORMAL);
 				}
+				requestLayout();
 			}
 		});
 		italic.invalidate();
@@ -134,6 +129,7 @@ public final class Label extends AUserControl {
 			@Override
 			public void onChanged(Object sender) {
 				getElement().getStyle().setFontSize(fontSize.get(), Style.Unit.PX);
+				requestLayout();
 			}
 		});
 		fontSize.invalidate();
@@ -141,7 +137,8 @@ public final class Label extends AUserControl {
 
 			@Override
 			public void onChanged(Object sender) {
-				getElement().getStyle().setProperty("fontFamily", fontFamily.get().toCSS());
+				fontFamily.get().apply(getElement());
+				requestLayout();
 			}
 		});
 		fontFamily.invalidate();

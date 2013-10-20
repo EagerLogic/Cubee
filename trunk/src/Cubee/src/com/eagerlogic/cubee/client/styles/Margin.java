@@ -1,10 +1,12 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.styles;
+
+import com.google.gwt.dom.client.Element;
 
 /**
  *
  * @author dipacs
  */
-public final class Margin {
+public final class Margin implements IStyle {
 	
 	private final int leftMargin;
 	private final int topMargin;
@@ -73,6 +75,12 @@ public final class Margin {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void apply(Element element) {
+		// TODO implementálni
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 }

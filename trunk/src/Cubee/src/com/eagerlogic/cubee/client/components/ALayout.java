@@ -1,4 +1,4 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.components;
 
 import com.google.gwt.dom.client.Element;
 

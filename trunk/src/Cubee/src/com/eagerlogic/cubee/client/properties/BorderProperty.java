@@ -1,5 +1,6 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.properties;
 
+import com.eagerlogic.cubee.client.styles.Border;
 import com.eagerlogic.cubee.client.properties.Property;
 
 /**

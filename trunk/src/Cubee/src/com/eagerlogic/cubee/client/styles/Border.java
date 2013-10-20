@@ -1,21 +1,22 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.styles;
+
+import com.eagerlogic.cubee.client.styles.IStyle;
+import com.google.gwt.dom.client.Element;
 
 /**
  *
  * @author dipacs
  */
-public final class Border {
-	
+public final class Border implements IStyle {
+
 	private final int leftBorderSize;
 	private final int topBorderSize;
 	private final int rightBorderSize;
 	private final int bottomBorderSize;
-	
 	private final Color leftBorderColor;
 	private final Color topBorderColor;
 	private final Color rightBorderColor;
 	private final Color bottomBorderColor;
-	
 	private final int topLeftBorderRadius;
 	private final int topRightBorderRadius;
 	private final int bottomRightBorderRadius;
@@ -36,8 +37,8 @@ public final class Border {
 		this.bottomLeftBorderRadius = radius;
 	}
 
-	public Border(int leftBorderSize, int topBorderSize, int rightBorderSize, int bottomBorderSize, 
-			Color leftBorderColor, Color topBorderColor, Color rightBorderColor, Color bottomBorderColor, 
+	public Border(int leftBorderSize, int topBorderSize, int rightBorderSize, int bottomBorderSize,
+			Color leftBorderColor, Color topBorderColor, Color rightBorderColor, Color bottomBorderColor,
 			int topLeftBorderRadius, int topRightBorderRadius, int bottomRightBorderRadius, int bottomLeftBorderRadius) {
 		this.leftBorderSize = leftBorderSize;
 		this.topBorderSize = topBorderSize;
@@ -101,4 +102,21 @@ public final class Border {
 		return bottomLeftBorderRadius;
 	}
 
+	@Override
+	public void apply(Element element) {
+		element.getStyle().setProperty("borderStyle", "solid");
+		element.getStyle().setProperty("borderLeftColor", this.getLeftBorderColor().toCSS());
+		element.getStyle().setProperty("borderLeftWidth", this.getLeftBorderSize() + "px");
+		element.getStyle().setProperty("borderTopColor", this.getTopBorderColor().toCSS());
+		element.getStyle().setProperty("borderTopWidth", this.getTopBorderSize() + "px");
+		element.getStyle().setProperty("borderRightColor", this.getRightBorderColor().toCSS());
+		element.getStyle().setProperty("borderRightWidth", this.getRightBorderSize() + "px");
+		element.getStyle().setProperty("borderBottomColor", this.getBottomBorderColor().toCSS());
+		element.getStyle().setProperty("borderBottomWidth", this.getBottomBorderSize() + "px");
+
+		element.getStyle().setProperty("borderTopLeftRadius", this.getTopLeftBorderRadius() + "px");
+		element.getStyle().setProperty("borderTopRightRadius", this.getTopRightBorderRadius() + "px");
+		element.getStyle().setProperty("borderBottomLeftRadius", this.getBottomLeftBorderRadius() + "px");
+		element.getStyle().setProperty("borderBottomRightRadius", this.getBottomRightBorderRadius() + "px");
+	}
 }

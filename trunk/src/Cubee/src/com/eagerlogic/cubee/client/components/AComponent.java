@@ -1,5 +1,8 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.styles.Padding;
+import com.eagerlogic.cubee.client.properties.BorderProperty;
+import com.eagerlogic.cubee.client.styles.Border;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.DoubleProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
@@ -75,10 +78,7 @@ public abstract class AComponent {
 				if (p == null) {
 					getElement().getStyle().setPadding(0.0, Style.Unit.PX);
 				} else {
-					getElement().getStyle().setPaddingLeft(p.getLeftPadding(), Style.Unit.PX);
-					getElement().getStyle().setPaddingTop(p.getTopPadding(), Style.Unit.PX);
-					getElement().getStyle().setPaddingRight(p.getRightPadding(), Style.Unit.PX);
-					getElement().getStyle().setPaddingBottom(p.getBottomPadding(), Style.Unit.PX);
+					p.apply(getElement());
 				}
 				requestLayout();
 			}
@@ -93,20 +93,7 @@ public abstract class AComponent {
 					getElement().getStyle().clearBorderColor();
 					getElement().getStyle().clearBorderWidth();
 				} else {
-					getElement().getStyle().setProperty("borderStyle", "solid");
-					getElement().getStyle().setProperty("borderLeftColor", b.getLeftBorderColor().toCSS());
-					getElement().getStyle().setProperty("borderLeftWidth", b.getLeftBorderSize() + "px");
-					getElement().getStyle().setProperty("borderTopColor", b.getTopBorderColor().toCSS());
-					getElement().getStyle().setProperty("borderTopWidth", b.getTopBorderSize() + "px");
-					getElement().getStyle().setProperty("borderRightColor", b.getRightBorderColor().toCSS());
-					getElement().getStyle().setProperty("borderRightWidth", b.getRightBorderSize() + "px");
-					getElement().getStyle().setProperty("borderBottomColor", b.getBottomBorderColor().toCSS());
-					getElement().getStyle().setProperty("borderBottomWidth", b.getBottomBorderSize() + "px");
-					
-					getElement().getStyle().setProperty("borderTopLeftRadius", b.getTopLeftBorderRadius() + "px");
-					getElement().getStyle().setProperty("borderTopRightRadius", b.getTopRightBorderRadius() + "px");
-					getElement().getStyle().setProperty("borderBottomLeftRadius", b.getBottomLeftBorderRadius() + "px");
-					getElement().getStyle().setProperty("borderBottomRightRadius", b.getBottomRightBorderRadius() + "px");
+					b.apply(getElement());
 				}
 				requestLayout();
 			}

@@ -1,6 +1,6 @@
 package com.eagerlogic.cubee.client.properties;
 
-import com.eagerlogic.cubee.client.ui.Color;
+import com.eagerlogic.cubee.client.styles.Color;
 
 /**
  *

@@ -1,11 +1,14 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.styles;
+
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 
 /**
  *
  * @author dipacs
  */
-public final class Padding {
-	
+public final class Padding implements IStyle {
+
 	private final int leftPadding;
 	private final int topPadding;
 	private final int rightPadding;
@@ -41,4 +44,11 @@ public final class Padding {
 		return bottomPadding;
 	}
 
+	@Override
+	public void apply(Element element) {
+		element.getStyle().setPaddingLeft(this.getLeftPadding(), Style.Unit.PX);
+		element.getStyle().setPaddingTop(this.getTopPadding(), Style.Unit.PX);
+		element.getStyle().setPaddingRight(this.getRightPadding(), Style.Unit.PX);
+		element.getStyle().setPaddingBottom(this.getBottomPadding(), Style.Unit.PX);
+	}
 }

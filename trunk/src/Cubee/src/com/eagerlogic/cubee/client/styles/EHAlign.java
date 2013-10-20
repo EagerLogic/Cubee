@@ -1,4 +1,4 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.styles;
 
 /**
  *

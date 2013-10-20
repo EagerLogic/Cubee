@@ -1,10 +1,12 @@
-package com.eagerlogic.cubee.client.ui;
+package com.eagerlogic.cubee.client.styles;
+
+import com.google.gwt.dom.client.Element;
 
 /**
  *
  * @author dipacs
  */
-public enum ETextAlign {
+public enum ETextAlign implements IStyle {
 	
 	LEFT("left"),
 	CENTER("center"),
@@ -24,6 +26,11 @@ public enum ETextAlign {
 	@Override
 	public String toString() {
 		return cssValue;
+	}
+
+	@Override
+	public void apply(Element element) {
+		element.getStyle().setProperty("textAlign", cssValue);
 	}
 
 }
