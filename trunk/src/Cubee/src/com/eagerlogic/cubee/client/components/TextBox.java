@@ -1,22 +1,26 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
-import com.google.gwt.dom.client.Element;
+import com.eagerlogic.cubee.client.properties.PaddingProperty;
+import com.eagerlogic.cubee.client.properties.StringProperty;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.EventListener;
 
 /**
  *
  * @author dipacs
  */
-public abstract class AUserControl extends ALayout {
-
+public final class TextBox extends AComponent {
+	
 	private final IntegerProperty width = new IntegerProperty(null, true, false);
 	private final IntegerProperty height = new IntegerProperty(null, true, false);
+	private final StringProperty text = new StringProperty("", false, false);
 
-	public AUserControl() {
-		super(DOM.createDiv());
+	public TextBox() {
+		super(DOM.createInputText());
 		width.addChangeListener(new IChangeListener() {
 			@Override
 			public void onChanged(Object sender) {
@@ -43,42 +47,40 @@ public abstract class AUserControl extends ALayout {
 				requestLayout();
 			}
 		});
+		text.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				getElement().setAttribute("value", text.get());
+			}
+		});
+		DOM.setEventListener((com.google.gwt.user.client.Element)getElement(), new EventListener() {
+
+			@Override
+			public void onBrowserEvent(com.google.gwt.user.client.Event event) {
+				if (event.getTypeInt() == com.google.gwt.user.client.Event.ONCHANGE) {
+					text.set(getElement().getAttribute("value"));
+				}
+			}
+		});
 	}
 
-	protected IntegerProperty getWidth() {
+	public IntegerProperty getWidth() {
 		return width;
 	}
 
-	protected IntegerProperty getHeight() {
+	public IntegerProperty getHeight() {
 		return height;
 	}
 
 	@Override
-	protected final void onChildAdded(AComponent child) {
-		if (child != null) {
-			getElement().appendChild(child.getElement());
-		}
+	public PaddingProperty getPadding() {
+		return super.getPadding();
 	}
 
 	@Override
-	protected final void onChildRemoved(AComponent child) {
-		if (child != null) {
-			getElement().removeChild(child.getElement());
-		}
+	public BorderProperty getBorder() {
+		return super.getBorder();
 	}
 
-	@Override
-	protected final void onChildrenCleared() {
-		Element root = getElement();
-		Element e = getElement().getFirstChildElement();
-		while (e != null) {
-			root.removeChild(e);
-			e = root.getFirstChildElement();
-		}
-	}
-
-	@Override
-	protected final void onLayout() {
-		// nothing to do here
-	}
 }
