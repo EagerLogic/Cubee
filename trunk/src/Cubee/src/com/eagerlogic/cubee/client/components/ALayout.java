@@ -19,7 +19,7 @@ public abstract class ALayout extends AComponent {
 	}
 	
 	protected abstract void onChildAdded(AComponent child);
-	protected abstract void onChildRemoved(AComponent child);
+	protected abstract void onChildRemoved(AComponent child, int index);
 	protected abstract void onChildrenCleared();
 	
 	@Override

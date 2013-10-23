@@ -61,7 +61,7 @@ public abstract class AUserControl extends ALayout {
 	}
 
 	@Override
-	protected final void onChildRemoved(AComponent child) {
+	protected final void onChildRemoved(AComponent child, int index) {
 		if (child != null) {
 			getElement().removeChild(child.getElement());
 		}

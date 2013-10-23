@@ -44,7 +44,7 @@ public final class LayoutChildren implements Iterable<AComponent> {
         if (removedComponent != null) {
             removedComponent.setParent(null);
         }
-        parent.onChildRemoved(removedComponent);
+        parent.onChildRemoved(removedComponent, index);
     }
     
     public void clear() {
