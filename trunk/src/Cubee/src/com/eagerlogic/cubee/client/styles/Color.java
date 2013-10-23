@@ -7,6 +7,7 @@ package com.eagerlogic.cubee.client.styles;
 public final class Color {
 	
 	public static final Color BLACK = new Color(0xff000000);
+	public static final Color WHITE = new Color(0xffffffff);
 	public static final Color TRANSPARENT = new Color(0x00000000);
 	
 	public static Color getArgbColor(int argb) {
