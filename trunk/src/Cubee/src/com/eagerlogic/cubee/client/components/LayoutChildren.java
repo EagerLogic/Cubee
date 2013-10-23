@@ -57,8 +57,8 @@ public final class LayoutChildren implements Iterable<AComponent> {
 		parent.onChildrenCleared();
     }
     
-    public void get(int index) {
-        children.get(index);
+    public AComponent get(int index) {
+        return children.get(index);
     }
     
     public int indexOf(AComponent component) {
