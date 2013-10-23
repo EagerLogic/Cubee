@@ -287,4 +287,9 @@ public abstract class AComponent {
 		return boundsTop;
 	}
 	
+	protected void setPosition(int x, int y) {
+		getElement().getStyle().setLeft(x, Style.Unit.PX);
+		getElement().getStyle().setTop(y, Style.Unit.PX);
+	}
+	
 }
