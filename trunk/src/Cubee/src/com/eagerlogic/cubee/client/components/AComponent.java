@@ -5,8 +5,10 @@ import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.styles.Border;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.DoubleProperty;
+import com.eagerlogic.cubee.client.properties.ECursor;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
+import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.utils.Point2D;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
@@ -42,6 +44,7 @@ public abstract class AComponent {
 	private final IntegerProperty boundsHeightSetter = new IntegerProperty(0, false, false);
 	private final IntegerProperty boundsLeftSetter = new IntegerProperty(0, false, false);
 	private final IntegerProperty boundsTopSetter = new IntegerProperty(0, false, false);
+	private final Property<ECursor> cursor = new Property<ECursor>(ECursor.AUTO, false, false);
 	
 	private final Element element;
 	private ALayout parent;
@@ -98,6 +101,14 @@ public abstract class AComponent {
 				requestLayout();
 			}
 		});
+		cursor.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				getElement().getStyle().setProperty("cursor", cursor.get().getCssValue());
+			}
+		});
+		cursor.invalidate();
 		measuredWidth.initReadonlyBind(measuredWidthSetter);
 		measuredHeight.initReadonlyBind(measuredHeightSetter);
 		clientWidth.initReadonlyBind(clientWidthSetter);
@@ -295,6 +306,10 @@ public abstract class AComponent {
 	protected void setSize(int width, int height) {
 		getElement().getStyle().setWidth(width, Style.Unit.PX);
 		getElement().getStyle().setHeight(height, Style.Unit.PX);
+	}
+
+	protected Property<ECursor> cursorProperty() {
+		return cursor;
 	}
 	
 }
