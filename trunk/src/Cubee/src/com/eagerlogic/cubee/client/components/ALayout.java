@@ -29,9 +29,14 @@ public abstract class ALayout extends AComponent {
 				child.layout();
 			}
 		}
+		this.onLayout();
 		this.measure();
 	}
 	
+	/**
+	 * Called by the layout after the children of this layout are measured but before this layout measured. You need to 
+	 * set the size of this layout if needed and set the positions of the children if needed.
+	 */
 	protected abstract void onLayout();
 
 }

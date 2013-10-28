@@ -139,7 +139,7 @@ public abstract class AComponent {
 		this.needsLayout = false;
 	}
 	
-	private final void onMeasure() {
+	private void onMeasure() {
 		// calculating client bounds
 		int cw = element.getClientWidth();
 		int ch = element.getClientHeight();
@@ -219,77 +219,82 @@ public abstract class AComponent {
 		return needsLayout;
 	}
 
-	public final IntegerProperty getTranslateX() {
+	public final IntegerProperty translateXProperty() {
 		return translateX;
 	}
 
-	public final IntegerProperty getTranslateY() {
+	public final IntegerProperty translateYProperty() {
 		return translateY;
 	}
 
-	public final DoubleProperty getRotate() {
+	public final DoubleProperty rotateProperty() {
 		return rotate;
 	}
 
-	public final DoubleProperty getScaleX() {
+	public final DoubleProperty scaleXProperty() {
 		return scaleX;
 	}
 
-	public final DoubleProperty getScaleY() {
+	public final DoubleProperty scaleYProperty() {
 		return scaleY;
 	}
 
-	public final DoubleProperty getTransformCenterX() {
+	public final DoubleProperty transformCenterXProperty() {
 		return transformCenterX;
 	}
 
-	public final DoubleProperty getTransformCenterY() {
+	public final DoubleProperty transformCenterYProperty() {
 		return transformCenterY;
 	}
 
-	protected PaddingProperty getPadding() {
+	protected PaddingProperty paddingProperty() {
 		return padding;
 	}
 
-	protected BorderProperty getBorder() {
+	protected BorderProperty borderProperty() {
 		return border;
 	}
 
-	public IntegerProperty getMeasuredWidth() {
+	public IntegerProperty measuredWidthProperty() {
 		return measuredWidth;
 	}
 
-	public IntegerProperty getMeasuredHeight() {
+	public IntegerProperty measuredHeightProperty() {
 		return measuredHeight;
 	}
 
-	public IntegerProperty getClientWidth() {
+	public IntegerProperty clientWidthProperty() {
 		return clientWidth;
 	}
 
-	public IntegerProperty getClientHeight() {
+	public IntegerProperty clientHeightProperty() {
 		return clientHeight;
 	}
 
-	public IntegerProperty getBoundsWidth() {
+	public IntegerProperty boundsWidthProperty() {
 		return boundsWidth;
 	}
 
-	public IntegerProperty getBoundsHeight() {
+	public IntegerProperty boundsHeightProperty() {
 		return boundsHeight;
 	}
 
-	public IntegerProperty getBoundsLeft() {
+	public IntegerProperty boundsLeftProperty() {
 		return boundsLeft;
 	}
 
-	public IntegerProperty getBoundsTop() {
+	public IntegerProperty boundsTopProperty() {
 		return boundsTop;
 	}
 	
 	protected void setPosition(int x, int y) {
 		getElement().getStyle().setLeft(x, Style.Unit.PX);
 		getElement().getStyle().setTop(y, Style.Unit.PX);
+	}
+	
+	protected void setSize(int width, int height) {
+		getElement().getStyle().setWidth(width, Style.Unit.PX);
+		getElement().getStyle().setHeight(height, Style.Unit.PX);
 	}
 	
 }

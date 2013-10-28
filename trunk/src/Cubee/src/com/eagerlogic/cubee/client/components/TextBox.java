@@ -178,63 +178,75 @@ public class TextBox extends AComponent {
 				}
 			}
 		});
+		background.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (background.get() == null) {
+					// TODO clear background
+				} else {
+					background.get().apply(getElement());
+				}
+			}
+		});
+		background.invalidate();
 	}
 
-	public final IntegerProperty getWidth() {
+	public final IntegerProperty widthProperty() {
 		return width;
 	}
 
-	public final IntegerProperty getHeight() {
+	public final IntegerProperty heightProperty() {
 		return height;
 	}
 
 	@Override
-	public final PaddingProperty getPadding() {
-		return super.getPadding();
+	public final PaddingProperty paddingProperty() {
+		return super.paddingProperty();
 	}
 
 	@Override
-	public final BorderProperty getBorder() {
-		return super.getBorder();
+	public final BorderProperty borderProperty() {
+		return super.borderProperty();
 	}
 
-	public final StringProperty getText() {
+	public final StringProperty textProperty() {
 		return text;
 	}
 
-	public final BackgroundProperty getBackground() {
+	public final BackgroundProperty backgroundProperty() {
 		return background;
 	}
 
-	public final ColorProperty getForeColor() {
+	public final ColorProperty foreColorProperty() {
 		return foreColor;
 	}
 
-	public final Property<ETextAlign> getTextAlign() {
+	public final Property<ETextAlign> textAlignProperty() {
 		return textAlign;
 	}
 
-	public final Property<EVAlign> getVerticalAlign() {
+	public final Property<EVAlign> verticalAlignProperty() {
 		return verticalAlign;
 	}
 
-	public final BooleanProperty getBold() {
+	public final BooleanProperty boldProperty() {
 		return bold;
 	}
 
-	public final BooleanProperty getItalic() {
+	public final BooleanProperty italicProperty() {
 		return italic;
 	}
 
-	public final BooleanProperty getUnderline() {
+	public final BooleanProperty underlineProperty() {
 		return underline;
 	}
 
-	public final IntegerProperty getFontSize() {
+	public final IntegerProperty fontSizeProperty() {
 		return fontSize;
 	}
 
-	public final Property<FontFamily> getFontFamily() {
+	public final Property<FontFamily> fontFamilyProperty() {
 		return fontFamily;
 	}
 

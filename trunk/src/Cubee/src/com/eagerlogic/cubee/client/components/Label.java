@@ -145,58 +145,58 @@ public final class Label extends AUserControl {
 	}
 
 	@Override
-	public final IntegerProperty getWidth() {
-		return super.getWidth();
+	public final IntegerProperty widthProperty() {
+		return super.widthProperty();
 	}
 
 	@Override
-	public final IntegerProperty getHeight() {
-		return super.getHeight();
+	public final IntegerProperty heightProperty() {
+		return super.heightProperty();
 	}
 
-	public final StringProperty getText() {
+	public final StringProperty textProperty() {
 		return text;
 	}
 
-	public final Property<ETextOverflow> getTextOverFlow() {
+	public final Property<ETextOverflow> textOverflowProperty() {
 		return textOverFlow;
 	}
 
 	@Override
-	protected PaddingProperty getPadding() {
-		return super.getPadding();
+	public PaddingProperty paddingProperty() {
+		return super.paddingProperty();
 	}
 
 	@Override
-	protected BorderProperty getBorder() {
-		return super.getBorder();
+	public BorderProperty borderProperty() {
+		return super.borderProperty();
 	}
 
-	public ColorProperty getForeColor() {
+	public ColorProperty foreColorProperty() {
 		return foreColor;
 	}
 
-	public Property<EVAlign> getVerticalAlign() {
+	public Property<EVAlign> verticalAlignProperty() {
 		return verticalAlign;
 	}
 
-	public BooleanProperty getBold() {
+	public BooleanProperty boldProperty() {
 		return bold;
 	}
 
-	public BooleanProperty getItalic() {
+	public BooleanProperty italicProperty() {
 		return italic;
 	}
 
-	public BooleanProperty getUnderline() {
+	public BooleanProperty underlineProperty() {
 		return underline;
 	}
 
-	public Property<ETextAlign> getTextAlign() {
+	public Property<ETextAlign> textAlignProperty() {
 		return textAlign;
 	}
 
-	public IntegerProperty getFontSize() {
+	public IntegerProperty fontSizeProperty() {
 		return fontSize;
 	}
 

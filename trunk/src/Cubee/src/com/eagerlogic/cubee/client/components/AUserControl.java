@@ -1,7 +1,10 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
+import com.eagerlogic.cubee.client.styles.Color;
+import com.eagerlogic.cubee.client.styles.ColorBackground;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
@@ -14,6 +17,7 @@ public abstract class AUserControl extends ALayout {
 
 	private final IntegerProperty width = new IntegerProperty(null, true, false);
 	private final IntegerProperty height = new IntegerProperty(null, true, false);
+	private final BackgroundProperty background = new BackgroundProperty(new ColorBackground(Color.WHITE), true, false);
 
 	public AUserControl() {
 		super(DOM.createDiv());
@@ -30,6 +34,7 @@ public abstract class AUserControl extends ALayout {
 				requestLayout();
 			}
 		});
+		width.invalidate();
 		height.addChangeListener(new IChangeListener() {
 			@Override
 			public void onChanged(Object sender) {
@@ -43,14 +48,31 @@ public abstract class AUserControl extends ALayout {
 				requestLayout();
 			}
 		});
+		height.invalidate();
+		background.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (background.get() == null) {
+					// TODO clear background
+				} else {
+					background.get().apply(getElement());
+				}
+			}
+		});
+		background.invalidate();
 	}
 
-	protected IntegerProperty getWidth() {
+	protected IntegerProperty widthProperty() {
 		return width;
 	}
 
-	protected IntegerProperty getHeight() {
+	protected IntegerProperty heightProperty() {
 		return height;
+	}
+
+	protected BackgroundProperty backgroundProperty() {
+		return background;
 	}
 
 	@Override
@@ -79,6 +101,33 @@ public abstract class AUserControl extends ALayout {
 
 	@Override
 	protected final void onLayout() {
-		// nothing to do here
+		if (widthProperty().get() != null && heightProperty().get() != null) {
+			setSize(widthProperty().get(), heightProperty().get());
+		} else {
+			int maxW = 0;
+			int maxH = 0;
+			for (AComponent component : getChildren()) {
+				int cW = component.boundsWidthProperty().get();
+				int cH = component.boundsHeightProperty().get();
+				
+				if (cW > maxW) {
+					maxW = cW;
+				}
+				
+				if (cH > maxH) {
+					maxH = cH;
+				}
+			}
+			
+			if (widthProperty().get() != null) {
+				maxW = widthProperty().get();
+			}
+			
+			if (heightProperty().get() != null) {
+				maxH = heightProperty().get();
+			}
+			
+			setSize(maxW, maxH);
+		}
 	}
 }

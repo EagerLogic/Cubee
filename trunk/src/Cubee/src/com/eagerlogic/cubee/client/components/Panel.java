@@ -11,23 +11,28 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
 public final class Panel extends AUserControl {
 
 	@Override
-	public final IntegerProperty getWidth() {
-		return super.getWidth();
+	public final IntegerProperty widthProperty() {
+		return super.widthProperty();
 	}
 
 	@Override
-	public final IntegerProperty getHeight() {
-		return super.getHeight();
+	public final IntegerProperty heightProperty() {
+		return super.heightProperty();
 	}
 
 	@Override
-	public final PaddingProperty getPadding() {
-		return super.getPadding();
+	public final PaddingProperty paddingProperty() {
+		return super.paddingProperty();
 	}
 
 	@Override
-	public final BorderProperty getBorder() {
-		return super.getBorder();
+	public final BorderProperty borderProperty() {
+		return super.borderProperty();
+	}
+
+	@Override
+	public LayoutChildren getChildren() {
+		return super.getChildren();
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.styles.EHAlign;
 import com.eagerlogic.cubee.client.styles.EVAlign;
@@ -23,6 +24,13 @@ public final class VBox extends ALayout {
 
 	public VBox() {
 		super(DOM.createDiv());
+		width.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				requestLayout();
+			}
+		});
 	}
 
 	public void setCellHeight(AComponent component, Integer cellHeight) {
@@ -138,8 +146,8 @@ public final class VBox extends ALayout {
 				}
 			} else {
 				child.layout();
-				int cw = child.getBoundsWidth().get();
-				int ch = child.getBoundsHeight().get();
+				int cw = child.boundsWidthProperty().get();
+				int ch = child.boundsHeightProperty().get();
 				int calculatedCellH = realCellH;
 				if (calculatedCellH < 0) {
 					calculatedCellH = ch;
@@ -173,7 +181,7 @@ public final class VBox extends ALayout {
 			Element wrappingPanel = wrappingPanels.get(i);
 			EHAlign hAlign = getCellHAlign(i);
 			wrappingPanel.getStyle().setWidth(realWidth, Style.Unit.PX);
-			int cw = child.getBoundsWidth().get();
+			int cw = child.boundsWidthProperty().get();
 			if (hAlign == EHAlign.CENTER) {
 				int left = (realWidth - cw) / 2;
 				child.getElement().getStyle().setLeft(left, Style.Unit.PX);
@@ -185,8 +193,7 @@ public final class VBox extends ALayout {
 			}
 		}
 		
-		getElement().getStyle().setWidth(realWidth, Style.Unit.PX);
-		getElement().getStyle().setHeight(actH, Style.Unit.PX);
+		setSize(realWidth, actH);
 	}
 
 	private <T> T getFromList(List<T> list, int index) {
@@ -207,5 +214,10 @@ public final class VBox extends ALayout {
 		if (list.size() > index) {
 			list.remove(index);
 		}
+	}
+
+	@Override
+	public LayoutChildren getChildren() {
+		return super.getChildren();
 	}
 }

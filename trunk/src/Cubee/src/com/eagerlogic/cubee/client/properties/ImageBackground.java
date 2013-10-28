@@ -3,8 +3,8 @@ package com.eagerlogic.cubee.client.properties;
 import com.eagerlogic.cubee.client.styles.ABackGround;
 import com.eagerlogic.cubee.client.styles.EHAlign;
 import com.eagerlogic.cubee.client.styles.EVAlign;
-import com.eagerlogic.cubee.client.utils.Image;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.ui.Image;
 
 /**
  *
@@ -72,7 +72,7 @@ public final class ImageBackground extends ABackGround {
 	
 	private void applyImage(Element element) {
 		if (image == null) {
-			element.getStyle().clearBackgroundImage();;
+			element.getStyle().clearBackgroundImage();
 		} else {
 			element.getStyle().setBackgroundImage(image.getUrl());
 		}

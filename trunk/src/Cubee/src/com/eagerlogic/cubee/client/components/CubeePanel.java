@@ -37,13 +37,13 @@ public final class CubeePanel extends AUserControl {
 	}
 
 	@Override
-	protected IntegerProperty getWidth() {
-		return super.getWidth();
+	protected IntegerProperty widthProperty() {
+		return super.widthProperty();
 	}
 
 	@Override
-	protected IntegerProperty getHeight() {
-		return super.getHeight();
+	protected IntegerProperty heightProperty() {
+		return super.heightProperty();
 	}
 
 }
