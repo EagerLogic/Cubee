@@ -2,7 +2,7 @@ package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
-import com.eagerlogic.cubee.client.properties.EPictureSizeMode;
+import com.eagerlogic.cubee.client.styles.EPictureSizeMode;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;

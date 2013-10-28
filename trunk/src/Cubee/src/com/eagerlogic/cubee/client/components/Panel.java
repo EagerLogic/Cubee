@@ -1,7 +1,7 @@
 package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.properties.BorderProperty;
-import com.eagerlogic.cubee.client.properties.ECursor;
+import com.eagerlogic.cubee.client.styles.ECursor;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
