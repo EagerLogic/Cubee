@@ -21,8 +21,9 @@ public final class Timeline extends AAnimator {
 
 	public Timeline(KeyFrame... keyFrames) {
 		this.keyFrames = keyFrames;
+		createPropertyLines();
 	}
-	
+
 	private void createPropertyLines() {
 		HashMap<Property<?>, LinkedList<KeyFrame>> plMap = new HashMap<Property<?>, LinkedList<KeyFrame>>();
 		for (KeyFrame keyFrame : keyFrames) {
@@ -37,7 +38,7 @@ public final class Timeline extends AAnimator {
 			}
 			propertyLine.add(keyFrame);
 		}
-		
+
 		for (LinkedList<KeyFrame> frameList : plMap.values()) {
 			PropertyLine<?> propertyLine = frameList.getFirst().getProperty().createPropertyLine(frameList);
 			propertyLines.add(propertyLine);
@@ -54,6 +55,15 @@ public final class Timeline extends AAnimator {
 		super.start();
 	}
 
+	public void start(int repeatCount) {
+		this.repeatCount = repeatCount;
+		long startTime = System.currentTimeMillis();
+		for (PropertyLine<?> propertyLine : propertyLines) {
+			propertyLine.setStartTime(startTime);
+		}
+		super.start();
+	}
+
 	@Override
 	protected void onAnimate() {
 		boolean finished = true;
@@ -62,14 +72,21 @@ public final class Timeline extends AAnimator {
 		}
 
 		if (finished) {
-			repeatCount--;
-			if (repeatCount > -1) {
+			if (repeatCount < 0) {
 				long startTime = System.currentTimeMillis();
 				for (PropertyLine<?> propertyLine : propertyLines) {
 					propertyLine.setStartTime(startTime);
 				}
 			} else {
-				this.stop();
+				repeatCount--;
+				if (repeatCount > -1) {
+					long startTime = System.currentTimeMillis();
+					for (PropertyLine<?> propertyLine : propertyLines) {
+						propertyLine.setStartTime(startTime);
+					}
+				} else {
+					this.stop();
+				}
 			}
 		}
 	}
