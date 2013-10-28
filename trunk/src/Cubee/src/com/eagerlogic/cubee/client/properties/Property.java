@@ -175,8 +175,21 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<Pro
         }
     }
     
-    public boolean isBound() {
+	@Override
+    public final boolean isBound() {
         return this.bindingSource != null;
     }
+
+	public final boolean isNullable() {
+		return nullable;
+	}
+
+	public final boolean isReadonly() {
+		return readonly;
+	}
+	
+	PropertyLine<T> createPropertyLine(LinkedList<KeyFrame> keyFrames) {
+		return new PropertyLine<T>(keyFrames);
+	}
     
 }

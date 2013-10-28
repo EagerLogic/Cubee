@@ -1,4 +1,4 @@
-package com.eagerlogic.cubee.client.animation;
+package com.eagerlogic.cubee.client.properties;
 
 import com.eagerlogic.cubee.client.EventQueue;
 import java.util.LinkedList;
@@ -34,7 +34,7 @@ public abstract class AAnimator {
 	
 	private boolean started;
 	
-	public final void start() {
+	public void start() {
 		if (started) {
 			throw new IllegalStateException("This animator is already started.");
 		}
@@ -46,7 +46,7 @@ public abstract class AAnimator {
 		started = true;
 	}
 	
-	public final void stop() {
+	public void stop() {
 		if (!started) {
 			throw new IllegalStateException("This animator is already stopped.");
 		}

@@ -1,4 +1,4 @@
-package com.eagerlogic.cubee.client.animation;
+package com.eagerlogic.cubee.client.properties;
 
 /**
  *
