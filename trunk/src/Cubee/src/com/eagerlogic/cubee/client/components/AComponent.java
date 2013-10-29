@@ -1,5 +1,8 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.events.Event;
+import com.eagerlogic.cubee.client.events.EventArgs;
+import com.eagerlogic.cubee.client.events.MouseEventArgs;
 import com.eagerlogic.cubee.client.styles.Padding;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.styles.Border;
@@ -12,6 +15,8 @@ import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.utils.Point2D;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.EventListener;
 
 /**
  *
@@ -45,6 +50,16 @@ public abstract class AComponent {
 	private final IntegerProperty boundsLeftSetter = new IntegerProperty(0, false, false);
 	private final IntegerProperty boundsTopSetter = new IntegerProperty(0, false, false);
 	private final Property<ECursor> cursor = new Property<ECursor>(ECursor.AUTO, false, false);
+	// TODO visible property
+	// TODO enabled property
+	
+	private final Event<MouseEventArgs> onClick = new Event<MouseEventArgs>();
+	private final Event<MouseEventArgs> onMouseDown = new Event<MouseEventArgs>();
+	private final Event<MouseEventArgs> onMouseMove = new Event<MouseEventArgs>();
+	private final Event<MouseEventArgs> onMouseUp = new Event<MouseEventArgs>();
+	private final Event<EventArgs> onMouseEnter = new Event<EventArgs>();
+	private final Event<EventArgs> onMouseLeave = new Event<EventArgs>();
+	private final Event<MouseEventArgs> onMouseWheel = new Event<MouseEventArgs>();
 	
 	private final Element element;
 	private ALayout parent;
@@ -117,6 +132,51 @@ public abstract class AComponent {
 		boundsHeight.initReadonlyBind(boundsHeightSetter);
 		boundsLeft.initReadonlyBind(boundsLeftSetter);
 		boundsTop.initReadonlyBind(boundsTopSetter);
+		DOM.setEventListener((com.google.gwt.user.client.Element) getElement(), new EventListener() {
+
+			@Override
+			public void onBrowserEvent(com.google.gwt.user.client.Event event) {
+				switch (event.getTypeInt()) {
+					case com.google.gwt.user.client.Event.ONCLICK:
+						onClick.fireEvent(createMouseEventArgs(event));
+						break;
+					case com.google.gwt.user.client.Event.ONMOUSEDOWN:
+						onMouseDown.fireEvent(createMouseEventArgs(event));
+						break;
+					case com.google.gwt.user.client.Event.ONMOUSEMOVE:
+						onMouseMove.fireEvent(createMouseEventArgs(event));
+						break;
+					case com.google.gwt.user.client.Event.ONMOUSEUP:
+						onMouseUp.fireEvent(createMouseEventArgs(event));
+						break;
+					case com.google.gwt.user.client.Event.ONMOUSEOVER:
+						onMouseEnter.fireEvent(new EventArgs(AComponent.this));
+						break;
+					case com.google.gwt.user.client.Event.ONMOUSEOUT:
+						onMouseLeave.fireEvent(new EventArgs(AComponent.this));
+						break;
+					case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
+						onMouseLeave.fireEvent(createMouseEventArgs(event));
+						break;
+				}
+			}
+		});
+		DOM.sinkEvents((com.google.gwt.user.client.Element) getElement(), -1);
+	}
+	
+	private MouseEventArgs createMouseEventArgs(com.google.gwt.user.client.Event event) {
+		return new MouseEventArgs(
+				event.getClientX(), 
+				event.getClientY(), 
+				event.getScreenX(), 
+				event.getScreenY(), 
+				event.getAltKey(), 
+				event.getCtrlKey(), 
+				event.getShiftKey(), 
+				event.getMetaKey(), 
+				event.getMouseWheelVelocityY(),
+				this
+				);
 	}
 
 	private void updateTransform() {
@@ -308,8 +368,36 @@ public abstract class AComponent {
 		getElement().getStyle().setHeight(height, Style.Unit.PX);
 	}
 
-	protected Property<ECursor> cursorProperty() {
+	public final Property<ECursor> cursorProperty() {
 		return cursor;
+	}
+
+	public final Event<MouseEventArgs> onClickEvent() {
+		return onClick;
+	}
+
+	public final Event<MouseEventArgs> onMouseDownEvent() {
+		return onMouseDown;
+	}
+
+	public final Event<MouseEventArgs> onMouseMoveEvent() {
+		return onMouseMove;
+	}
+
+	public final Event<MouseEventArgs> onMouseUpEvent() {
+		return onMouseUp;
+	}
+
+	public final Event<EventArgs> onMouseEnterEvent() {
+		return onMouseEnter;
+	}
+
+	public final Event<EventArgs> onMouseLeaveEvent() {
+		return onMouseLeave;
+	}
+
+	public final Event<MouseEventArgs> onMouseWheelEvent() {
+		return onMouseWheel;
 	}
 	
 }

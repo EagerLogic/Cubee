@@ -37,9 +37,4 @@ public final class Panel extends AUserControl {
 		return super.getChildren();
 	}
 
-	@Override
-	public Property<ECursor> cursorProperty() {
-		return super.cursorProperty();
-	}
-
 }

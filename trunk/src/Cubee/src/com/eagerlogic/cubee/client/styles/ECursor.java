@@ -73,7 +73,11 @@ public enum ECursor {
 	/**
 	 * The cursor indicates that the program is busy.
 	 */
-	WAIT("wait");
+	WAIT("wait"),
+	/**
+	 * The cursor is inherited from the parent of the component.
+	 */
+	INHERIT("inherit");
 	
 	private final String cssValue;
 
