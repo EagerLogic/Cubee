@@ -52,6 +52,7 @@ public abstract class AComponent {
 	private final IntegerProperty boundsTopSetter = new IntegerProperty(0, false, false);
 	private final Property<ECursor> cursor = new Property<ECursor>(ECursor.AUTO, false, false);
 	private final BooleanProperty pointerTransparent = new BooleanProperty(false, false, false);
+	private final BooleanProperty visible = new BooleanProperty(false, false, false);
 	// TODO visible property
 	// TODO enabled property
 	
@@ -125,7 +126,18 @@ public abstract class AComponent {
 				getElement().getStyle().setProperty("cursor", cursor.get().getCssValue());
 			}
 		});
-		cursor.invalidate();
+		visible.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (visible.get()) {
+					getElement().getStyle().setVisibility(Style.Visibility.HIDDEN);
+				} else {
+					getElement().getStyle().setVisibility(Style.Visibility.VISIBLE);
+				}
+			}
+		});
+		
 		measuredWidth.initReadonlyBind(measuredWidthSetter);
 		measuredHeight.initReadonlyBind(measuredHeightSetter);
 		clientWidth.initReadonlyBind(clientWidthSetter);
@@ -391,6 +403,10 @@ public abstract class AComponent {
 
 	public final BooleanProperty pointerTransparentProperty() {
 		return pointerTransparent;
+	}
+
+	public final BooleanProperty visibleProperty() {
+		return visible;
 	}
 
 	public final Event<MouseEventArgs> onClickEvent() {
