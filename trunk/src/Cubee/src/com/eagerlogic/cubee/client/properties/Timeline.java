@@ -30,6 +30,7 @@ public final class Timeline extends AAnimator {
 			LinkedList<KeyFrame> propertyLine = plMap.get(keyFrame.getProperty());
 			if (propertyLine == null) {
 				propertyLine = new LinkedList<KeyFrame>();
+				plMap.put(keyFrame.getProperty(), propertyLine);
 			}
 			if (propertyLine.size() > 0) {
 				if (propertyLine.getLast().getTime() >= keyFrame.getTime()) {

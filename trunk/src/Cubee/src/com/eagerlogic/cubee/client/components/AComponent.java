@@ -3,6 +3,7 @@ package com.eagerlogic.cubee.client.components;
 import com.eagerlogic.cubee.client.events.Event;
 import com.eagerlogic.cubee.client.events.EventArgs;
 import com.eagerlogic.cubee.client.events.MouseEventArgs;
+import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.styles.Padding;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.styles.Border;
@@ -50,6 +51,7 @@ public abstract class AComponent {
 	private final IntegerProperty boundsLeftSetter = new IntegerProperty(0, false, false);
 	private final IntegerProperty boundsTopSetter = new IntegerProperty(0, false, false);
 	private final Property<ECursor> cursor = new Property<ECursor>(ECursor.AUTO, false, false);
+	private final BooleanProperty pointerTransparent = new BooleanProperty(false, false, false);
 	// TODO visible property
 	// TODO enabled property
 	
@@ -138,29 +140,44 @@ public abstract class AComponent {
 			public void onBrowserEvent(com.google.gwt.user.client.Event event) {
 				switch (event.getTypeInt()) {
 					case com.google.gwt.user.client.Event.ONCLICK:
-						onClick.fireEvent(createMouseEventArgs(event));
+						if (!pointerTransparent.get()) {
+							onClick.fireEvent(createMouseEventArgs(event));
+						}
 						break;
 					case com.google.gwt.user.client.Event.ONMOUSEDOWN:
-						onMouseDown.fireEvent(createMouseEventArgs(event));
+						if (!pointerTransparent.get()) {
+							onMouseDown.fireEvent(createMouseEventArgs(event));
+						}
 						break;
 					case com.google.gwt.user.client.Event.ONMOUSEMOVE:
-						onMouseMove.fireEvent(createMouseEventArgs(event));
+						if (!pointerTransparent.get()) {
+							onMouseMove.fireEvent(createMouseEventArgs(event));
+						}
 						break;
 					case com.google.gwt.user.client.Event.ONMOUSEUP:
-						onMouseUp.fireEvent(createMouseEventArgs(event));
+						if (!pointerTransparent.get()) {
+							onMouseUp.fireEvent(createMouseEventArgs(event));
+						}
 						break;
 					case com.google.gwt.user.client.Event.ONMOUSEOVER:
-						onMouseEnter.fireEvent(new EventArgs(AComponent.this));
+						if (!pointerTransparent.get()) {
+							onMouseEnter.fireEvent(new EventArgs(AComponent.this));
+						}
 						break;
 					case com.google.gwt.user.client.Event.ONMOUSEOUT:
-						onMouseLeave.fireEvent(new EventArgs(AComponent.this));
+						if (!pointerTransparent.get()) {
+							onMouseLeave.fireEvent(new EventArgs(AComponent.this));
+						}
 						break;
 					case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
-						onMouseLeave.fireEvent(createMouseEventArgs(event));
+						if (!pointerTransparent.get()) {
+							onMouseLeave.fireEvent(createMouseEventArgs(event));
+						}
 						break;
 				}
 			}
 		});
+		// sinking all the events
 		DOM.sinkEvents((com.google.gwt.user.client.Element) getElement(), -1);
 	}
 	
@@ -370,6 +387,10 @@ public abstract class AComponent {
 
 	public final Property<ECursor> cursorProperty() {
 		return cursor;
+	}
+
+	public final BooleanProperty pointerTransparentProperty() {
+		return pointerTransparent;
 	}
 
 	public final Event<MouseEventArgs> onClickEvent() {

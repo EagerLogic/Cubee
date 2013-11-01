@@ -51,6 +51,7 @@ public abstract class AAnimator {
 			throw new IllegalStateException("This animator is already stopped.");
 		}
 		started = false;
+		animators.remove(this);
 	}
 
 	public final boolean isStarted() {

@@ -14,13 +14,16 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.properties.StringProperty;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.DOM;
 
 /**
  *
  * @author dipacs
  */
-public final class Label extends AUserControl {
+public final class Label extends AComponent {
 	
+	private final IntegerProperty width = new IntegerProperty(null, true, false);
+	private final IntegerProperty height = new IntegerProperty(null, true, false);
 	private final StringProperty text = new StringProperty("", false, false);
 	private final Property<ETextOverflow> textOverFlow = new Property<ETextOverflow>(ETextOverflow.CLIP, false, false);
 	private final ColorProperty foreColor = new ColorProperty(Color.BLACK, true, false);
@@ -33,6 +36,36 @@ public final class Label extends AUserControl {
 	private final Property<FontFamily> fontFamily = new Property<FontFamily>(FontFamily.Arial, false, false);
 	
 	public Label() {
+		super(DOM.createDiv());
+		width.addChangeListener(new IChangeListener() {
+			@Override
+			public void onChanged(Object sender) {
+				if (width.get() == null) {
+					getElement().getStyle().setWhiteSpace(Style.WhiteSpace.NOWRAP);
+					getElement().getStyle().setOverflowX(Style.Overflow.VISIBLE);
+				} else {
+					getElement().getStyle().setWhiteSpace(Style.WhiteSpace.NORMAL);
+					getElement().getStyle().setWidth(width.get(), Style.Unit.PX);
+					getElement().getStyle().setOverflowX(Style.Overflow.HIDDEN);
+				}
+				requestLayout();
+			}
+		});
+		width.invalidate();
+		height.addChangeListener(new IChangeListener() {
+			@Override
+			public void onChanged(Object sender) {
+				if (height.get() == null) {
+					getElement().getStyle().clearHeight();
+					getElement().getStyle().setOverflowY(Style.Overflow.VISIBLE);
+				} else {
+					getElement().getStyle().setHeight(height.get(), Style.Unit.PX);
+					getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+				}
+				requestLayout();
+			}
+		});
+		height.invalidate();
 		text.addChangeListener(new IChangeListener() {
 
 			@Override
@@ -41,6 +74,7 @@ public final class Label extends AUserControl {
 				requestLayout();
 			}
 		});
+		text.invalidate();
 		textOverFlow.addChangeListener(new IChangeListener() {
 
 			@Override
@@ -144,14 +178,12 @@ public final class Label extends AUserControl {
 		fontFamily.invalidate();
 	}
 
-	@Override
 	public final IntegerProperty widthProperty() {
-		return super.widthProperty();
+		return width;
 	}
 
-	@Override
 	public final IntegerProperty heightProperty() {
-		return super.heightProperty();
+		return height;
 	}
 
 	public final StringProperty textProperty() {
@@ -198,6 +230,10 @@ public final class Label extends AUserControl {
 
 	public IntegerProperty fontSizeProperty() {
 		return fontSize;
+	}
+
+	public Property<FontFamily> fontFamilyProperty() {
+		return fontFamily;
 	}
 
 }

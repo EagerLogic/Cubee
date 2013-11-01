@@ -6,6 +6,8 @@ package com.eagerlogic.cubee.client;
 
 import com.google.gwt.user.client.Timer;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,6 +15,8 @@ import java.util.LinkedList;
  */
 public final class EventQueue {
 
+	private static final Logger LOG = Logger.getLogger(EventQueue.class.getName());
+	
     private static EventQueue instance;
 
     public static EventQueue getInstance() {
@@ -32,18 +36,18 @@ public final class EventQueue {
             public void run() {
                 int size = queue.size();
                 for (int i = 0; i < size; i++) {
-                    Runnable task = null;
+                    Runnable task;
                     task = queue.get(0);
                     queue.remove(0);
                     if (task != null) {
                         try {
                             task.run();
                         } catch (Throwable t) {
-                            t.printStackTrace();
+                            LOG.log(Level.SEVERE, t.getMessage(), t);
                         }
                     }
                 }
-                timer.schedule(1);
+                timer.schedule(10);
             }
         };
         timer.schedule(10);

@@ -78,9 +78,9 @@ class PropertyLine<T> {
 			property.set((T) keyFrames.getLast().getEndValue());
 			return true;
 		} else {
-			double pos = (nextFrame.getTime() - actFrame.getTime()) / (double)(actTime - startTime - actFrame.getTime());
+			double pos = ((double)(actTime - startTime - actFrame.getTime())) / (nextFrame.getTime() - actFrame.getTime());
 			pos = nextFrame.getInterpolator().interpolate(pos);
-			property.animate(pos, (T)actFrame.getEndValue(), (T)nextFrame.getEndValue());
+			property.set(property.animate(pos, (T)actFrame.getEndValue(), (T)nextFrame.getEndValue()));
 		}
 		
 		previousFrame = actFrame;

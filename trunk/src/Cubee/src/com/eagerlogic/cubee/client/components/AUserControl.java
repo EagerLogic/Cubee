@@ -26,7 +26,7 @@ public abstract class AUserControl extends ALayout {
 			public void onChanged(Object sender) {
 				if (width.get() == null) {
 					getElement().getStyle().clearWidth();
-					getElement().getStyle().setOverflowX(Style.Overflow.AUTO);
+					getElement().getStyle().setOverflowX(Style.Overflow.VISIBLE);
 				} else {
 					getElement().getStyle().setWidth(width.get(), Style.Unit.PX);
 					getElement().getStyle().setOverflowX(Style.Overflow.HIDDEN);
@@ -40,7 +40,7 @@ public abstract class AUserControl extends ALayout {
 			public void onChanged(Object sender) {
 				if (height.get() == null) {
 					getElement().getStyle().clearHeight();
-					getElement().getStyle().setOverflowY(Style.Overflow.AUTO);
+					getElement().getStyle().setOverflowY(Style.Overflow.VISIBLE);
 				} else {
 					getElement().getStyle().setHeight(height.get(), Style.Unit.PX);
 					getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
@@ -54,7 +54,9 @@ public abstract class AUserControl extends ALayout {
 			@Override
 			public void onChanged(Object sender) {
 				if (background.get() == null) {
-					// TODO clear background
+					getElement().getStyle().clearBackgroundColor();
+					getElement().getStyle().clearBackgroundImage();
+					// TODO clear gradient backgrounds
 				} else {
 					background.get().apply(getElement());
 				}
@@ -107,8 +109,8 @@ public abstract class AUserControl extends ALayout {
 			int maxW = 0;
 			int maxH = 0;
 			for (AComponent component : getChildren()) {
-				int cW = component.boundsWidthProperty().get();
-				int cH = component.boundsHeightProperty().get();
+				int cW = component.boundsWidthProperty().get() + component.boundsLeftProperty().get() + component.translateXProperty().get();
+				int cH = component.boundsHeightProperty().get() + component.boundsTopProperty().get() + component.translateYProperty().get();
 				
 				if (cW > maxW) {
 					maxW = cW;

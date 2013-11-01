@@ -88,6 +88,7 @@ public final class VBox extends ALayout {
 	protected final void onChildAdded(AComponent child) {
 		Element e = DOM.createDiv();
 		e.getStyle().setOverflow(Style.Overflow.HIDDEN);
+		e.getStyle().setPosition(Style.Position.ABSOLUTE);
 		wrappingPanels.add(e);
 		getElement().appendChild(e);
 		if (child != null) {
@@ -145,12 +146,14 @@ public final class VBox extends ALayout {
 					actH += realCellH;
 				}
 			} else {
-				child.layout();
+				//child.layout();
 				int cw = child.boundsWidthProperty().get();
 				int ch = child.boundsHeightProperty().get();
+				int cl = child.translateXProperty().get();
+				int ct = child.translateYProperty().get();
 				int calculatedCellH = realCellH;
 				if (calculatedCellH < 0) {
-					calculatedCellH = ch;
+					calculatedCellH = ch + ct;
 				}
 				wrappingPanel.getStyle().setHeight(calculatedCellH, Style.Unit.PX);
 				wrappingPanel.getStyle().setTop(actH, Style.Unit.PX);
@@ -165,8 +168,8 @@ public final class VBox extends ALayout {
 					child.getElement().getStyle().setTop(0, Style.Unit.PX);
 				}
 				
-				if (cw > maxW) {
-					maxW = cw;
+				if (cw + cl > maxW) {
+					maxW = cw + cl;
 				}
 				actH += calculatedCellH;
 			}
@@ -178,6 +181,9 @@ public final class VBox extends ALayout {
 		}
 		for (int i = 0; i < wrappingPanels.size(); i++) {
 			AComponent child = getChildren().get(i);
+			if (child == null) {
+				continue;
+			}
 			Element wrappingPanel = wrappingPanels.get(i);
 			EHAlign hAlign = getCellHAlign(i);
 			wrappingPanel.getStyle().setWidth(realWidth, Style.Unit.PX);
