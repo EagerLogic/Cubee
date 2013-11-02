@@ -1,19 +1,19 @@
 package com.eagerlogic.cubee.client.properties;
 
-import com.eagerlogic.cubee.client.styles.ABackGround;
+import com.eagerlogic.cubee.client.styles.ABackground;
 
 /**
  *
  * @author dipacs
  */
-public class BackgroundProperty extends Property<ABackGround> {
+public class BackgroundProperty extends Property<ABackground> {
 
-	public BackgroundProperty(ABackGround defaultValue, boolean nullable, boolean readonly) {
+	public BackgroundProperty(ABackground defaultValue, boolean nullable, boolean readonly) {
 		super(defaultValue, nullable, readonly);
 	}
 
 	@Override
-	public ABackGround animate(double pos, ABackGround startValue, ABackGround endValue) {
+	public ABackground animate(double pos, ABackground startValue, ABackground endValue) {
 		// TODO implementálni
 		return super.animate(pos, startValue, endValue);
 	}

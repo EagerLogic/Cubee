@@ -6,7 +6,7 @@ import com.google.gwt.dom.client.Element;
  *
  * @author dipacs
  */
-public class ColorBackground extends ABackGround {
+public class ColorBackground extends ABackground {
 	
 	private final Color color;
 

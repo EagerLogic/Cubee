@@ -1,6 +1,6 @@
 package com.eagerlogic.cubee.client.properties;
 
-import com.eagerlogic.cubee.client.styles.ABackGround;
+import com.eagerlogic.cubee.client.styles.ABackground;
 import com.eagerlogic.cubee.client.styles.EHAlign;
 import com.eagerlogic.cubee.client.styles.EVAlign;
 import com.google.gwt.dom.client.Element;
@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Image;
  *
  * @author dipacs
  */
-public final class ImageBackground extends ABackGround {
+public final class ImageBackground extends ABackground {
 	
 	private final Image image;
 	private final Double width;
