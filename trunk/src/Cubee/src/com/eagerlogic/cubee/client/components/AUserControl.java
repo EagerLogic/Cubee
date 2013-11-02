@@ -50,14 +50,12 @@ public abstract class AUserControl extends ALayout {
 		});
 		height.invalidate();
 		background.addChangeListener(new IChangeListener() {
-
 			@Override
 			public void onChanged(Object sender) {
-				if (background.get() == null) {
-					getElement().getStyle().clearBackgroundColor();
-					getElement().getStyle().clearBackgroundImage();
-					// TODO clear gradient backgrounds
-				} else {
+				getElement().getStyle().clearBackgroundColor();
+				getElement().getStyle().clearBackgroundImage();
+				getElement().getStyle().setProperty("background", "none");
+				if (background.get() != null) {
 					background.get().apply(getElement());
 				}
 			}
@@ -111,24 +109,24 @@ public abstract class AUserControl extends ALayout {
 			for (AComponent component : getChildren()) {
 				int cW = component.boundsWidthProperty().get() + component.boundsLeftProperty().get() + component.translateXProperty().get();
 				int cH = component.boundsHeightProperty().get() + component.boundsTopProperty().get() + component.translateYProperty().get();
-				
+
 				if (cW > maxW) {
 					maxW = cW;
 				}
-				
+
 				if (cH > maxH) {
 					maxH = cH;
 				}
 			}
-			
+
 			if (widthProperty().get() != null) {
 				maxW = widthProperty().get();
 			}
-			
+
 			if (heightProperty().get() != null) {
 				maxH = heightProperty().get();
 			}
-			
+
 			setSize(maxW, maxH);
 		}
 	}
