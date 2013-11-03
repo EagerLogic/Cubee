@@ -26,6 +26,7 @@ public final class CubeePanel extends ALayout {
 		getElement().getStyle().setTop(0, Style.Unit.PX);
 		getElement().getStyle().setRight(0, Style.Unit.PX);
 		getElement().getStyle().setBottom(0, Style.Unit.PX);
+		getElement().getStyle().setBackgroundColor("#f0f0f0");
 		Window.addResizeHandler(new ResizeHandler() {
 
 			@Override
