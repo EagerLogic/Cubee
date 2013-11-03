@@ -2,6 +2,7 @@ package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.events.EventArgs;
 import com.eagerlogic.cubee.client.styles.Color;
+import com.eagerlogic.cubee.client.utils.ARunOnce;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -18,12 +19,70 @@ import com.google.gwt.user.client.ui.RootPanel;
  */
 public class ADialog {
 
+	private static class DialogRootContainer extends ALayout {
+		
+		private ARunOnce layoutRunOnce;
+		private final ADialog parent;
+
+		public DialogRootContainer(ADialog parent) {
+			super(DOM.createDiv());
+			this.parent = parent;
+		}
+
+		@Override
+		public void requestLayout() {
+			if (layoutRunOnce == null) {
+				layoutRunOnce = new ARunOnce() {
+					@Override
+					protected void onRun() {
+						// TODO remove sout
+						System.out.println("!!! LAYING OUT DIALOG !!!");
+						layout();
+						parent.centerRoot();
+					}
+				};
+			}
+			layoutRunOnce.run();
+		}
+
+		@Override
+		protected final void onChildAdded(AComponent child) {
+			if (child != null) {
+				getElement().appendChild(child.getElement());
+			}
+		}
+
+		@Override
+		protected final void onChildRemoved(AComponent child, int index) {
+			if (child != null) {
+				getElement().removeChild(child.getElement());
+			}
+		}
+
+		@Override
+		protected final void onChildrenCleared() {
+			Element root = getElement();
+			Element e = getElement().getFirstChildElement();
+			while (e != null) {
+				root.removeChild(e);
+				e = root.getFirstChildElement();
+			}
+		}
+
+		@Override
+		protected void onLayout() {
+			// nothing to do here
+		}
+	}
+	
+	
 	private final boolean modal;
 	private final boolean autoHide;
 	private final Color glassColor;
 	private AComponent rootComponent;
 	private Element glass;
 	private boolean visible = false;
+	private final DialogRootContainer dialogRootContainer;
 
 	public ADialog(boolean modal, boolean autoHide) {
 		this(modal, autoHide, Color.getArgbColor(0x80000000));
@@ -43,6 +102,9 @@ public class ADialog {
 		if (glassColor != null) {
 			glass.getStyle().setBackgroundColor(glassColor.toCSS());
 		}
+		
+		dialogRootContainer = new DialogRootContainer(this);
+		glass.appendChild(dialogRootContainer.getElement());
 
 		DOM.setEventListener((com.google.gwt.user.client.Element) glass, new EventListener() {
 			@Override
@@ -61,23 +123,22 @@ public class ADialog {
 		});
 		// sinking all the events
 		DOM.sinkEvents((com.google.gwt.user.client.Element) glass, Event.ONCLICK);
-		
-		Window.addResizeHandler(new ResizeHandler() {
 
+		Window.addResizeHandler(new ResizeHandler() {
 			@Override
 			public void onResize(ResizeEvent event) {
 				centerRoot();
 			}
 		});
 	}
-	
+
 	private void centerRoot() {
-		if (this.rootComponent != null && this.visible) {
+		if (this.visible) {
 			int ww = Window.getClientWidth();
 			int wh = Window.getClientHeight();
-			int rw = rootComponent.boundsWidthProperty().get();
-			int rh = rootComponent.boundsHeightProperty().get();
-			rootComponent.setPosition((ww - rw) / 2, (wh - rh) / 2);
+			int rw = dialogRootContainer.boundsWidthProperty().get();
+			int rh = dialogRootContainer.boundsHeightProperty().get();
+			dialogRootContainer.setPosition((ww - rw) / 2, (wh - rh) / 2);
 		}
 	}
 
@@ -103,15 +164,11 @@ public class ADialog {
 	}
 
 	protected final void setRootComponent(AComponent rootComponent) {
-		if (this.rootComponent != null) {
-			glass.removeChild(this.rootComponent.getElement());
-		}
-		if (rootComponent != null) {
-			glass.appendChild(rootComponent.getElement());
-			rootComponent.layout();
-		}
+		dialogRootContainer.getChildren().clear();
 		this.rootComponent = rootComponent;
-		centerRoot();
+		if (rootComponent != null) {
+			dialogRootContainer.getChildren().add(rootComponent);
+		}
 	}
 
 	public boolean isModal() {

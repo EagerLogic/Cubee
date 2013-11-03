@@ -229,10 +229,9 @@ public abstract class AComponent {
 	}
 	
 	public void requestLayout() {
+		this.needsLayout = true;
 		if (this.parent != null) {
 			this.parent.requestLayout();
-		} else {
-			layout();
 		}
 	}
 	
