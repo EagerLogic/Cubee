@@ -53,6 +53,7 @@ public abstract class AComponent {
 	private final Property<ECursor> cursor = new Property<ECursor>(ECursor.AUTO, false, false);
 	private final BooleanProperty pointerTransparent = new BooleanProperty(false, false, false);
 	private final BooleanProperty visible = new BooleanProperty(false, false, false);
+	private final DoubleProperty alpha = new DoubleProperty(1.0, false, false);
 	// TODO visible property
 	// TODO enabled property
 	
@@ -135,6 +136,13 @@ public abstract class AComponent {
 				} else {
 					getElement().getStyle().setVisibility(Style.Visibility.VISIBLE);
 				}
+			}
+		});
+		alpha.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				getElement().getStyle().setOpacity(alpha.get());
 			}
 		});
 		
@@ -436,6 +444,10 @@ public abstract class AComponent {
 
 	public final Event<MouseEventArgs> onMouseWheelEvent() {
 		return onMouseWheel;
+	}
+
+	public final DoubleProperty alphaProperty() {
+		return alpha;
 	}
 	
 }
