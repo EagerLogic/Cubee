@@ -91,10 +91,8 @@ public final class Led extends AUserControl {
 					new ColorStop(0.5, color.get()), 
 					new ColorStop(1.0, Color.fadeColors(color.get(), Color.BLACK, 0.25)));
 		} else {
-			Color darkColor = Color.fadeColors(color.get(), Color.BLACK, 0.7);
-			lgLed = new LinearGradient(0.0, new ColorStop(0.0, Color.fadeColors(darkColor, Color.WHITE, 0.5)), 
-					new ColorStop(0.5, darkColor), 
-					new ColorStop(1.0, Color.fadeColors(darkColor, Color.BLACK, 0.25)));
+			lgLed = new LinearGradient(0.0, new ColorStop(0.0, Color.getRgbColor(0xe0e0e0)),
+					new ColorStop(1.0, Color.getRgbColor(0xc0c0c0)));
 		}
 		this.ledPanel.backgroundProperty().set(lgLed);
 	}
