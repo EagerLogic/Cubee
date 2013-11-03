@@ -8,17 +8,11 @@ import com.google.gwt.dom.client.Element;
  */
 public class LinearGradient extends ABackground {
 	
-	private final double startX;
-	private final double startY;
-	private final double endX;
-	private final double endY;
+	private final double angle;
 	private final ColorStop[] stops;
 
-	public LinearGradient(double startX, double startY, double endX, double endY, ColorStop... stops) {
-		this.startX = startX;
-		this.startY = startY;
-		this.endX = endX;
-		this.endY = endY;
+	public LinearGradient(double angle, ColorStop... stops) {
+		this.angle = angle;
 		this.stops = stops;
 	}
 	
@@ -35,6 +29,7 @@ public class LinearGradient extends ABackground {
 
 	@Override
 	public void apply(Element element) {
+		element.getStyle().setProperty("bkgrnd", "almafa");
 		applyMozilla(element);
 		applyWebkitOld(element);
 		applyWebkitNew(element);
@@ -44,9 +39,10 @@ public class LinearGradient extends ABackground {
 	}
 	
 	public void applyMozilla(Element element) {
-		String style = "-moz-linear-gradient(" + ((int)(startX * 100)) + "% " 
-				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
-				+ ((int)(endY * 100)) + "%";
+		String style = "-moz-linear-gradient(" + ((angle - 0.75) * 360) + "deg";
+//		String style = "-moz-linear-gradient(" + ((int)(startX * 100)) + "% " 
+//				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
+//				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
 			style += ", " + stop.getColor().toCSS() + "," + ((int)stop.getPosition() * 100) + "%";
 		}
@@ -55,10 +51,11 @@ public class LinearGradient extends ABackground {
 	}
 	
 	public void applyWebkitOld(Element element) {
+		String style = "-webkit-gradient(linear, " + ((angle - 0.75) * 360) + "deg";
 		// background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#ff0000), color-stop(100%,#00ff00)); /* Chrome,Safari4+ */
-		String style = "-webkit-gradient(linear, " + ((int)(startX * 100)) + "% " 
-				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
-				+ ((int)(endY * 100)) + "%";
+//		String style = "-webkit-gradient(linear, " + ((int)(startX * 100)) + "% " 
+//				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
+//				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
 			style += ", color-stop(" + ((int)stop.getPosition() * 100) + "%," + stop.getColor().toCSS() + ")";
 		}
@@ -67,9 +64,10 @@ public class LinearGradient extends ABackground {
 	}
 	
 	public void applyWebkitNew(Element element) {
-		String style = "-webkit-linear-gradient(" + ((int)(startX * 100)) + "% " 
-				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
-				+ ((int)(endY * 100)) + "%";
+		String style = "-webkit-linear-gradient(" + ((angle - 0.75) * 360) + "deg";
+//		String style = "-webkit-linear-gradient(" + ((int)(startX * 100)) + "% " 
+//				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
+//				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
 			style += ", " + stop.getColor().toCSS() + "," + ((int)stop.getPosition() * 100) + "%";
 		}
@@ -78,9 +76,10 @@ public class LinearGradient extends ABackground {
 	}
 	
 	public void applyOpera(Element element) {
-		String style = "-o-linear-gradient(" + ((int)(startX * 100)) + "% " 
-				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
-				+ ((int)(endY * 100)) + "%";
+		String style = "-o-linear-gradient(" + ((angle - 0.75) * 360) + "deg";
+//		String style = "-o-linear-gradient(" + ((int)(startX * 100)) + "% " 
+//				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
+//				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
 			style += ", " + stop.getColor().toCSS() + "," + ((int)stop.getPosition() * 100) + "%";
 		}
@@ -89,9 +88,10 @@ public class LinearGradient extends ABackground {
 	}
 	
 	public void applyMs(Element element) {
-		String style = "-ms-linear-gradient(" + ((int)(startX * 100)) + "% " 
-				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
-				+ ((int)(endY * 100)) + "%";
+		String style = "-ms-linear-gradient(" + ((angle - 0.75) * 360) + "deg";
+//		String style = "-ms-linear-gradient(" + ((int)(startX * 100)) + "% " 
+//				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
+//				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
 			style += ", " + stop.getColor().toCSS() + "," + ((int)stop.getPosition() * 100) + "%";
 		}
@@ -100,11 +100,12 @@ public class LinearGradient extends ABackground {
 	}
 	
 	public void applyStandard(Element element) {
-		String style = "linear-gradient(" + ((int)(startX * 100)) + "% " 
-				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
-				+ ((int)(endY * 100)) + "%";
+		String style = "linear-gradient(" + ((angle - 0.5) * 360) + "deg";
+//		String style = "linear-gradient(" + ((int)(startX * 100)) + "% " 
+//				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
+//				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
-			style += ", " + stop.getColor().toCSS() + "," + ((int)stop.getPosition() * 100) + "%";
+			style += ", " + stop.getColor().toCSS() + " " + ((int)stop.getPosition() * 100) + "%";
 		}
 		style += ")";
 		element.getStyle().setProperty("background", style);
