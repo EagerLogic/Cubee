@@ -103,7 +103,7 @@ public final class Color {
 	}
 	
 	public String toCSS() {
-		return "rgba(" + getRed() + ", " + getGreen() + ", " + getBlue() + ", " + (getAlpha() / 255.0);
+		return "rgba(" + getRed() + ", " + getGreen() + ", " + getBlue() + ", " + (getAlpha() / 255.0) + ")";
 	}
 
 }
