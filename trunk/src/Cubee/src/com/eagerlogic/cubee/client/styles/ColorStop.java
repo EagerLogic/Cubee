@@ -6,15 +6,15 @@ package com.eagerlogic.cubee.client.styles;
  */
 public final class ColorStop {
 	
-	private final float position;
+	private final double position;
 	private final Color color;
 
-	public ColorStop(float position, Color color) {
+	public ColorStop(double position, Color color) {
 		this.position = position;
 		this.color = color;
 	}
 
-	public float getPosition() {
+	public double getPosition() {
 		return position;
 	}
 
