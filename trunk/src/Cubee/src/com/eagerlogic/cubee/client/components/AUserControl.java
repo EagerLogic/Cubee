@@ -17,7 +17,7 @@ public abstract class AUserControl extends ALayout {
 
 	private final IntegerProperty width = new IntegerProperty(null, true, false);
 	private final IntegerProperty height = new IntegerProperty(null, true, false);
-	private final BackgroundProperty background = new BackgroundProperty(new ColorBackground(Color.WHITE), true, false);
+	private final BackgroundProperty background = new BackgroundProperty(new ColorBackground(Color.TRANSPARENT), true, false);
 
 	public AUserControl() {
 		super(DOM.createDiv());
