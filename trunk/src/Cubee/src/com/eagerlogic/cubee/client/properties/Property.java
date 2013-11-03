@@ -11,14 +11,14 @@ import java.util.LinkedList;
  *
  * @author dipacs
  */
-public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<Property<T>> {
+public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IProperty<T>> {
     
     private LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
     private T value;
     private boolean valid = false;
     private final boolean nullable;
     private final boolean readonly;
-    private Property<T> bindingSource;
+    private IProperty<T> bindingSource;
     private IChangeListener bindListener;
     private IProperty<T> readonlyBind;
 
@@ -45,7 +45,7 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<Pro
 		this.valid = true;
 		
         if (bindingSource != null) {
-            return bindingSource.get();
+            return (T) bindingSource.getObjectValue();
         }
         
         if (readonlyBind != null) {
@@ -142,7 +142,7 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<Pro
     }
 
     @Override
-    public void bind(Property<T> source) {
+    public void bind(IProperty<T> source) {
         if (source == null) {
             throw new NullPointerException("The source can not be null.");
         }
