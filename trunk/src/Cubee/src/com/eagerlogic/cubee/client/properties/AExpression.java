@@ -86,8 +86,8 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
     @Override
     public final void invalidate() {
         this.valid = false;
-        for (IProperty prop : bindingSources) {
-           prop.invalidate();
+        for (IChangeListener listener : changeListeners) {
+           listener.onChanged(this);
         }
     }
     
