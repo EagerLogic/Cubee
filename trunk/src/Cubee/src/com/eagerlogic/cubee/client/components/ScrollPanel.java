@@ -21,7 +21,7 @@ import com.eagerlogic.cubee.client.styles.ColorBackground;
  * @author dipacs
  */
 public final class ScrollPanel extends AUserControl {
-	
+
 	private final Property<EScrollBarPolicy> horizontalScrollBarPolicy = new Property<EScrollBarPolicy>(EScrollBarPolicy.AUTO, false, false);
 	private final Property<EScrollBarPolicy> verticalScrollBarPolicy = new Property<EScrollBarPolicy>(EScrollBarPolicy.AUTO, false, false);
 	private final BackgroundProperty scrollBarBackground = new BackgroundProperty(new ColorBackground(Color.getArgbColor(0x60000000)), true, false);
@@ -29,9 +29,7 @@ public final class ScrollPanel extends AUserControl {
 	private final IntegerProperty scrollHeight = new IntegerProperty(0, false, true);
 	private final DoubleProperty horizontalScrollPosition = new DoubleProperty(0.0, false, false);
 	private final DoubleProperty verticalScrollPosition = new DoubleProperty(0.0, false, false);
-
 	private final AUserControl wheelPanel = new AUserControl() {
-
 		@Override
 		protected boolean onPointerEventFallingDown(int screenX, int screenY, int x, int y, int wheelVelocity, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
 			if (type == MouseEventTypes.TYPE_MOUSE_WHEEL) {
@@ -44,25 +42,22 @@ public final class ScrollPanel extends AUserControl {
 	private final Panel hScrollBar = new Panel();
 	private final Panel vScrollBar = new Panel();
 	private final Panel contentPanel = new Panel();
-	
 	private AComponent content;
-	
 	private int vScrollStartPos = -1;
 	private double vScrollStartValue = 0;
 	private int hScrollStartPos = -1;
 	private double hScrollStartValue = 0;
-	
+
 	public ScrollPanel() {
 		this.getChildren().add(contentPanel);
 		this.getChildren().add(vScrollBar);
 		this.getChildren().add(hScrollBar);
 		this.getChildren().add(wheelPanel);
-		
+
 		this.widthProperty().set(200);
 		this.heightProperty().set(200);
-		
+
 		contentPanel.translateXProperty().bind(new AExpression<Integer>() {
-			
 			{
 				this.bind(horizontalScrollPosition);
 				this.bind(boundsWidthProperty());
@@ -74,7 +69,7 @@ public final class ScrollPanel extends AUserControl {
 				if (scrollWidth.get() <= boundsWidthProperty().get()) {
 					return 0;
 				}
-				int res = -((int)((scrollWidth.get() - boundsWidthProperty().get()) * horizontalScrollPosition.get()));
+				int res = -((int) ((scrollWidth.get() - boundsWidthProperty().get()) * horizontalScrollPosition.get()));
 				if (res > 0) {
 					res = 0;
 				}
@@ -85,7 +80,6 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		contentPanel.translateYProperty().bind(new AExpression<Integer>() {
-			
 			{
 				this.bind(verticalScrollPosition);
 				this.bind(boundsHeightProperty());
@@ -97,7 +91,7 @@ public final class ScrollPanel extends AUserControl {
 				if (scrollHeight.get() <= boundsHeightProperty().get()) {
 					return 0;
 				}
-				int res = -((int)((scrollHeight.get() - boundsHeightProperty().get()) * verticalScrollPosition.get()));
+				int res = -((int) ((scrollHeight.get() - boundsHeightProperty().get()) * verticalScrollPosition.get()));
 				if (res > 0) {
 					res = 0;
 				}
@@ -108,7 +102,6 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		vScrollBar.translateXProperty().bind(new AExpression<Integer>() {
-			
 			{
 				this.bind(boundsWidthProperty());
 				this.bind(vScrollBar.boundsWidthProperty());
@@ -120,7 +113,6 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		vScrollBar.translateYProperty().bind(new AExpression<Integer>() {
-			
 			{
 				this.bind(boundsHeightProperty());
 				this.bind(vScrollBar.boundsHeightProperty());
@@ -129,11 +121,10 @@ public final class ScrollPanel extends AUserControl {
 
 			@Override
 			public Integer calculate() {
-				return (int)((boundsHeightProperty().get() - vScrollBar.boundsHeightProperty().get()) * verticalScrollPosition.get());
+				return (int) ((boundsHeightProperty().get() - vScrollBar.boundsHeightProperty().get()) * verticalScrollPosition.get());
 			}
 		});
 		hScrollBar.translateYProperty().bind(new AExpression<Integer>() {
-
 			{
 				this.bind(boundsHeightProperty());
 				this.bind(hScrollBar.boundsHeightProperty());
@@ -141,11 +132,10 @@ public final class ScrollPanel extends AUserControl {
 
 			@Override
 			public Integer calculate() {
-				return boundsHeightProperty().get() - vScrollBar.boundsHeightProperty().get();
+				return boundsHeightProperty().get() - hScrollBar.boundsHeightProperty().get();
 			}
 		});
 		hScrollBar.translateXProperty().bind(new AExpression<Integer>() {
-			
 			{
 				this.bind(boundsWidthProperty());
 				this.bind(hScrollBar.boundsWidthProperty());
@@ -154,12 +144,11 @@ public final class ScrollPanel extends AUserControl {
 
 			@Override
 			public Integer calculate() {
-				return (int)((boundsWidthProperty().get() - hScrollBar.boundsWidthProperty().get()) * horizontalScrollPosition.get());
+				return (int) ((boundsWidthProperty().get() - hScrollBar.boundsWidthProperty().get()) * horizontalScrollPosition.get());
 			}
 		});
-		
+
 		vScrollBar.heightProperty().bind(new AExpression<Integer>() {
-			
 			{
 				this.bind(scrollHeight);
 				this.bind(boundsHeightProperty());
@@ -170,16 +159,15 @@ public final class ScrollPanel extends AUserControl {
 				if (scrollHeight.get() <= boundsHeightProperty().get()) {
 					return boundsHeightProperty().get();
 				}
-				
-				int res = ((int)((boundsHeightProperty().get().doubleValue() / scrollHeight.get()) * boundsHeightProperty().get()));
-				if (res < 15) {
-					res = 15;
+
+				int res = ((int) ((boundsHeightProperty().get().doubleValue() / scrollHeight.get()) * boundsHeightProperty().get()));
+				if (res < 20) {
+					res = 20;
 				}
 				return res;
 			}
 		});
 		hScrollBar.widthProperty().bind(new AExpression<Integer>() {
-			
 			{
 				this.bind(scrollWidth);
 				this.bind(boundsWidthProperty());
@@ -190,17 +178,16 @@ public final class ScrollPanel extends AUserControl {
 				if (scrollWidth.get() <= boundsWidthProperty().get()) {
 					return boundsWidthProperty().get();
 				}
-				
-				int res = ((int)((boundsWidthProperty().get().doubleValue() / scrollWidth.get()) * boundsWidthProperty().get()));
-				if (res < 15) {
-					res = 15;
+
+				int res = ((int) ((boundsWidthProperty().get().doubleValue() / scrollWidth.get()) * boundsWidthProperty().get()));
+				if (res < 20) {
+					res = 20;
 				}
 				return res;
 			}
 		});
-		
-		vScrollBar.onMouseDownEvent().addListener(new IEventListener<MouseDownEventArgs>() {
 
+		vScrollBar.onMouseDownEvent().addListener(new IEventListener<MouseDownEventArgs>() {
 			@Override
 			public void onFired(MouseDownEventArgs args) {
 				vScrollStartPos = args.getScreenY();
@@ -208,15 +195,14 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		vScrollBar.onMouseDragEvent().addListener(new IEventListener<MouseDragEventArgs>() {
-
 			@Override
 			public void onFired(MouseDragEventArgs args) {
 				if (vScrollStartPos < 0) {
 					return;
-				} 
+				}
 				int delta = args.getScreenY() - vScrollStartPos;
 				int sw = boundsHeightProperty().get() - vScrollBar.boundsHeightProperty().get();
-				double valueDelta = delta / ((double)sw);
+				double valueDelta = delta / ((double) sw);
 				double newValue = vScrollStartValue + valueDelta;
 				if (newValue < 0) {
 					newValue = 0;
@@ -228,15 +214,14 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		vScrollBar.onMouseUpEvent().addListener(new IEventListener<MouseUpEventArgs>() {
-
 			@Override
 			public void onFired(MouseUpEventArgs args) {
 				if (vScrollStartPos < 0) {
 					return;
-				} 
+				}
 				int delta = args.getScreenY() - vScrollStartPos;
 				int sw = boundsHeightProperty().get() - vScrollBar.boundsHeightProperty().get();
-				double valueDelta = delta / ((double)sw);
+				double valueDelta = delta / ((double) sw);
 				double newValue = vScrollStartValue + valueDelta;
 				if (newValue < 0) {
 					newValue = 0;
@@ -248,7 +233,6 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		hScrollBar.onMouseDownEvent().addListener(new IEventListener<MouseDownEventArgs>() {
-
 			@Override
 			public void onFired(MouseDownEventArgs args) {
 				hScrollStartPos = args.getScreenX();
@@ -256,15 +240,14 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		hScrollBar.onMouseDragEvent().addListener(new IEventListener<MouseDragEventArgs>() {
-
 			@Override
 			public void onFired(MouseDragEventArgs args) {
 				if (hScrollStartPos < 0) {
 					return;
-				} 
+				}
 				int delta = args.getScreenX() - hScrollStartPos;
 				int sw = boundsWidthProperty().get() - hScrollBar.boundsWidthProperty().get();
-				double valueDelta = delta / ((double)sw);
+				double valueDelta = delta / ((double) sw);
 				double newValue = hScrollStartValue + valueDelta;
 				if (newValue < 0) {
 					newValue = 0;
@@ -276,15 +259,14 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		hScrollBar.onMouseUpEvent().addListener(new IEventListener<MouseUpEventArgs>() {
-
 			@Override
 			public void onFired(MouseUpEventArgs args) {
 				if (hScrollStartPos < 0) {
 					return;
-				} 
+				}
 				int delta = args.getScreenX() - hScrollStartPos;
 				int sw = boundsWidthProperty().get() - hScrollBar.boundsWidthProperty().get();
-				double valueDelta = delta / ((double)sw);
+				double valueDelta = delta / ((double) sw);
 				double newValue = hScrollStartValue + valueDelta;
 				if (newValue < 0) {
 					newValue = 0;
@@ -296,7 +278,6 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		vScrollBar.visibleProperty().bind(new AExpression<Boolean>() {
-			
 			{
 				this.bind(verticalScrollBarPolicy);
 				this.bind(boundsHeightProperty());
@@ -315,7 +296,6 @@ public final class ScrollPanel extends AUserControl {
 			}
 		});
 		hScrollBar.visibleProperty().bind(new AExpression<Boolean>() {
-			
 			{
 				this.bind(horizontalScrollBarPolicy);
 				this.bind(boundsWidthProperty());
@@ -333,41 +313,52 @@ public final class ScrollPanel extends AUserControl {
 				}
 			}
 		});
-		
-		wheelPanel.onMouseWheelEvent().addListener(new IEventListener<MouseWheelEventArgs>() {
 
+		wheelPanel.onMouseWheelEvent().addListener(new IEventListener<MouseWheelEventArgs>() {
 			@Override
 			public void onFired(MouseWheelEventArgs args) {
-				double pixels = 12 * args.getWheelVelocity();
-				System.out.println(args.getWheelVelocity());
-				double delta = pixels / scrollHeight.get();
-				double newValue = verticalScrollPosition.get() + delta;
-				if (newValue < 0) {
-					newValue = 0;
+				if (args.isShiftPressed()) {
+					double pixels = 12 * args.getWheelVelocity();
+					double delta = pixels / scrollWidth.get();
+					double newValue = horizontalScrollPosition.get() + delta;
+					if (newValue < 0) {
+						newValue = 0;
+					}
+					if (newValue > 1) {
+						newValue = 1;
+					}
+					horizontalScrollPosition.set(newValue);
+				} else {
+					double pixels = 12 * args.getWheelVelocity();
+					double delta = pixels / scrollHeight.get();
+					double newValue = verticalScrollPosition.get() + delta;
+					if (newValue < 0) {
+						newValue = 0;
+					}
+					if (newValue > 1) {
+						newValue = 1;
+					}
+					verticalScrollPosition.set(newValue);
 				}
-				if (newValue > 1) {
-					newValue = 1;
-				}
-				verticalScrollPosition.set(newValue);
 			}
 		});
-		
-		
-		
+
+
+
 		hScrollBar.backgroundProperty().bind(scrollBarBackground);
 		vScrollBar.backgroundProperty().bind(scrollBarBackground);
 		vScrollBar.widthProperty().set(10);
 		hScrollBar.heightProperty().set(10);
 		hScrollBar.borderProperty().set(new Border(0, Color.TRANSPARENT, 5));
 		vScrollBar.borderProperty().set(new Border(0, Color.TRANSPARENT, 5));
-		
+
 		scrollWidth.initReadonlyBind(contentPanel.boundsWidthProperty());
 		scrollHeight.initReadonlyBind(contentPanel.boundsHeightProperty());
-		
+
 		wheelPanel.widthProperty().bind(this.widthProperty());
 		wheelPanel.heightProperty().bind(this.heightProperty());
 	}
-	
+
 	public void setContent(AComponent component) {
 		this.contentPanel.getChildren().clear();
 		if (component != null) {
@@ -375,7 +366,7 @@ public final class ScrollPanel extends AUserControl {
 		}
 		this.content = component;
 	}
-	
+
 	public AComponent getContent() {
 		return this.content;
 	}
@@ -418,7 +409,4 @@ public final class ScrollPanel extends AUserControl {
 	public final BackgroundProperty backgroundProperty() {
 		return super.backgroundProperty();
 	}
-	
-	
-
 }
