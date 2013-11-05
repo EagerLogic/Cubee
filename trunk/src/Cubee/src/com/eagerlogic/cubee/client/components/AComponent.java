@@ -1,8 +1,14 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.events.ClickEventArgs;
 import com.eagerlogic.cubee.client.events.Event;
 import com.eagerlogic.cubee.client.events.EventArgs;
-import com.eagerlogic.cubee.client.events.PointerEventArgs;
+import com.eagerlogic.cubee.client.events.MouseDownEventArgs;
+import com.eagerlogic.cubee.client.events.MouseEventTypes;
+import com.eagerlogic.cubee.client.events.MouseDragEventArgs;
+import com.eagerlogic.cubee.client.events.MouseMoveEventArgs;
+import com.eagerlogic.cubee.client.events.MouseWheelEventArgs;
+import com.eagerlogic.cubee.client.events.MouseUpEventArgs;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.styles.Padding;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
@@ -15,16 +21,81 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.utils.Point2D;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.EventListener;
+import java.util.LinkedList;
 
 /**
  *
  * @author dipacs
  */
 public abstract class AComponent {
+	
+	private static final LinkedList<MouseDownEventLog> pointerDownEvents = new LinkedList<MouseDownEventLog>();
+	
+	private static void logPointerDownEvent(MouseDownEventLog item) {
+		pointerDownEvents.add(item);
+	}
+	
+	private static void fireDragEvents(int screenX, int screenY, boolean altPressed, boolean ctrlPressed, 
+			boolean shiftPressed, boolean metaPressed) {
+		for (MouseDownEventLog log : pointerDownEvents) {
+			MouseDragEventArgs args = new MouseDragEventArgs(screenX, screenY, screenX - log.getScreenX(), 
+					screenY - log.getScreenY(), altPressed, ctrlPressed, shiftPressed, metaPressed, log.getComponent());
+			log.getComponent().onMouseDrag.fireEvent(args);
+		}
+	}
+	
+	private static void fireUpEvents(int screenX, int screenY, boolean altPressed, boolean ctrlPressed, 
+			boolean shiftPressed, boolean metaPressed) {
+		long stamp = System.currentTimeMillis();
+		for (MouseDownEventLog log : pointerDownEvents) {
+			MouseUpEventArgs args = new MouseUpEventArgs(screenX, screenY, screenX - log.getScreenX(), 
+					screenY - log.getScreenY(), altPressed, ctrlPressed, shiftPressed, metaPressed, log.getComponent());
+			log.getComponent().onMouseUp.fireEvent(args);
+			if (stamp - log.getTimeStamp() < 500) {
+				log.getComponent().onClick.fireEvent(new ClickEventArgs(screenX, screenY, log.getX(), log.getY(), 
+						altPressed, ctrlPressed, shiftPressed, metaPressed, log.getComponent()));
+			}
+		}
+		pointerDownEvents.clear();
+	}
+	
+	private static final EventListener nativeEventListener = new EventListener() {
+		@Override
+		public void onBrowserEvent(com.google.gwt.user.client.Event event) {
+			int x = event.getClientX();
+			int y = event.getClientY();
+			int wheelVelocity = event.getMouseWheelVelocityY();
+			switch (event.getTypeInt()) {
+				case com.google.gwt.user.client.Event.ONMOUSEDOWN:
+				case com.google.gwt.user.client.Event.ONMOUSEOVER:
+				case com.google.gwt.user.client.Event.ONMOUSEOUT:
+				case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
+					event.stopPropagation();
+					CubeePanel.getInstance().doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+							event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
+							event.getTypeInt());
+					break;
+				case com.google.gwt.user.client.Event.ONMOUSEMOVE:
+					event.stopPropagation();
+					if (pointerDownEvents.size() > 0) {
+						fireDragEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey());
+					}else {
+						CubeePanel.getInstance().doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+								event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
+								event.getTypeInt());
+					}
+					break;
+					
+				case com.google.gwt.user.client.Event.ONMOUSEUP:
+					event.stopPropagation();
+					fireUpEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey());
+					break;
+			}
+		}
+	};
 
 	private final IntegerProperty translateX = new IntegerProperty(0, false, false);
 	private final IntegerProperty translateY = new IntegerProperty(0, false, false);
@@ -57,42 +128,37 @@ public abstract class AComponent {
 	private final BooleanProperty visible = new BooleanProperty(true, false, false);
 	private final BooleanProperty enabled = new BooleanProperty(true, false, false);
 	private final DoubleProperty alpha = new DoubleProperty(1.0, false, false);
+	private final BooleanProperty selectable = new BooleanProperty(false, false, false);
+	//private final RectangleProperty clip = new RectangleProperty(null, true, false);
 	// TODO visible property
 	// TODO enabled property
-	
-	private final Event<PointerEventArgs> onClick = new Event<PointerEventArgs>();
-	private final Event<PointerEventArgs> onPointerDown = new Event<PointerEventArgs>();
-	private final Event<PointerEventArgs> onPointerMove = new Event<PointerEventArgs>();
-	private final Event<PointerEventArgs> onPointerUp = new Event<PointerEventArgs>();
-	private final Event<EventArgs> onPointerEnter = new Event<EventArgs>();
-	private final Event<EventArgs> onPointerLeave = new Event<EventArgs>();
-	private final Event<PointerEventArgs> onMouseWheel = new Event<PointerEventArgs>();
-	
+	private final Event<ClickEventArgs> onClick = new Event<ClickEventArgs>();
+	private final Event<MouseDownEventArgs> onMouseDown = new Event<MouseDownEventArgs>();
+	private final Event<MouseDragEventArgs> onMouseDrag = new Event<MouseDragEventArgs>();
+	private final Event<MouseMoveEventArgs> onMouseMove = new Event<MouseMoveEventArgs>();
+	private final Event<MouseUpEventArgs> onMouseUp = new Event<MouseUpEventArgs>();
+	private final Event<EventArgs> onMouseEnter = new Event<EventArgs>();
+	private final Event<EventArgs> onMouseLeave = new Event<EventArgs>();
+	private final Event<MouseWheelEventArgs> onMouseWheel = new Event<MouseWheelEventArgs>();
 	private int left = 0;
 	private int top = 0;
-	
 	private final Element element;
 	private ALayout parent;
-	
-	private boolean needsLayout = true;
-	
+	boolean needsLayout = true;
 	private IChangeListener transformChangedListener = new IChangeListener() {
-
 		@Override
 		public void onChanged(Object sender) {
 			updateTransform();
 			requestLayout();
 		}
 	};
-	
-	
-	
 
 	public AComponent(Element rootElement) {
 		this.element = rootElement;
 		this.element.setAttribute("draggabe", "false");
 		this.element.getStyle().setPosition(Style.Position.ABSOLUTE);
-		this.element.getStyle().setProperty("pointerEvents", "none");
+		//this.element.getStyle().setProperty("pointerEvents", "none");
+		this.element.getStyle().setProperty("pointerEvents", "all");
 		translateX.addChangeListener(transformChangedListener);
 		translateY.addChangeListener(transformChangedListener);
 		rotate.addChangeListener(transformChangedListener);
@@ -101,7 +167,6 @@ public abstract class AComponent {
 		transformCenterX.addChangeListener(transformChangedListener);
 		transformCenterY.addChangeListener(transformChangedListener);
 		padding.addChangeListener(new IChangeListener() {
-
 			@Override
 			public void onChanged(Object sender) {
 				Padding p = padding.get();
@@ -114,7 +179,6 @@ public abstract class AComponent {
 			}
 		});
 		border.addChangeListener(new IChangeListener() {
-
 			@Override
 			public void onChanged(Object sender) {
 				Border b = border.get();
@@ -129,14 +193,12 @@ public abstract class AComponent {
 			}
 		});
 		cursor.addChangeListener(new IChangeListener() {
-
 			@Override
 			public void onChanged(Object sender) {
 				getElement().getStyle().setProperty("cursor", cursor.get().getCssValue());
 			}
 		});
 		visible.addChangeListener(new IChangeListener() {
-
 			@Override
 			public void onChanged(Object sender) {
 				if (visible.get()) {
@@ -147,7 +209,6 @@ public abstract class AComponent {
 			}
 		});
 		enabled.addChangeListener(new IChangeListener() {
-
 			@Override
 			public void onChanged(Object sender) {
 				if (!enabled.get()) {
@@ -158,13 +219,31 @@ public abstract class AComponent {
 			}
 		});
 		alpha.addChangeListener(new IChangeListener() {
-
 			@Override
 			public void onChanged(Object sender) {
 				getElement().getStyle().setOpacity(alpha.get());
 			}
 		});
-		
+		selectable.addChangeListener(new IChangeListener() {
+			@Override
+			public void onChanged(Object sender) {
+				if (selectable.get()) {
+					getElement().getStyle().clearProperty("mozUserSelect");
+					getElement().getStyle().clearProperty("khtmlUserSelect");
+					getElement().getStyle().clearProperty("webkitUserSelect");
+					getElement().getStyle().clearProperty("msUserSelect");
+					getElement().getStyle().clearProperty("userSelect");
+				} else {
+					getElement().getStyle().setProperty("mozUserSelect", "none");
+					getElement().getStyle().setProperty("khtmlUserSelect", "none");
+					getElement().getStyle().setProperty("webkitUserSelect", "none");
+					getElement().getStyle().setProperty("msUserSelect", "none");
+					getElement().getStyle().setProperty("userSelect", "none");
+				}
+			}
+		});
+		selectable.invalidate();
+
 		measuredWidth.initReadonlyBind(measuredWidthSetter);
 		measuredHeight.initReadonlyBind(measuredHeightSetter);
 		clientWidth.initReadonlyBind(clientWidthSetter);
@@ -173,7 +252,11 @@ public abstract class AComponent {
 		boundsHeight.initReadonlyBind(boundsHeightSetter);
 		boundsLeft.initReadonlyBind(boundsLeftSetter);
 		boundsTop.initReadonlyBind(boundsTopSetter);
-		
+
+		DOM.setEventListener((com.google.gwt.user.client.Element) getElement(), nativeEventListener);
+		// sinking all the events
+		DOM.sinkEvents((com.google.gwt.user.client.Element) getElement(), -1);
+
 	}
 
 	private void updateTransform() {
@@ -195,19 +278,20 @@ public abstract class AComponent {
 		element.getStyle().setProperty("webkitTransformOrigin", centerX + " " + centerY);
 		element.getStyle().setProperty("webkitTransform", "translate(" + translateX.get() + "px, " + translateY.get() + "px) rotate(" + angleStr + ") scaleX( " + sX + ") scaleY(" + sY + ")");
 	}
-	
+
 	public void requestLayout() {
-		this.needsLayout = true;
-		if (this.parent != null) {
-			this.parent.requestLayout();
+		if (!this.needsLayout) {
+			this.needsLayout = true;
+			if (this.parent != null) {
+				this.parent.requestLayout();
+			}
 		}
 	}
-	
+
 	public final void measure() {
 		onMeasure();
-		this.needsLayout = false;
 	}
-	
+
 	private void onMeasure() {
 		// calculating client bounds
 		int cw = element.getClientWidth();
@@ -219,20 +303,20 @@ public abstract class AComponent {
 		}
 		clientWidthSetter.set(cw);
 		clientHeightSetter.set(ch);
-		
+
 		// calculating measured bounds
 		int mw = element.getOffsetWidth();
 		int mh = element.getOffsetHeight();
 		measuredWidthSetter.set(mw);
 		measuredHeightSetter.set(mh);
-		
+
 		// calculating parent bounds
 		double tcx = transformCenterX.get();
 		double tcy = transformCenterY.get();
-		
+
 		double sx = scaleX.get();
 		double sy = scaleY.get();
-		
+
 		int bw = (int) (mw * sx);
 		int bh = (int) (mh * sy);
 		int bx = (int) (0 - ((bw - mw) * tcx));
@@ -257,9 +341,9 @@ public abstract class AComponent {
 		boundsWidthSetter.set(bw);
 		boundsHeightSetter.set(bh);
 	}
-	
+
 	private Point2D rotatePoint(int x, int y, double angle) {
-		angle = ((angle/180)*Math.PI);
+		angle = ((angle / 180) * Math.PI);
 		double cosAngle = Math.cos(angle);
 		double sinAngle = Math.sin(angle);
 
@@ -267,7 +351,7 @@ public abstract class AComponent {
 		int resY = (int) ((x * sinAngle) + (y * cosAngle));
 		return new Point2D(resX, resY);
 	}
-	
+
 	public final Element getElement() {
 		return this.element;
 	}
@@ -279,8 +363,9 @@ public abstract class AComponent {
 	final void setParent(ALayout parent) {
 		this.parent = parent;
 	}
-	
+
 	public void layout() {
+		this.needsLayout = false;
 		measure();
 	}
 
@@ -296,26 +381,25 @@ public abstract class AComponent {
 		return translateY;
 	}
 
-	public final DoubleProperty rotateProperty() {
-		return rotate;
-	}
-
-	public final DoubleProperty scaleXProperty() {
-		return scaleX;
-	}
-
-	public final DoubleProperty scaleYProperty() {
-		return scaleY;
-	}
-
-	public final DoubleProperty transformCenterXProperty() {
-		return transformCenterX;
-	}
-
-	public final DoubleProperty transformCenterYProperty() {
-		return transformCenterY;
-	}
-
+//	public final DoubleProperty rotateProperty() {
+//		return rotate;
+//	}
+//
+//	public final DoubleProperty scaleXProperty() {
+//		return scaleX;
+//	}
+//
+//	public final DoubleProperty scaleYProperty() {
+//		return scaleY;
+//	}
+//
+//	public final DoubleProperty transformCenterXProperty() {
+//		return transformCenterX;
+//	}
+//
+//	public final DoubleProperty transformCenterYProperty() {
+//		return transformCenterY;
+//	}
 	protected PaddingProperty paddingProperty() {
 		return padding;
 	}
@@ -355,15 +439,25 @@ public abstract class AComponent {
 	public IntegerProperty boundsTopProperty() {
 		return boundsTop;
 	}
-	
-	protected void setPosition(int left, int top) {
+
+	protected final void setPosition(int left, int top) {
 		getElement().getStyle().setLeft(left, Style.Unit.PX);
 		getElement().getStyle().setTop(top, Style.Unit.PX);
 		this.left = left;
 		this.top = top;
 	}
-	
-	protected void setSize(int width, int height) {
+
+	protected final void setLeft(int left) {
+		getElement().getStyle().setLeft(left, Style.Unit.PX);
+		this.left = left;
+	}
+
+	protected final void setTop(int top) {
+		getElement().getStyle().setTop(top, Style.Unit.PX);
+		this.top = top;
+	}
+
+	protected final void setSize(int width, int height) {
 		getElement().getStyle().setWidth(width, Style.Unit.PX);
 		getElement().getStyle().setHeight(height, Style.Unit.PX);
 	}
@@ -380,31 +474,35 @@ public abstract class AComponent {
 		return visible;
 	}
 
-	public final Event<PointerEventArgs> onClickEvent() {
+	public final Event<ClickEventArgs> onClickEvent() {
 		return onClick;
 	}
 
-	public final Event<PointerEventArgs> onPointerDownEvent() {
-		return onPointerDown;
+	public final Event<MouseDownEventArgs> onMouseDownEvent() {
+		return onMouseDown;
 	}
 
-	public final Event<PointerEventArgs> onPointerMoveEvent() {
-		return onPointerMove;
+	public final Event<MouseDragEventArgs> onMouseDragEvent() {
+		return onMouseDrag;
+	}
+	
+	public final Event<MouseMoveEventArgs> onMouseMoveEvent() {
+		return onMouseMove;
 	}
 
-	public final Event<PointerEventArgs> onPointerUpEvent() {
-		return onPointerUp;
+	public final Event<MouseUpEventArgs> onMouseUpEvent() {
+		return onMouseUp;
 	}
 
-	public final Event<EventArgs> onPointerEnterEvent() {
-		return onPointerEnter;
+	public final Event<EventArgs> onMouseEnterEvent() {
+		return onMouseEnter;
 	}
 
-	public final Event<EventArgs> onPointerLeaveEvent() {
-		return onPointerLeave;
+	public final Event<EventArgs> onMouseLeaveEvent() {
+		return onMouseLeave;
 	}
 
-	public final Event<PointerEventArgs> onMouseWheelEvent() {
+	public final Event<MouseWheelEventArgs> onMouseWheelEvent() {
 		return onMouseWheel;
 	}
 
@@ -427,43 +525,34 @@ public abstract class AComponent {
 	public final int getTop() {
 		return top;
 	}
-	
+
+	protected BooleanProperty selectableProperty() {
+		return selectable;
+	}
+
 	/**
 	 * This method is called by the parent of this component when a pointer event is occured. The goal of this method is
-	 * to decide if this component wants to handle the event or not, and delegate the event to child components if needed.
-	 * 
-	 * @param screenX
-	 * The x coordinate of the pointer relative to the screen's top-left corner.
-	 * @param screenY
-	 * The y coordinate of the pointer relative to the screen's top-left corner.
-	 * @param parentScreenX
-	 * The x coordinate of the pointer relative to the parent's top-left corner.
-	 * @param parentScreenY
-	 * The y coordinate of the pointer relative to the parent's top-left corner.
-	 * @param x
-	 * The x coordinate of the pointer relative to this component's top-left corner.
-	 * @param y
-	 * The y coordinate of the pointer relative to this component's top-left corner.
-	 * @param wheelVelocity
-	 * The mouse wheel velocity value.
-	 * @param type
-	 * The type of the event. Valid values are listed in PointerEventArgs class.
-	 * @param altPressed 
-	 * Indicates if the alt key is pressed when the event occured or not.
-	 * @param ctrlPressed 
-	 * Indicates if the ctrl key is pressed when the event occured or not.
-	 * @param shiftPressed 
-	 * Indicates if the shift key is pressed when the event occured or not.
-	 * @param metaPressed 
-	 * Indicates if the meta key is pressed when the event occured or not.
-	 * 
-	 * @return 
-	 * True if the event is fully handled and underlaying components can't handle this event, otherwise
-	 * false if underlaying components can handle this event.
+	 * to decide if this component wants to handle the event or not, and delegate the event to child components if
+	 * needed.
+	 *
+	 * @param screenX The x coordinate of the pointer relative to the screen's top-left corner.
+	 * @param screenY The y coordinate of the pointer relative to the screen's top-left corner.
+	 * @param parentScreenX The x coordinate of the pointer relative to the parent's top-left corner.
+	 * @param parentScreenY The y coordinate of the pointer relative to the parent's top-left corner.
+	 * @param x The x coordinate of the pointer relative to this component's top-left corner.
+	 * @param y The y coordinate of the pointer relative to this component's top-left corner.
+	 * @param wheelVelocity The mouse wheel velocity value.
+	 * @param type The type of the event. Valid values are listed in PointerEventArgs class.
+	 * @param altPressed Indicates if the alt key is pressed when the event occured or not.
+	 * @param ctrlPressed Indicates if the ctrl key is pressed when the event occured or not.
+	 * @param shiftPressed Indicates if the shift key is pressed when the event occured or not.
+	 * @param metaPressed Indicates if the meta key is pressed when the event occured or not.
+	 *
+	 * @return True if the event is fully handled and underlaying components can't handle this event, otherwise false if
+	 * underlaying components can handle this event.
 	 */
-	boolean doPointerEventClimbingUp(int screenX, int screenY, int parentScreenX, int parentScreenY, 
-			int x, int y, int wheelVelocity, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, 
-			boolean metaPressed, int type) {
+	boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
+			boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
 		if (!handlePointer.get()) {
 			return false;
 		}
@@ -476,133 +565,104 @@ public abstract class AComponent {
 		if (!visible.get()) {
 			return false;
 		}
-		onPointerEventClimbingUp(screenX, screenY, parentScreenX, parentScreenY, x, y, wheelVelocity, altPressed, 
+		onPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed,
 				ctrlPressed, shiftPressed, metaPressed, type);
-		return onPointerEventFallingDown(screenX, screenY, parentScreenX, parentScreenY, x, y, wheelVelocity, altPressed, 
+		return onPointerEventFallingDown(screenX, screenY, x, y, wheelVelocity, altPressed,
 				ctrlPressed, shiftPressed, metaPressed, type);
 	}
-	
+
 //	boolean doPointerEventFallingDown(int screenX, int screenY, int parentScreenX, int parentScreenY, 
 //			int x, int y, int wheelVelocity, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, 
 //			boolean metaPressed, int type) {
 //		return onPointerEventFallingDown(screenX, screenY, parentScreenX, parentScreenY, x, y, wheelVelocity, altPressed, 
 //				ctrlPressed, shiftPressed, metaPressed, type);
 //	}
-	
 	/**
-	 * This method is called when a pointer event is climbing up on the component hierarchy. The goal of this method is 
+	 * This method is called when a pointer event is climbing up on the component hierarchy. The goal of this method is
 	 * to decide if the event can reach child components or not. In the most of the cases you don't need to overwrite
 	 * this method. The default implementation is returns true.
-	 * 
-	 * @param screenX
-	 * The x coordinate of the pointer relative to the screen's top-left corner.
-	 * @param screenY
-	 * The y coordinate of the pointer relative to the screen's top-left corner.
-	 * @param parentScreenX
-	 * The x coordinate of the pointer relative to the parent's top-left corner.
-	 * @param parentScreenY
-	 * The y coordinate of the pointer relative to the parent's top-left corner.
-	 * @param x
-	 * The x coordinate of the pointer relative to this component's top-left corner.
-	 * @param y
-	 * The y coordinate of the pointer relative to this component's top-left corner.
-	 * @param wheelVelocity
-	 * The mouse wheel velocity value.
-	 * @param type
-	 * The type of the event. Valid values are listed in PointerEventArgs class.
-	 * @param altPressed 
-	 * Indicates if the alt key is pressed when the event occured or not.
-	 * @param ctrlPressed 
-	 * Indicates if the ctrl key is pressed when the event occured or not.
-	 * @param shiftPressed 
-	 * Indicates if the shift key is pressed when the event occured or not.
-	 * @param metaPressed 
-	 * Indicates if the meta key is pressed when the event occured or not.
-	 * 
-	 * @return 
-	 * False if this event can't reach overlaying components, or
-	 * true if overlaying components can also get the climbing up event.
+	 *
+	 * @param screenX The x coordinate of the pointer relative to the screen's top-left corner.
+	 * @param screenY The y coordinate of the pointer relative to the screen's top-left corner.
+	 * @param parentScreenX The x coordinate of the pointer relative to the parent's top-left corner.
+	 * @param parentScreenY The y coordinate of the pointer relative to the parent's top-left corner.
+	 * @param x The x coordinate of the pointer relative to this component's top-left corner.
+	 * @param y The y coordinate of the pointer relative to this component's top-left corner.
+	 * @param wheelVelocity The mouse wheel velocity value.
+	 * @param type The type of the event. Valid values are listed in PointerEventArgs class.
+	 * @param altPressed Indicates if the alt key is pressed when the event occured or not.
+	 * @param ctrlPressed Indicates if the ctrl key is pressed when the event occured or not.
+	 * @param shiftPressed Indicates if the shift key is pressed when the event occured or not.
+	 * @param metaPressed Indicates if the meta key is pressed when the event occured or not.
+	 *
+	 * @return False if this event can't reach overlaying components, or true if overlaying components can also get the
+	 * climbing up event.
 	 */
-	protected boolean onPointerEventClimbingUp(int screenX, int screenY, int parentScreenX, int parentScreenY, 
-			int x, int y, int wheelVelocity, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, 
-			boolean metaPressed, int type) {
+	protected boolean onPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
+			boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
 		return true;
 	}
-	
+
 	/**
-	 * This method is called when a pointer event is falling down on the component hierarchy. The goal of this method is to 
-	 * fire events if needed, and in the result type define if the underlaying components can process this event too.
+	 * This method is called when a pointer event is falling down on the component hierarchy. The goal of this method is
+	 * to fire events if needed, and in the result type define if the underlaying components can process this event too.
 	 * The default implementation is fires the associated event, and returns true.
-	 * 
-	 * @param screenX
-	 * The x coordinate of the pointer relative to the screen's top-left corner.
-	 * @param screenY
-	 * The y coordinate of the pointer relative to the screen's top-left corner.
-	 * @param parentScreenX
-	 * The x coordinate of the pointer relative to the parent's top-left corner.
-	 * @param parentScreenY
-	 * The y coordinate of the pointer relative to the parent's top-left corner.
-	 * @param x
-	 * The x coordinate of the pointer relative to this component's top-left corner.
-	 * @param y
-	 * The y coordinate of the pointer relative to this component's top-left corner.
-	 * @param wheelVelocity
-	 * The mouse wheel velocity value.
-	 * @param type
-	 * The type of the event. Valid values are listed in PointerEventArgs class.
-	 * @param altPressed 
-	 * Indicates if the alt key is pressed when the event occured or not.
-	 * @param ctrlPressed 
-	 * Indicates if the ctrl key is pressed when the event occured or not.
-	 * @param shiftPressed 
-	 * Indicates if the shift key is pressed when the event occured or not.
-	 * @param metaPressed 
-	 * Indicates if the meta key is pressed when the event occured or not.
-	 * 
-	 * @return 
-	 * True if this event is fully processed, and underlaying components can't process this event, or
-	 * false if underlaying components can also get the falling down event.
+	 *
+	 * @param screenX The x coordinate of the pointer relative to the screen's top-left corner.
+	 * @param screenY The y coordinate of the pointer relative to the screen's top-left corner.
+	 * @param parentScreenX The x coordinate of the pointer relative to the parent's top-left corner.
+	 * @param parentScreenY The y coordinate of the pointer relative to the parent's top-left corner.
+	 * @param x The x coordinate of the pointer relative to this component's top-left corner.
+	 * @param y The y coordinate of the pointer relative to this component's top-left corner.
+	 * @param wheelVelocity The mouse wheel velocity value.
+	 * @param type The type of the event. Valid values are listed in PointerEventArgs class.
+	 * @param altPressed Indicates if the alt key is pressed when the event occured or not.
+	 * @param ctrlPressed Indicates if the ctrl key is pressed when the event occured or not.
+	 * @param shiftPressed Indicates if the shift key is pressed when the event occured or not.
+	 * @param metaPressed Indicates if the meta key is pressed when the event occured or not.
+	 *
+	 * @return True if this event is fully processed, and underlaying components can't process this event, or false if
+	 * underlaying components can also get the falling down event.
 	 */
-	protected boolean onPointerEventFallingDown(int screenX, int screenY, int parentScreenX, int parentScreenY, 
-			int x, int y, int wheelVelocity, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, 
-			boolean metaPressed, int type) {
-		PointerEventArgs args = new PointerEventArgs(type, x, y, screenX, screenY, altPressed, ctrlPressed, shiftPressed, 
-				metaPressed, wheelVelocity, this);
+	protected boolean onPointerEventFallingDown(int screenX, int screenY, int x, int y, int wheelVelocity,
+			boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
 		switch (type) {
-			case PointerEventArgs.TYPE_MOUSE_DOWN:
-				onPointerDown.fireEvent(args);
+			case MouseEventTypes.TYPE_MOUSE_DOWN:
+				MouseDownEventArgs mdea = new MouseDownEventArgs(screenX, screenY, x, y, altPressed, ctrlPressed, shiftPressed, metaPressed, this);
+				registerDownEvent(screenX, screenY, x, y, altPressed, ctrlPressed, shiftPressed, metaPressed);
+				onMouseDown.fireEvent(mdea);
 				break;
-			case PointerEventArgs.TYPE_MOUSE_MOVE:
-				onPointerMove.fireEvent(args);
+			case MouseEventTypes.TYPE_MOUSE_MOVE:
+				MouseMoveEventArgs mmea = new MouseMoveEventArgs(screenX, screenY, x, y, altPressed, ctrlPressed, shiftPressed, metaPressed, this);
+				registerDownEvent(screenX, screenY, x, y, altPressed, ctrlPressed, shiftPressed, metaPressed);
+				onMouseMove.fireEvent(mmea);
 				break;
-			case PointerEventArgs.TYPE_MOUSE_UP:
-				onPointerUp.fireEvent(args);
-				onClick.fireEvent(args);
+			case MouseEventTypes.TYPE_MOUSE_ENTER:
+				onMouseEnter.fireEvent(new EventArgs(this));
 				break;
-			case PointerEventArgs.TYPE_MOUSE_ENTER:
-				onPointerEnter.fireEvent(args);
+			case MouseEventTypes.TYPE_MOUSE_LEAVE:
+				onMouseLeave.fireEvent(new EventArgs(this));
 				break;
-			case PointerEventArgs.TYPE_MOUSE_LEAVE:
-				onPointerLeave.fireEvent(args);
-				break;
-			case PointerEventArgs.TYPE_MOUSE_WHEEL:
-				onMouseWheel.fireEvent(args);
+			case MouseEventTypes.TYPE_MOUSE_WHEEL:
+				onMouseWheel.fireEvent(new MouseWheelEventArgs(wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, this));
 				break;
 		}
 		return true;
 	}
 	
+	protected final void registerDownEvent(int screenX, int screenY, int x, int y, boolean altPressed, boolean ctrlPressed, 
+			boolean shiftPressed, boolean metaPressed) {
+		logPointerDownEvent(new MouseDownEventLog(this, x, y, screenX, screenY));
+	}
+
 	/**
 	 * Indicates if this component is intersects the given point. The x and y coordinate is relative to the parent's
-	 * top-left coordinate. 
-	 * 
-	 * @param x
-	 * The x coordinate of the point.
-	 * @param y
-	 * The y coordinate of the point.
-	 * 
-	 * @return 
-	 * True if this component is intersects the given point, otherwise false.
+	 * top-left coordinate.
+	 *
+	 * @param x The x coordinate of the point.
+	 * @param y The y coordinate of the point.
+	 *
+	 * @return True if this component is intersects the given point, otherwise false.
 	 */
 	boolean isIntersectsPoint(int x, int y) {
 		// measured positions
@@ -614,21 +674,21 @@ public abstract class AComponent {
 		int y3 = y2 + measuredHeight.get();
 		int x4 = x1;
 		int y4 = y3;
-		
+
 		// scale points
 		if (scaleX.get() != 1.0) {
 			x1 = (int) (x1 - ((x2 - x1) * transformCenterX.get() * scaleX.get()));
-			x2 = (int) (x1 + ((x2 - x1) *  (1 - transformCenterX.get()) * scaleX.get()));
+			x2 = (int) (x1 + ((x2 - x1) * (1 - transformCenterX.get()) * scaleX.get()));
 			x3 = x2;
 			x4 = x1;
 		}
 		if (scaleY.get() != 1.0) {
 			y1 = (int) (y1 - ((y2 - y1) * transformCenterY.get() * scaleY.get()));
-			y4 = (int) (y4 + ((y4 - y1) *  (1 - transformCenterY.get()) * scaleY.get()));
+			y4 = (int) (y4 + ((y4 - y1) * (1 - transformCenterY.get()) * scaleY.get()));
 			y2 = y1;
 			y3 = y4;
 		}
-		
+
 		// rotatePoints
 		if (rotate.get() != 1.0) {
 			int rpx = (int) ((x2 - x1) * transformCenterX.get());
@@ -646,7 +706,7 @@ public abstract class AComponent {
 			x4 = bl.getX() + rpx;
 			y4 = bl.getY() + rpy;
 		}
-		
+
 		int cnt = 0;
 		if (isPointIntersectsLine(x, y, x1, y1, x2, y2)) {
 			cnt++;
@@ -662,12 +722,11 @@ public abstract class AComponent {
 		}
 		return cnt == 1 || cnt == 3;
 	}
-	
+
 	private boolean isPointIntersectsLine(int px, int py, int lx1, int ly1, int lx2, int ly2) {
 		/* ((poly[i][1] > y) != (poly[j][1] > y)) and \
-                    (x < (poly[j][0] - poly[i][0]) * (y - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
-					*/
-		return ((ly1 > py) != (ly2 > py)) && (px < (lx2 - lx1) * ((double)(py - ly1)) / (ly2 - ly1) + lx1);
+		 (x < (poly[j][0] - poly[i][0]) * (y - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
+		 */
+		return ((ly1 > py) != (ly2 > py)) && (px < (lx2 - lx1) * ((double) (py - ly1)) / (ly2 - ly1) + lx1);
 	}
-	
 }

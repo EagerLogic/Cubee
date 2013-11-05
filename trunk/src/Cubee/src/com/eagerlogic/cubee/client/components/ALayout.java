@@ -26,6 +26,7 @@ public abstract class ALayout extends AComponent {
 
 	@Override
 	public final void layout() {
+		this.needsLayout = false;
 		for (AComponent child : getChildren()) {
 			if (child != null) {
 				if (child.isNeedsLayout()) {
@@ -38,7 +39,8 @@ public abstract class ALayout extends AComponent {
 	}
 
 	@Override
-	final boolean doPointerEventClimbingUp(int screenX, int screenY, int parentScreenX, int parentScreenY, int x, int y, int wheelVelocity, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
+	final boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
+			boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
 		if (!handlePointerProperty().get()) {
 			return false;
 		}
@@ -48,20 +50,16 @@ public abstract class ALayout extends AComponent {
 		if (!visibleProperty().get()) {
 			return false;
 		}
-		if (onPointerEventClimbingUp(screenX, screenY, parentScreenX, parentScreenY, x, y, wheelVelocity, altPressed,
+		if (onPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed,
 				ctrlPressed, shiftPressed, metaPressed, type)) {
 			for (int i = getChildren().size() - 1; i >= 0; i--) {
 				AComponent child = getChildren().get(i);
 				if (child != null) {
-					int thisX = parentScreenX + getLeft() + translateXProperty().get();
-					int thisY = parentScreenY + getTop() + translateYProperty().get();
-					int childX = screenX - thisX - child.getLeft() - child.translateXProperty().get();
-					int childY = screenY - thisY - child.getTop() - child.translateYProperty().get();
-					// TODO rotate and scale child points
-					// TODO rotate and scale this points
 					if (child.isIntersectsPoint(x, y)) {
-						// TODO convert points
-						if (child.doPointerEventClimbingUp(screenX, screenY, thisX, thisY, childX, childY, wheelVelocity,
+						int childX = x - child.getLeft() - child.translateXProperty().get();
+						int childY = y - child.getTop() - child.translateYProperty().get();
+						// TODO rotate and scale child point
+						if (child.doPointerEventClimbingUp(screenX, screenY, childX, childY, wheelVelocity,
 								altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
 							return true;
 						}
@@ -69,8 +67,13 @@ public abstract class ALayout extends AComponent {
 				}
 			}
 		}
-		return onPointerEventFallingDown(screenX, screenY, parentScreenX, parentScreenY, x, y, wheelVelocity, altPressed,
-				ctrlPressed, shiftPressed, metaPressed, type);
+		if (pointerTransparentProperty().get()) {
+			return false;
+		} else {
+			return onPointerEventFallingDown(screenX, screenY, x, y, wheelVelocity, altPressed,
+					ctrlPressed, shiftPressed, metaPressed, type);
+		}
+		
 	}
 
 	/**

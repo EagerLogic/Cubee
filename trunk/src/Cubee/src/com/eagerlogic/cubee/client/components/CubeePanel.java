@@ -1,8 +1,5 @@
 package com.eagerlogic.cubee.client.components;
 
-import com.eagerlogic.cubee.client.EventQueue;
-import com.eagerlogic.cubee.client.events.EventArgs;
-import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.utils.ARunOnce;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
@@ -17,19 +14,27 @@ import com.google.gwt.user.client.Window;
  * @author dipacs
  */
 public final class CubeePanel extends ALayout {
+	
+	private static CubeePanel instance;
+	
+	public static CubeePanel getInstance() {
+		if (instance == null) {
+			instance = new CubeePanel();
+		}
+		return instance;
+	}
 
 	private ARunOnce layoutRunOnce;
 	
 	private AComponent rootComponent;
 
-	public CubeePanel() {
+	private CubeePanel() {
 		super(DOM.createDiv());
 		getElement().getStyle().setLeft(0, Style.Unit.PX);
 		getElement().getStyle().setTop(0, Style.Unit.PX);
 		getElement().getStyle().setRight(0, Style.Unit.PX);
 		getElement().getStyle().setBottom(0, Style.Unit.PX);
 		getElement().getStyle().setBackgroundColor("#f0f0f0");
-		getElement().getStyle().setProperty("pointerEvents", "all");
 		Window.addResizeHandler(new ResizeHandler() {
 
 			@Override
@@ -37,30 +42,6 @@ public final class CubeePanel extends ALayout {
 				requestLayout();
 			}
 		});
-		
-		DOM.setEventListener((com.google.gwt.user.client.Element) getElement(), new EventListener() {
-
-			@Override
-			public void onBrowserEvent(com.google.gwt.user.client.Event event) {
-				switch (event.getTypeInt()) {
-					case com.google.gwt.user.client.Event.ONMOUSEDOWN:
-					case com.google.gwt.user.client.Event.ONMOUSEMOVE:
-					case com.google.gwt.user.client.Event.ONMOUSEUP:
-					case com.google.gwt.user.client.Event.ONMOUSEOVER:
-					case com.google.gwt.user.client.Event.ONMOUSEOUT:
-					case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
-						int x = event.getClientX();
-						int y = event.getClientY();
-						int wheelVelocity = event.getMouseWheelVelocityY();
-						doPointerEventClimbingUp(x, y, 0, 0, x, y, wheelVelocity, 
-								event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(), 
-								event.getTypeInt());
-						break;
-				}
-			}
-		});
-		// sinking all the events
-		DOM.sinkEvents((com.google.gwt.user.client.Element) getElement(), -1);
 		
 		requestLayout();
 	}
@@ -72,8 +53,10 @@ public final class CubeePanel extends ALayout {
 				@Override
 				protected void onRun() {
 					// TODO remove sout
-					System.out.println("!!! LAYING OUT !!!");
+					long ss = System.currentTimeMillis();
 					layout();
+					long es = System.currentTimeMillis();
+					System.out.println("!!! LAYING OUT !!!" + (es - ss) + "ms.");
 				}
 			};
 		}

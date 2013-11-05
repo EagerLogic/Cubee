@@ -1,7 +1,9 @@
 package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.events.IEventListener;
-import com.eagerlogic.cubee.client.events.PointerEventArgs;
+import com.eagerlogic.cubee.client.events.MouseDownEventArgs;
+import com.eagerlogic.cubee.client.events.MouseEventTypes;
+import com.eagerlogic.cubee.client.events.MouseUpEventArgs;
 import com.eagerlogic.cubee.client.properties.AExpression;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
@@ -54,15 +56,15 @@ public final class Button extends AUserControl {
 		label.selectableProperty().set(Boolean.FALSE);
 		this.getChildren().add(label);
 
-		this.onPointerDownEvent().addListener(new IEventListener<PointerEventArgs>() {
+		this.onMouseDownEvent().addListener(new IEventListener<MouseDownEventArgs>() {
 			@Override
-			public void onFired(PointerEventArgs args) {
+			public void onFired(MouseDownEventArgs args) {
 				alphaProperty().set(0.5);
 			}
 		});
-		this.onPointerUpEvent().addListener(new IEventListener<PointerEventArgs>() {
+		this.onMouseUpEvent().addListener(new IEventListener<MouseUpEventArgs>() {
 			@Override
-			public void onFired(PointerEventArgs args) {
+			public void onFired(MouseUpEventArgs args) {
 				alphaProperty().set(1.0);
 			}
 		});

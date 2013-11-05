@@ -34,7 +34,6 @@ public final class Label extends AComponent {
 	private final BooleanProperty underline = new BooleanProperty(false, false, false);
 	private final IntegerProperty fontSize = new IntegerProperty(12, false, false);
 	private final Property<FontFamily> fontFamily = new Property<FontFamily>(FontFamily.Arial, false, false);
-	private final BooleanProperty selectable = new BooleanProperty(Boolean.TRUE, false, false);
 	
 	public Label() {
 		super(DOM.createDiv());
@@ -177,25 +176,6 @@ public final class Label extends AComponent {
 			}
 		});
 		fontFamily.invalidate();
-		selectable.addChangeListener(new IChangeListener() {
-
-			@Override
-			public void onChanged(Object sender) {
-				if (selectable.get()) {
-					getElement().getStyle().clearProperty("mozUserSelect");
-					getElement().getStyle().clearProperty("khtmlUserSelect");
-					getElement().getStyle().clearProperty("webkitUserSelect");
-					getElement().getStyle().clearProperty("msUserSelect");
-					getElement().getStyle().clearProperty("userSelect");
-				} else {
-					getElement().getStyle().setProperty("mozUserSelect", "none");
-					getElement().getStyle().setProperty("khtmlUserSelect", "none");
-					getElement().getStyle().setProperty("webkitUserSelect", "none");
-					getElement().getStyle().setProperty("msUserSelect", "none");
-					getElement().getStyle().setProperty("userSelect", "none");
-				}
-			}
-		});
 	}
 
 	public final IntegerProperty widthProperty() {
@@ -256,8 +236,9 @@ public final class Label extends AComponent {
 		return fontFamily;
 	}
 
+	@Override
 	public BooleanProperty selectableProperty() {
-		return selectable;
+		return super.selectableProperty();
 	}
 
 }

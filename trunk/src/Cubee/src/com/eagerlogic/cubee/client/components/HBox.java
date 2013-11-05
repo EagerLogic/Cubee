@@ -17,13 +17,14 @@ import java.util.List;
 public class HBox extends ALayout {
 
 	private final IntegerProperty height = new IntegerProperty(null, true, false);
-	private final ArrayList<Element> wrappingPanels = new ArrayList<Element>();
 	private final ArrayList<Integer> cellWidths = new ArrayList<Integer>();
 	private final ArrayList<EHAlign> hAligns = new ArrayList<EHAlign>();
 	private final ArrayList<EVAlign> vAligns = new ArrayList<EVAlign>();
 
 	public HBox() {
 		super(DOM.createDiv());
+		getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
+		this.pointerTransparentProperty().set(true);
 		height.addChangeListener(new IChangeListener() {
 
 			@Override
@@ -86,21 +87,17 @@ public class HBox extends ALayout {
 
 	@Override
 	protected final void onChildAdded(AComponent child) {
-		Element e = DOM.createDiv();
-		e.getStyle().setOverflow(Style.Overflow.HIDDEN);
-		e.getStyle().setPosition(Style.Position.ABSOLUTE);
-		wrappingPanels.add(e);
-		getElement().appendChild(e);
 		if (child != null) {
-			e.appendChild(child.getElement());
+			getElement().appendChild(child.getElement());
 		}
 		requestLayout();
 	}
 
 	@Override
 	protected final void onChildRemoved(AComponent child, int index) {
-		getElement().removeChild(wrappingPanels.get(index));
-		wrappingPanels.remove(index);
+		if (child != null) {
+			getElement().removeChild(child.getElement());
+		}
 		removeFromList(hAligns, index);
 		removeFromList(vAligns, index);
 		removeFromList(cellWidths, index);
@@ -115,7 +112,6 @@ public class HBox extends ALayout {
 			root.removeChild(e);
 			e = root.getFirstChildElement();
 		}
-		wrappingPanels.clear();
 		hAligns.clear();
 		vAligns.clear();
 		cellWidths.clear();
@@ -131,9 +127,9 @@ public class HBox extends ALayout {
 
 		int actW = 0;
 		int maxH = 0;
-		for (int i = 0; i < wrappingPanels.size(); i++) {
+		for (int i = 0; i < getChildren().size(); i++) {
+			int childX = 0;
 			AComponent child = getChildren().get(i);
-			Element wrappingPanel = wrappingPanels.get(i);
 			Integer cellW = getCellWidth(i);
 			EHAlign hAlign = getCellHAlign(i);
 			int realCellW = -1;
@@ -154,19 +150,18 @@ public class HBox extends ALayout {
 				int calculatedCellW = realCellW;
 				if (calculatedCellW < 0) {
 					calculatedCellW = cw + cl;
+				} else if (calculatedCellW < cw) {
+					calculatedCellW = cw;
 				}
-				wrappingPanel.getStyle().setWidth(calculatedCellW, Style.Unit.PX);
-				wrappingPanel.getStyle().setLeft(actW, Style.Unit.PX);
+				
+				childX = actW - child.translateXProperty().get();
 				
 				if (hAlign == EHAlign.CENTER) {
-					int left = (calculatedCellW - cw) / 2;
-					child.getElement().getStyle().setLeft(left, Style.Unit.PX);
+					childX += (calculatedCellW - cw) / 2;
 				} else if (hAlign == EHAlign.RIGHT) {
-					int left = (calculatedCellW - cw);
-					child.getElement().getStyle().setLeft(left, Style.Unit.PX);
-				} else {
-					child.getElement().getStyle().setLeft(0, Style.Unit.PX);
+					childX += (calculatedCellW - cw);
 				}
+				child.setLeft(childX);
 				
 				if (ch + ct > maxH) {
 					maxH = ch + ct;
@@ -179,24 +174,21 @@ public class HBox extends ALayout {
 		if (maxHeight > -1) {
 			realHeight = maxHeight;
 		}
-		for (int i = 0; i < wrappingPanels.size(); i++) {
+		for (int i = 0; i < getChildren().size(); i++) {
+			int childY = 0;
 			AComponent child = getChildren().get(i);
 			if (child == null) {
 				continue;
 			}
-			Element wrappingPanel = wrappingPanels.get(i);
 			EVAlign vAlign = getCellVAlign(i);
-			wrappingPanel.getStyle().setHeight(realHeight, Style.Unit.PX);
 			int ch = child.boundsHeightProperty().get();
 			if (vAlign == EVAlign.MIDDLE) {
-				int top = (realHeight - ch) / 2;
-				child.getElement().getStyle().setTop(top, Style.Unit.PX);
+				childY += (realHeight - ch) / 2;
 			} else if (vAlign == EVAlign.BOTTOM) {
-				int top = (realHeight - ch);
-				child.getElement().getStyle().setTop(top, Style.Unit.PX);
-			} else {
-				child.getElement().getStyle().setTop(0, Style.Unit.PX);
+				childY += (realHeight - ch);
 			}
+			
+			child.setTop(childY);
 		}
 		
 		setSize(actW, realHeight);
