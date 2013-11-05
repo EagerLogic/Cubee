@@ -202,9 +202,9 @@ public abstract class AComponent {
 			@Override
 			public void onChanged(Object sender) {
 				if (visible.get()) {
-					getElement().getStyle().setVisibility(Style.Visibility.HIDDEN);
-				} else {
 					getElement().getStyle().setVisibility(Style.Visibility.VISIBLE);
+				} else {
+					getElement().getStyle().setVisibility(Style.Visibility.HIDDEN);
 				}
 			}
 		});
