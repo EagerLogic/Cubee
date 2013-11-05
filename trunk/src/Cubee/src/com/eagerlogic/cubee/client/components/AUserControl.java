@@ -80,6 +80,7 @@ public abstract class AUserControl extends ALayout {
 		if (child != null) {
 			getElement().appendChild(child.getElement());
 		}
+		requestLayout();
 	}
 
 	@Override
@@ -87,6 +88,7 @@ public abstract class AUserControl extends ALayout {
 		if (child != null) {
 			getElement().removeChild(child.getElement());
 		}
+		requestLayout();
 	}
 
 	@Override
@@ -97,6 +99,7 @@ public abstract class AUserControl extends ALayout {
 			root.removeChild(e);
 			e = root.getFirstChildElement();
 		}
+		requestLayout();
 	}
 
 	@Override

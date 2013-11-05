@@ -1,7 +1,7 @@
 package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.events.IEventListener;
-import com.eagerlogic.cubee.client.events.MouseEventArgs;
+import com.eagerlogic.cubee.client.events.PointerEventArgs;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.ColorProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
@@ -46,10 +46,10 @@ public final class CheckBox extends AUserControl {
 		
 		led.lightProperty().bind(checked);
 		
-		this.onClickEvent().addListener(new IEventListener<MouseEventArgs>() {
+		this.onClickEvent().addListener(new IEventListener<PointerEventArgs>() {
 
 			@Override
-			public void onFired(MouseEventArgs args) {
+			public void onFired(PointerEventArgs args) {
 				checked.set(!checked.get());
 			}
 		});

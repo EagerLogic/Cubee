@@ -4,8 +4,16 @@ package com.eagerlogic.cubee.client.events;
  *
  * @author dipacs
  */
-public final class MouseEventArgs extends EventArgs {
+public final class PointerEventArgs extends EventArgs {
 	
+	public static final int TYPE_MOUSE_DOWN = com.google.gwt.user.client.Event.ONMOUSEDOWN;
+	public static final int TYPE_MOUSE_MOVE = com.google.gwt.user.client.Event.ONMOUSEMOVE;
+	public static final int TYPE_MOUSE_UP = com.google.gwt.user.client.Event.ONMOUSEUP;
+	public static final int TYPE_MOUSE_ENTER = com.google.gwt.user.client.Event.ONMOUSEOVER;
+	public static final int TYPE_MOUSE_LEAVE = com.google.gwt.user.client.Event.ONMOUSEOUT;
+	public static final int TYPE_MOUSE_WHEEL = com.google.gwt.user.client.Event.ONMOUSEWHEEL;
+	
+	private final int type;
 	private final int x;
 	private final int y;
 	private final int screenX;
@@ -16,8 +24,9 @@ public final class MouseEventArgs extends EventArgs {
 	private final boolean metaPressed;
 	private final int wheelRotation;
 
-	public MouseEventArgs(int x, int y, int screenX, int screenY, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int wheelRotation, Object sender) {
+	public PointerEventArgs(int type, int x, int y, int screenX, int screenY, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int wheelRotation, Object sender) {
 		super(sender);
+		this.type = type;
 		this.x = x;
 		this.y = y;
 		this.screenX = screenX;
@@ -63,6 +72,10 @@ public final class MouseEventArgs extends EventArgs {
 
 	public int getWheelRotation() {
 		return wheelRotation;
+	}
+
+	public int getType() {
+		return type;
 	}
 
 }
