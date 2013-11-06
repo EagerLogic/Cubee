@@ -78,10 +78,22 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
     }
     
     protected void bind(IProperty property) {
-        this.bindingSources.add(property);
         property.addChangeListener(bindingListener);
+        this.bindingSources.add(property);
         this.invalidate();
     }
+	
+	protected void bind(IProperty property, IProperty... properties) {
+        property.addChangeListener(bindingListener);
+		this.bindingSources.add(property);
+		
+		for (IProperty prop : properties) {
+			prop.addChangeListener(bindingListener);
+			this.bindingSources.add(prop);
+		}
+		
+        this.invalidate();
+	}
     
     @Override
     public final void invalidate() {
