@@ -52,7 +52,6 @@ public final class Led extends AUserControl {
 
 			@Override
 			public Integer calculate() {
-				System.out.println(sizeProperty().get() - 6);
 				return sizeProperty().get() - 6;
 			}
 		});
