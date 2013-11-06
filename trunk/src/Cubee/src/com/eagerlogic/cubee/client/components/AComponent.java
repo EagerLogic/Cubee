@@ -129,9 +129,11 @@ public abstract class AComponent {
 	private final BooleanProperty enabled = new BooleanProperty(true, false, false);
 	private final DoubleProperty alpha = new DoubleProperty(1.0, false, false);
 	private final BooleanProperty selectable = new BooleanProperty(false, false, false);
-	//private final RectangleProperty clip = new RectangleProperty(null, true, false);
-	// TODO visible property
-	// TODO enabled property
+	private final IntegerProperty minWidth = new IntegerProperty(null, true, false);
+	private final IntegerProperty minHeight = new IntegerProperty(null, true, false);
+	private final IntegerProperty maxWidth = new IntegerProperty(null, true, false);
+	private final IntegerProperty maxHeight = new IntegerProperty(null, true, false);
+	
 	private final Event<ClickEventArgs> onClick = new Event<ClickEventArgs>();
 	private final Event<MouseDownEventArgs> onMouseDown = new Event<MouseDownEventArgs>();
 	private final Event<MouseDragEventArgs> onMouseDrag = new Event<MouseDragEventArgs>();
@@ -243,6 +245,54 @@ public abstract class AComponent {
 			}
 		});
 		selectable.invalidate();
+		minWidth.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (minWidth.get() == null) {
+					element.getStyle().clearProperty("minWidth");
+				} else {
+					element.getStyle().setProperty("minWidth", minWidth.get() + "px");
+				}
+				requestLayout();
+			}
+		});
+		minHeight.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (minHeight.get() == null) {
+					element.getStyle().clearProperty("minHeight");
+				} else {
+					element.getStyle().setProperty("minHeight", minHeight.get() + "px");
+				}
+				requestLayout();
+			}
+		});
+		maxWidth.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (maxWidth.get() == null) {
+					element.getStyle().clearProperty("maxWidth");
+				} else {
+					element.getStyle().setProperty("maxWidth", maxWidth.get() + "px");
+				}
+				requestLayout();
+			}
+		});
+		maxHeight.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (maxHeight.get() == null) {
+					element.getStyle().clearProperty("maxHeight");
+				} else {
+					element.getStyle().setProperty("maxHeight", maxHeight.get() + "px");
+				}
+				requestLayout();
+			}
+		});
 
 		measuredWidth.initReadonlyBind(measuredWidthSetter);
 		measuredHeight.initReadonlyBind(measuredHeightSetter);
@@ -408,36 +458,52 @@ public abstract class AComponent {
 		return border;
 	}
 
-	public IntegerProperty measuredWidthProperty() {
+	public final IntegerProperty measuredWidthProperty() {
 		return measuredWidth;
 	}
 
-	public IntegerProperty measuredHeightProperty() {
+	public final IntegerProperty measuredHeightProperty() {
 		return measuredHeight;
 	}
 
-	public IntegerProperty clientWidthProperty() {
+	public final IntegerProperty clientWidthProperty() {
 		return clientWidth;
 	}
 
-	public IntegerProperty clientHeightProperty() {
+	public final IntegerProperty clientHeightProperty() {
 		return clientHeight;
 	}
 
-	public IntegerProperty boundsWidthProperty() {
+	public final IntegerProperty boundsWidthProperty() {
 		return boundsWidth;
 	}
 
-	public IntegerProperty boundsHeightProperty() {
+	public final IntegerProperty boundsHeightProperty() {
 		return boundsHeight;
 	}
 
-	public IntegerProperty boundsLeftProperty() {
+	public final IntegerProperty boundsLeftProperty() {
 		return boundsLeft;
 	}
 
-	public IntegerProperty boundsTopProperty() {
+	public final IntegerProperty boundsTopProperty() {
 		return boundsTop;
+	}
+
+	protected IntegerProperty minWidthProperty() {
+		return minWidth;
+	}
+
+	protected IntegerProperty minHeightProperty() {
+		return minHeight;
+	}
+
+	protected IntegerProperty maxWidthProperty() {
+		return maxWidth;
+	}
+
+	protected IntegerProperty maxHeightProperty() {
+		return maxHeight;
 	}
 
 	protected final void setPosition(int left, int top) {

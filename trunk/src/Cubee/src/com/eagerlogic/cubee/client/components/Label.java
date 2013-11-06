@@ -241,4 +241,24 @@ public final class Label extends AComponent {
 		return super.selectableProperty();
 	}
 
+	@Override
+	public final IntegerProperty minWidthProperty() {
+		return super.minWidthProperty();
+	}
+
+	@Override
+	public final IntegerProperty minHeightProperty() {
+		return super.minHeightProperty();
+	}
+
+	@Override
+	public final IntegerProperty maxWidthProperty() {
+		return super.maxWidthProperty();
+	}
+
+	@Override
+	public final IntegerProperty maxHeightProperty() {
+		return super.maxHeightProperty();
+	}
+
 }
