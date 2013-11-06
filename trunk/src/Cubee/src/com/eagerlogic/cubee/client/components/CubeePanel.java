@@ -26,6 +26,8 @@ public final class CubeePanel extends ALayout {
 
 	private ARunOnce layoutRunOnce;
 	
+	private final Panel contentPanel;
+	private final Panel popupPanel;
 	private AComponent rootComponent;
 
 	private CubeePanel() {
@@ -42,6 +44,20 @@ public final class CubeePanel extends ALayout {
 				requestLayout();
 			}
 		});
+		
+		this.contentPanel = new Panel();
+		this.contentPanel.getElement().getStyle().setProperty("pointerEvents", "none");
+		this.contentPanel.widthProperty().bind(this.clientWidthProperty());
+		this.contentPanel.heightProperty().bind(this.clientHeightProperty());
+		this.contentPanel.pointerTransparentProperty().set(true);
+		this.getChildren().add(this.contentPanel);
+		
+		this.popupPanel = new Panel();
+		this.popupPanel.getElement().getStyle().setProperty("pointerEvents", "none");
+		this.popupPanel.widthProperty().bind(this.clientWidthProperty());
+		this.popupPanel.heightProperty().bind(this.clientHeightProperty());
+		this.popupPanel.pointerTransparentProperty().set(true);
+		this.getChildren().add(this.popupPanel);
 		
 		requestLayout();
 	}
@@ -68,9 +84,10 @@ public final class CubeePanel extends ALayout {
 	}
 
 	public void setRootComponent(AComponent rootComponent) {
-		getChildren().clear();
+		this.contentPanel.getChildren().clear();
+		this.rootComponent = null;
 		if (rootComponent != null) {
-			getChildren().add(rootComponent);
+			this.contentPanel.getChildren().add(rootComponent);
 		}
 		this.rootComponent = rootComponent;
 	}
@@ -103,4 +120,13 @@ public final class CubeePanel extends ALayout {
 	protected void onLayout() {
 		// nothing to do here
 	}
+	
+	void showPopup(APopup popup) {
+		this.popupPanel.getChildren().add(popup.getPopupRoot());
+	}
+	
+	void closePopup(APopup popup) {
+		this.popupPanel.getChildren().remove(popup.getPopupRoot());
+	}
+	
 }
