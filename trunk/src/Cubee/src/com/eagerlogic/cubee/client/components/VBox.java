@@ -94,6 +94,10 @@ public final class VBox extends ALayout {
 		requestLayout();
 	}
 
+	public IntegerProperty widthProperty() {
+		return width;
+	}
+
 	@Override
 	protected final void onChildRemoved(AComponent child, int index) {
 		if (child != null) {
