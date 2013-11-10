@@ -3,6 +3,8 @@ package com.eagerlogic.cubee.client.components;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
+import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.styles.BoxShadow;
 import com.eagerlogic.cubee.client.styles.Color;
 import com.eagerlogic.cubee.client.styles.ColorBackground;
 import com.google.gwt.dom.client.Element;
@@ -18,6 +20,7 @@ public abstract class AUserControl extends ALayout {
 	private final IntegerProperty width = new IntegerProperty(null, true, false);
 	private final IntegerProperty height = new IntegerProperty(null, true, false);
 	private final BackgroundProperty background = new BackgroundProperty(new ColorBackground(Color.TRANSPARENT), true, false);
+	private final Property<BoxShadow> shadow = new Property<BoxShadow>(null, true, false);
 
 	public AUserControl() {
 		super(DOM.createDiv());
@@ -61,6 +64,17 @@ public abstract class AUserControl extends ALayout {
 			}
 		});
 		background.invalidate();
+		shadow.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (shadow.get() == null) {
+					getElement().getStyle().clearProperty("boxShadow");
+				} else {
+					shadow.get().apply(getElement());
+				}
+			}
+		});
 	}
 
 	protected IntegerProperty widthProperty() {
@@ -73,6 +87,10 @@ public abstract class AUserControl extends ALayout {
 
 	protected BackgroundProperty backgroundProperty() {
 		return background;
+	}
+
+	protected Property<BoxShadow> shadowProperty() {
+		return shadow;
 	}
 
 	@Override

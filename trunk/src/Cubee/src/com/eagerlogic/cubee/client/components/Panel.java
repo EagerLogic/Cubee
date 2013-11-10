@@ -6,6 +6,7 @@ import com.eagerlogic.cubee.client.styles.ECursor;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.styles.BoxShadow;
 
 /**
  *
@@ -41,6 +42,11 @@ public final class Panel extends AUserControl {
 	@Override
 	public BackgroundProperty backgroundProperty() {
 		return super.backgroundProperty();
+	}
+
+	@Override
+	public Property<BoxShadow> shadowProperty() {
+		return super.shadowProperty();
 	}
 
 }
