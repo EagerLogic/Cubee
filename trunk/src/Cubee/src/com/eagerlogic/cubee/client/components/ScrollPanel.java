@@ -8,6 +8,7 @@ import com.eagerlogic.cubee.client.events.MouseUpEventArgs;
 import com.eagerlogic.cubee.client.events.MouseWheelEventArgs;
 import com.eagerlogic.cubee.client.properties.AExpression;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
+import com.eagerlogic.cubee.client.properties.ColorProperty;
 import com.eagerlogic.cubee.client.properties.DoubleProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
@@ -371,27 +372,27 @@ public final class ScrollPanel extends AUserControl {
 		return this.content;
 	}
 
-	public final Property<EScrollBarPolicy> getHorizontalScrollBarPolicy() {
+	public final Property<EScrollBarPolicy> horizontalScrollBarPolicyProperty() {
 		return horizontalScrollBarPolicy;
 	}
 
-	public final Property<EScrollBarPolicy> getVerticalScrollBarPolicy() {
+	public final Property<EScrollBarPolicy> verticalScrollBarPolicyProperty() {
 		return verticalScrollBarPolicy;
 	}
 
-	public final IntegerProperty getScrollWidth() {
+	public final IntegerProperty scrollWidthProperty() {
 		return scrollWidth;
 	}
 
-	public final IntegerProperty getScrollHeight() {
+	public final IntegerProperty scrollHeightProperty() {
 		return scrollHeight;
 	}
 
-	public final DoubleProperty getHorizontalScrollPosition() {
+	public final DoubleProperty horizontalScrollPositionProperty() {
 		return horizontalScrollPosition;
 	}
 
-	public final DoubleProperty getVerticalScrollPosition() {
+	public final DoubleProperty verticalScrollPositionProperty() {
 		return verticalScrollPosition;
 	}
 
@@ -408,5 +409,9 @@ public final class ScrollPanel extends AUserControl {
 	@Override
 	public final BackgroundProperty backgroundProperty() {
 		return super.backgroundProperty();
+	}
+
+	public BackgroundProperty scrollBarBackgroundProperty() {
+		return scrollBarBackground;
 	}
 }
