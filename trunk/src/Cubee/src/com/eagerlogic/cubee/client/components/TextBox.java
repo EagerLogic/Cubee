@@ -1,5 +1,6 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
@@ -173,8 +174,14 @@ public class TextBox extends AComponent {
 
 			@Override
 			public void onBrowserEvent(com.google.gwt.user.client.Event event) {
-				if (event.getTypeInt() == com.google.gwt.user.client.Event.ONCHANGE) {
-					text.set(getElement().getAttribute("value"));
+				if ((event.getTypeInt() & com.google.gwt.user.client.Event.ONKEYUP) > 0) {
+					EventQueue.getInstance().invokePrior(new Runnable() {
+
+						@Override
+						public void run() {
+							text.set(getElement().getPropertyString("value"));
+						}
+					});
 				}
 			}
 		});
