@@ -27,7 +27,9 @@ import com.google.gwt.user.client.EventListener;
 import java.util.LinkedList;
 
 /**
- *
+ * This  class is the base class of all the components in Cubee. This class wraps a html element. You can inherite from
+ * this class if  you want to wrap a HTML element into a Cubee component.
+ * 
  * @author dipacs
  */
 public abstract class AComponent {
@@ -155,6 +157,12 @@ public abstract class AComponent {
 		}
 	};
 
+	/**
+	 * Creates a new instance of AComponet.
+	 * 
+	 * @param rootElement 
+	 * The underlaying HTML element which this component wraps.
+	 */
 	public AComponent(Element rootElement) {
 		this.element = rootElement;
 		this.element.setAttribute("draggabe", "false");
@@ -329,6 +337,9 @@ public abstract class AComponent {
 		element.getStyle().setProperty("webkitTransform", "translate(" + translateX.get() + "px, " + translateY.get() + "px) rotate(" + angleStr + ") scaleX( " + sX + ") scaleY(" + sY + ")");
 	}
 
+	/**
+	 * Notifies the layout engine that this component may changed it's size, and the UI needs to re-layout.
+	 */
 	public void requestLayout() {
 		if (!this.needsLayout) {
 			this.needsLayout = true;
@@ -338,6 +349,9 @@ public abstract class AComponent {
 		}
 	}
 
+	/**
+	 * Measures the dimensions of this component.
+	 */
 	public final void measure() {
 		onMeasure();
 	}
@@ -402,10 +416,22 @@ public abstract class AComponent {
 		return new Point2D(resX, resY);
 	}
 
+	/**
+	 * Returns the HTML element which is wrapped by this component.
+	 * 
+	 * @return 
+	 * The HTML element which is wrapped by this component.
+	 */
 	public final Element getElement() {
 		return this.element;
 	}
 
+	/**
+	 * Returns the parent layout of this component, or null if this components hasn't got any parent yet.
+	 * 
+	 * @return 
+	 * The parent layout of this component.
+	 */
 	public final ALayout getParent() {
 		return parent;
 	}
@@ -414,19 +440,40 @@ public abstract class AComponent {
 		this.parent = parent;
 	}
 
+	/**
+	 * Lays out this component. You can override this method to implement your own layout logic.
+	 */
 	public void layout() {
 		this.needsLayout = false;
 		measure();
 	}
 
-	public boolean isNeedsLayout() {
+	/**
+	 * Indicates if this component needs layout.
+	 * 
+	 * @return 
+	 * True if this component needs layout, otherwise false.
+	 */
+	public final boolean isNeedsLayout() {
 		return needsLayout;
 	}
 
+	/**
+	 * Returns the translateX property, which can be used to translate this component throught the x axis.
+	 * 
+	 * @return 
+	 * The translateX property instance.
+	 */
 	public final IntegerProperty translateXProperty() {
 		return translateX;
 	}
 
+	/**
+	 * Returns the translateY property, which can be used to translate this component throught the y axis.
+	 * 
+	 * @return 
+	 * The translateY property instance.
+	 */
 	public final IntegerProperty translateYProperty() {
 		return translateY;
 	}
@@ -450,34 +497,89 @@ public abstract class AComponent {
 //	public final DoubleProperty transformCenterYProperty() {
 //		return transformCenterY;
 //	}
+	
+	/**
+	 * Returns the padding property instance which can be used to control the padding of this component.
+	 * 
+	 * @return 
+	 * The padding property instance.
+	 */
 	protected PaddingProperty paddingProperty() {
 		return padding;
 	}
 
+	/**
+	 * Returns the border property instance which can be used to control the border of this component.
+	 * 
+	 * @return 
+	 * The border property instance.
+	 */
 	protected BorderProperty borderProperty() {
 		return border;
 	}
 
+	/**
+	 * Returns the read-only measured width property instance. The measured width property stores the untransformed width
+	 * of this component, including padding and border.
+	 * 
+	 * @return 
+	 * The read-only measured width property instance.
+	 */
 	public final IntegerProperty measuredWidthProperty() {
 		return measuredWidth;
 	}
 
+	/**
+	 * Returns the read-only measured height property instance. The measured height property stores the untransformed height
+	 * of this component, including padding and border.
+	 * 
+	 * @return 
+	 * The read-only measured height property instance.
+	 */
 	public final IntegerProperty measuredHeightProperty() {
 		return measuredHeight;
 	}
 
+	/**
+	 * Returns the read-only client width property instance. The client width property stores the untransformed width
+	 * of this component, excluding padding and border..
+	 * 
+	 * @return 
+	 * The read-only client width property instance.
+	 */
 	public final IntegerProperty clientWidthProperty() {
 		return clientWidth;
 	}
 
+	/**
+	 * Returns the read-only client height property instance. The client height property stores the untransformed height
+	 * of this component, excluding padding and border.
+	 * 
+	 * @return 
+	 * The read-only client height property instance.
+	 */
 	public final IntegerProperty clientHeightProperty() {
 		return clientHeight;
 	}
 
+	/**
+	 * Returns the read-only bounds width property instance. The nounds width property stores the width of this component's 
+	 * transformed bounding box.
+	 * 
+	 * @return 
+	 * The read-only bounds width property instance.
+	 */
 	public final IntegerProperty boundsWidthProperty() {
 		return boundsWidth;
 	}
 
+	/**
+	 * Returns the read-only bounds height property instance. The bounds height property stores the height of this component's 
+	 * transformed bounding box.
+	 * 
+	 * @return 
+	 * The read-only bounds height property instance.
+	 */
 	public final IntegerProperty boundsHeightProperty() {
 		return boundsHeight;
 	}
@@ -490,22 +592,56 @@ public abstract class AComponent {
 		return boundsTop;
 	}
 
+	/**
+	 * Returns the minWidth property instance which can be used to control this component's minimum width.
+	 * 
+	 * @return 
+	 * The minWidth property instance.
+	 */
 	protected IntegerProperty minWidthProperty() {
 		return minWidth;
 	}
 
+	/**
+	 * Returns the minHeight property instance which can be used to control this component's minimum height.
+	 * 
+	 * @return 
+	 * The minHeight property instance.
+	 */
 	protected IntegerProperty minHeightProperty() {
 		return minHeight;
 	}
 
+	/**
+	 * Returns the maxWidth property instance which can be used to control this component's maximum width.
+	 * 
+	 * @return 
+	 * The maxWidth property instance.
+	 */
 	protected IntegerProperty maxWidthProperty() {
 		return maxWidth;
 	}
 
+	/**
+	 * Returns the maxHeight property instance which can be used to control this component's maximum height.
+	 * 
+	 * @return 
+	 * The MaxHeight property instance.
+	 */
 	protected IntegerProperty maxHeightProperty() {
 		return maxHeight;
 	}
 
+	/**
+	 * Sets the base position of this component relative to the parent's top-left corner. 
+	 * This method is called from a layout's onLayout method to set the base position
+	 * of this component.
+	 * 
+	 * @param left
+	 * The left base position of this component relative to the parents top-left corner.
+	 * @param top 
+	 * The top base position of this component relative to the parents top-left corner.
+	 */
 	protected final void setPosition(int left, int top) {
 		getElement().getStyle().setLeft(left, Style.Unit.PX);
 		getElement().getStyle().setTop(top, Style.Unit.PX);
@@ -513,16 +649,41 @@ public abstract class AComponent {
 		this.top = top;
 	}
 
+	/**
+	 * Sets the base left position of this component relative to the parent's top-left corner. 
+	 * This method is called from a layout's onLayout method to set the base left position
+	 * of this component.
+	 * 
+	 * @param left
+	 * The left base position of this component relative to the parents top-left corner.
+	 */
 	protected final void setLeft(int left) {
 		getElement().getStyle().setLeft(left, Style.Unit.PX);
 		this.left = left;
 	}
 
+	/**
+	 * Sets the base top position of this component relative to the parent's top-left corner. 
+	 * This method is called from a layout's onLayout method to set the base top position
+	 * of this component.
+	 * 
+	 * @param top
+	 * The top base position of this component relative to the parents top-left corner.
+	 */
 	protected final void setTop(int top) {
 		getElement().getStyle().setTop(top, Style.Unit.PX);
 		this.top = top;
 	}
 
+	/**
+	 * Sets the size of this component. This method can be called when a dynamically sized component's size is calculated.
+	 * Typically from the onLayout method.
+	 * 
+	 * @param width
+	 * The width of this component.
+	 * @param height 
+	 * The height of this component.
+	 */
 	protected final void setSize(int width, int height) {
 		getElement().getStyle().setWidth(width, Style.Unit.PX);
 		getElement().getStyle().setHeight(height, Style.Unit.PX);
