@@ -1,5 +1,6 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.utils.ARunOnce;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
@@ -127,6 +128,10 @@ public final class CubeePanel extends ALayout {
 	
 	void closePopup(APopup popup) {
 		this.popupPanel.getChildren().remove(popup.getPopupRoot());
+	}
+
+	public BackgroundProperty backgroundProperty() {
+		return contentPanel.backgroundProperty();
 	}
 	
 }
