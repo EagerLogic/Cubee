@@ -1,5 +1,6 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.styles.ECursor;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
@@ -35,6 +36,11 @@ public final class Panel extends AUserControl {
 	@Override
 	public LayoutChildren getChildren() {
 		return super.getChildren();
+	}
+
+	@Override
+	public BackgroundProperty backgroundProperty() {
+		return super.backgroundProperty();
 	}
 
 }
