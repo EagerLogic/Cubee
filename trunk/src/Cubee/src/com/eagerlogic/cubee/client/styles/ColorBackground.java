@@ -7,8 +7,9 @@ import com.google.gwt.dom.client.Element;
  * @author dipacs
  */
 public class ColorBackground extends ABackground {
-	
+
 	private final Color color;
+	private String cache = null;
 
 	public ColorBackground(Color color) {
 		this.color = color;
@@ -20,11 +21,15 @@ public class ColorBackground extends ABackground {
 
 	@Override
 	public void apply(Element element) {
-		if (color == null) {
-			element.getStyle().clearBackgroundColor();
+		if (cache != null) {
+			element.getStyle().setBackgroundColor(cache);
 		} else {
-			element.getStyle().setBackgroundColor(color.toCSS());
+			if (color == null) {
+				element.getStyle().clearBackgroundColor();
+			} else {
+				cache = color.toCSS();
+				element.getStyle().setBackgroundColor(cache);
+			}
 		}
 	}
-
 }
