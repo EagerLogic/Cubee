@@ -44,7 +44,7 @@ public class LinearGradient extends ABackground {
 //				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
 //				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
-			style += ", " + stop.getColor().toCSS() + "," + ((int)stop.getPosition() * 100) + "%";
+			style += ", " + stop.getColor().toCSS() + "," + (stop.getPosition() * 100) + "%";
 		}
 		style += ")";
 		element.getStyle().setProperty("background", style);
@@ -57,7 +57,7 @@ public class LinearGradient extends ABackground {
 //				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
 //				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
-			style += ", color-stop(" + ((int)stop.getPosition() * 100) + "%," + stop.getColor().toCSS() + ")";
+			style += ", color-stop(" + (stop.getPosition() * 100) + "%," + stop.getColor().toCSS() + ")";
 		}
 		style += ")";
 		element.getStyle().setProperty("background", style);
@@ -69,7 +69,7 @@ public class LinearGradient extends ABackground {
 //				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
 //				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
-			style += ", " + stop.getColor().toCSS() + "," + ((int)stop.getPosition() * 100) + "%";
+			style += ", " + stop.getColor().toCSS() + "," + (stop.getPosition() * 100) + "%";
 		}
 		style += ")";
 		element.getStyle().setProperty("background", style);
@@ -81,7 +81,7 @@ public class LinearGradient extends ABackground {
 //				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
 //				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
-			style += ", " + stop.getColor().toCSS() + "," + ((int)stop.getPosition() * 100) + "%";
+			style += ", " + stop.getColor().toCSS() + "," + (stop.getPosition() * 100) + "%";
 		}
 		style += ")";
 		element.getStyle().setProperty("background", style);
@@ -93,7 +93,7 @@ public class LinearGradient extends ABackground {
 //				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
 //				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
-			style += ", " + stop.getColor().toCSS() + "," + ((int)stop.getPosition() * 100) + "%";
+			style += ", " + stop.getColor().toCSS() + "," + (stop.getPosition() * 100) + "%";
 		}
 		style += ")";
 		element.getStyle().setProperty("background", style);
@@ -105,7 +105,7 @@ public class LinearGradient extends ABackground {
 //				+ ((int)(startY * 100)) + "%, " + ((int)(endX * 100)) + "% " 
 //				+ ((int)(endY * 100)) + "%";
 		for (ColorStop stop : stops) {
-			style += ", " + stop.getColor().toCSS() + " " + ((int)stop.getPosition() * 100) + "%";
+			style += ", " + stop.getColor().toCSS() + " " + (stop.getPosition() * 100) + "%";
 		}
 		style += ")";
 		element.getStyle().setProperty("background", style);
