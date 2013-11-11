@@ -96,7 +96,7 @@ public final class BoxShadow {
 	
 	public void apply(Element element) {
 		element.getStyle().setProperty("boxShadow", hPos + "px " + vPos + "px " + blur + "px " + spread + "px " 
-				+ color + (inner ? " inset" : ""));
+				+ color.toCSS() + (inner ? " inset" : ""));
 		
 	}
 
