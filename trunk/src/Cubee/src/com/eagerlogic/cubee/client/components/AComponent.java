@@ -861,7 +861,6 @@ public abstract class AComponent {
 				break;
 			case MouseEventTypes.TYPE_MOUSE_MOVE:
 				MouseMoveEventArgs mmea = new MouseMoveEventArgs(screenX, screenY, x, y, altPressed, ctrlPressed, shiftPressed, metaPressed, this);
-				registerDownEvent(screenX, screenY, x, y, altPressed, ctrlPressed, shiftPressed, metaPressed);
 				onMouseMove.fireEvent(mmea);
 				break;
 			case MouseEventTypes.TYPE_MOUSE_ENTER:
