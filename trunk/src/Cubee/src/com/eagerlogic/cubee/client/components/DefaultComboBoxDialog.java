@@ -66,8 +66,16 @@ public final class DefaultComboBoxDialog<T> extends AComboBoxDialog<T> {
 		root.borderProperty().set(new Border(1, Color.getRgbColor(0x202020), 5));
 		this.setRootComponent(root);
 		
+		VBox vbMain = new VBox();
+		root.getChildren().add(vbMain);
+		
+		ScrollPanel spMain = new ScrollPanel();
+		spMain.maxHeightProperty().set(400);
+		spMain.minWidthProperty().bind(vbMain.clientWidthProperty());
+		vbMain.getChildren().add(spMain);
+		
 		this.vbox = new VBox();
-		root.getChildren().add(vbox);
+		spMain.setContent(this.vbox);
 		
 		if (emptySelectionEnabled) {
 			vbox.getChildren().add(createItem(emptySelectionText, -1, vbox));
@@ -79,8 +87,8 @@ public final class DefaultComboBoxDialog<T> extends AComboBoxDialog<T> {
 			i++;
 		}
 		
-		vbox.getChildren().add(null);
-		vbox.setCellHeight(vbox.getChildren().size() - 1, 10);
+		vbMain.getChildren().add(null);
+		vbMain.setCellHeight(vbMain.getChildren().size() - 1, 10);
 		
 		Panel btnPanel = new Panel();
 		btnPanel.paddingProperty().set(new Padding(5));
@@ -95,7 +103,7 @@ public final class DefaultComboBoxDialog<T> extends AComboBoxDialog<T> {
 			}
 		});
 		btnPanel.getChildren().add(btnCancel);
-		vbox.getChildren().add(btnPanel);
-		vbox.setCellHAlign(vbox.getChildren().size() - 1, EHAlign.CENTER);
+		vbMain.getChildren().add(btnPanel);
+		vbMain.setCellHAlign(vbox.getChildren().size() - 1, EHAlign.CENTER);
 	}
 }
