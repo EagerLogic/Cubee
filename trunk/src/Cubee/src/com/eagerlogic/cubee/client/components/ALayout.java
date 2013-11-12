@@ -1,5 +1,6 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.styles.Padding;
 import com.google.gwt.dom.client.Element;
 
 /**
@@ -55,9 +56,16 @@ public abstract class ALayout extends AComponent {
 			for (int i = getChildren().size() - 1; i >= 0; i--) {
 				AComponent child = getChildren().get(i);
 				if (child != null) {
-					if (child.isIntersectsPoint(x, y)) {
-						int childX = x - child.getLeft() - child.translateXProperty().get();
-						int childY = y - child.getTop() - child.translateYProperty().get();
+					int parentX = x;
+					int parentY = y;
+					Padding p = this.paddingProperty().get();
+					if (p != null) {
+						parentX -= p.getLeftPadding();
+						parentY -= p.getTopPadding();
+					}
+					if (child.isIntersectsPoint(parentX, parentY)) {
+						int childX = parentX - child.getLeft() - child.translateXProperty().get();
+						int childY = parentY - child.getTop() - child.translateYProperty().get();
 						// TODO rotate and scale child point
 						if (child.doPointerEventClimbingUp(screenX, screenY, childX, childY, wheelVelocity,
 								altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
