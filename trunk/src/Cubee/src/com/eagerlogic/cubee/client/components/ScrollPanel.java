@@ -53,9 +53,6 @@ public final class ScrollPanel extends AUserControl {
 		this.getChildren().add(hScrollBar);
 		this.getChildren().add(wheelPanel);
 
-		this.widthProperty().set(200);
-		this.heightProperty().set(200);
-
 		contentPanel.translateXProperty().bind(new AExpression<Integer>() {
 			{
 				this.bind(horizontalScrollPosition);
@@ -411,5 +408,25 @@ public final class ScrollPanel extends AUserControl {
 
 	public BackgroundProperty scrollBarBackgroundProperty() {
 		return scrollBarBackground;
+	}
+
+	@Override
+	public IntegerProperty minWidthProperty() {
+		return super.minWidthProperty();
+	}
+
+	@Override
+	public IntegerProperty minHeightProperty() {
+		return super.minHeightProperty();
+	}
+
+	@Override
+	public IntegerProperty maxWidthProperty() {
+		return super.maxWidthProperty();
+	}
+
+	@Override
+	public IntegerProperty maxHeightProperty() {
+		return super.maxHeightProperty();
 	}
 }
