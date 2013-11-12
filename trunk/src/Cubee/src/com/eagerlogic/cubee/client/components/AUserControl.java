@@ -24,12 +24,13 @@ public abstract class AUserControl extends ALayout {
 
 	public AUserControl() {
 		super(DOM.createDiv());
+		getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
 		width.addChangeListener(new IChangeListener() {
 			@Override
 			public void onChanged(Object sender) {
 				if (width.get() == null) {
 					getElement().getStyle().clearWidth();
-					getElement().getStyle().setOverflowX(Style.Overflow.VISIBLE);
+					getElement().getStyle().setOverflowX(Style.Overflow.HIDDEN);
 				} else {
 					getElement().getStyle().setWidth(width.get(), Style.Unit.PX);
 					getElement().getStyle().setOverflowX(Style.Overflow.HIDDEN);
@@ -43,7 +44,7 @@ public abstract class AUserControl extends ALayout {
 			public void onChanged(Object sender) {
 				if (height.get() == null) {
 					getElement().getStyle().clearHeight();
-					getElement().getStyle().setOverflowY(Style.Overflow.VISIBLE);
+					getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
 				} else {
 					getElement().getStyle().setHeight(height.get(), Style.Unit.PX);
 					getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
