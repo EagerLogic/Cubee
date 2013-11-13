@@ -42,6 +42,11 @@ public final class Button extends AUserControl {
 		label = new Label();
 		label.textOverflowProperty().set(ETextOverflow.ELLIPSIS);
 		label.widthProperty().bind(new AExpression<Integer>() {
+			
+			{
+				bind(widthProperty());
+			}
+			
 			@Override
 			public Integer calculate() {
 				if (widthProperty().get() == null) {
