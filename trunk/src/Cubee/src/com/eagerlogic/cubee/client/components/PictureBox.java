@@ -1,5 +1,7 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.events.EventArgs;
+import com.eagerlogic.cubee.client.events.IEventListener;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.styles.EPictureSizeMode;
@@ -7,12 +9,12 @@ import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.styles.Image;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Image;
 
 /**
  *
@@ -29,7 +31,9 @@ public final class PictureBox extends AComponent {
 
 	public PictureBox() {
 		super(DOM.createDiv());
+		getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
 		imgElement = DOM.createImg();
+		imgElement.getStyle().setPosition(Style.Position.ABSOLUTE);
 		getElement().appendChild(imgElement);
 		// TODO create one instance of change listener and replace multiple implementation
 		width.addChangeListener(new IChangeListener() {
@@ -57,13 +61,16 @@ public final class PictureBox extends AComponent {
 			@Override
 			public void onChanged(Object sender) {
 				if (image.get() != null) {
-					image.get().addLoadHandler(new LoadHandler() {
-						@Override
-						public void onLoad(LoadEvent event) {
-							recalculateSize();
-						}
-					});
-					imgElement.setAttribute("src", image.get().getUrl());
+					image.get().apply(imgElement);
+					if (!image.get().isLoaded()) {
+						image.get().onLoadEvent().addListener(new IEventListener<EventArgs>() {
+
+							@Override
+							public void onFired(EventArgs args) {
+								recalculateSize();
+							}
+						});
+					}
 				} else {
 					imgElement.setAttribute("src", "");
 				}
