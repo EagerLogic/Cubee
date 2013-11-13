@@ -46,6 +46,20 @@ public final class ComboBox<T> extends AUserControl {
 		
 		label.textProperty().set(emptySelectionText.get());
 		label.pointerTransparentProperty().set(Boolean.TRUE);
+		label.translateXProperty().bind(new AExpression<Integer>() {
+			
+			{
+				bind(clientWidthProperty(), label.boundsWidthProperty());
+			}
+
+			@Override
+			public Integer calculate() {
+				if (clientWidthProperty().get() > label.boundsWidthProperty().get()) {
+					return (clientWidthProperty().get() - label.boundsWidthProperty().get()) / 2;
+				}
+				return 0;
+			}
+		});
 		this.getChildren().add(label);
 		
 		this.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
