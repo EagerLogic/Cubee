@@ -85,6 +85,11 @@ public final class VBox extends ALayout {
 	public EVAlign getCellVAlign(int index) {
 		return getFromList(vAligns, index);
 	}
+	
+	public void addEmptyCell(int height) {
+		this.getChildren().add(null);
+		this.setCellHeight(this.getChildren().size() - 1, height);
+	}
 
 	@Override
 	protected final void onChildAdded(AComponent child) {
