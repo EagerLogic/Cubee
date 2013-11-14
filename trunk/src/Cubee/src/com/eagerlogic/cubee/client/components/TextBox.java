@@ -75,7 +75,7 @@ public class TextBox extends AComponent {
 
 			@Override
 			public void onChanged(Object sender) {
-				getElement().setAttribute("value", text.get());
+				getElement().setPropertyString("value", text.get());
 			}
 		});
 		foreColor.addChangeListener(new IChangeListener() {
