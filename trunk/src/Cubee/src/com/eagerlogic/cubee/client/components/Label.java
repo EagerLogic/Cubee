@@ -43,6 +43,7 @@ public final class Label extends AComponent {
 				if (width.get() == null) {
 					getElement().getStyle().setWhiteSpace(Style.WhiteSpace.NOWRAP);
 					getElement().getStyle().setOverflowX(Style.Overflow.VISIBLE);
+					getElement().getStyle().clearWidth();
 				} else {
 					getElement().getStyle().setWhiteSpace(Style.WhiteSpace.NORMAL);
 					getElement().getStyle().setWidth(width.get(), Style.Unit.PX);
