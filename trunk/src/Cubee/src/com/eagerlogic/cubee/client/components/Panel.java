@@ -49,4 +49,24 @@ public final class Panel extends AUserControl {
 		return super.shadowProperty();
 	}
 
+	@Override
+	public IntegerProperty minWidthProperty() {
+		return super.minWidthProperty();
+	}
+
+	@Override
+	public IntegerProperty minHeightProperty() {
+		return super.minHeightProperty();
+	}
+
+	@Override
+	public IntegerProperty maxWidthProperty() {
+		return super.maxWidthProperty();
+	}
+
+	@Override
+	public IntegerProperty maxHeightProperty() {
+		return super.maxHeightProperty();
+	}
+
 }
