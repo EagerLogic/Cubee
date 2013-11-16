@@ -64,16 +64,16 @@ public abstract class AComponent {
 		pointerDownEvents.clear();
 	}
 	
-	private static final EventListener nativeEventListener = new EventListener() {
+	private final EventListener nativeEventListener = new EventListener() {
+		
 		@Override
 		public void onBrowserEvent(com.google.gwt.user.client.Event event) {
 			int x = event.getClientX();
 			int y = event.getClientY();
 			int wheelVelocity = event.getMouseWheelVelocityY();
+			AComponent parent;
 			switch (event.getTypeInt()) {
 				case com.google.gwt.user.client.Event.ONMOUSEDOWN:
-				case com.google.gwt.user.client.Event.ONMOUSEOVER:
-				case com.google.gwt.user.client.Event.ONMOUSEOUT:
 				case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
 					event.stopPropagation();
 					CubeePanel.getInstance().doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
@@ -94,6 +94,36 @@ public abstract class AComponent {
 				case com.google.gwt.user.client.Event.ONMOUSEUP:
 					event.stopPropagation();
 					fireUpEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey());
+					break;
+				case com.google.gwt.user.client.Event.ONMOUSEOVER:
+					if (pointerTransparent.get()) {
+						return;
+					}
+					
+					// check handle pointer
+					parent = AComponent.this;
+					while (parent != null) {
+						if (!parent.handlePointer.get()) {
+							return;
+						}
+						parent = parent.getParent();
+					}
+					onMouseEnter.fireEvent(new EventArgs(AComponent.this));
+					break;
+				case com.google.gwt.user.client.Event.ONMOUSEOUT:
+					if (pointerTransparent.get()) {
+						return;
+					}
+					
+					// check handle pointer
+					parent = AComponent.this;
+					while (parent != null) {
+						if (!parent.handlePointer.get()) {
+							return;
+						}
+						parent = parent.getParent();
+					}
+					onMouseLeave.fireEvent(new EventArgs(AComponent.this));
 					break;
 			}
 		}
