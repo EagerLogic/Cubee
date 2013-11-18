@@ -263,6 +263,7 @@ public abstract class AComponent {
 					getElement().getStyle().clearBorderStyle();
 					getElement().getStyle().clearBorderColor();
 					getElement().getStyle().clearBorderWidth();
+					getElement().getStyle().clearProperty("borderRadius");
 				} else {
 					b.apply(getElement());
 				}
