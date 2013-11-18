@@ -86,6 +86,18 @@ public final class VBox extends ALayout {
 		return getFromList(vAligns, index);
 	}
 	
+	public void setLastCellHAlign(EHAlign hAlign) {
+		this.setCellHAlign(this.getChildren().size() - 1, hAlign);
+	}
+	
+	public void setLastCellVAlign(EVAlign vAlign) {
+		this.setCellVAlign(this.getChildren().size() - 1, vAlign);
+	}
+	
+	public void setLastCellHeight(int height) {
+		this.setCellHeight(this.getChildren().size() - 1, height);
+	}
+	
 	public void addEmptyCell(int height) {
 		this.getChildren().add(null);
 		this.setCellHeight(this.getChildren().size() - 1, height);

@@ -85,6 +85,18 @@ public class HBox extends ALayout {
 		return getFromList(vAligns, index);
 	}
 	
+	public void setLastCellHAlign(EHAlign hAlign) {
+		this.setCellHAlign(this.getChildren().size() - 1, hAlign);
+	}
+	
+	public void setLastCellVAlign(EVAlign vAlign) {
+		this.setCellVAlign(this.getChildren().size() - 1, vAlign);
+	}
+	
+	public void setLastCellWidth(int width) {
+		this.setCellWidth(this.getChildren().size() - 1, width);
+	}
+	
 	public void addEmptyCell(int width) {
 		this.getChildren().add(null);
 		this.setCellWidth(this.getChildren().size() - 1, width);
