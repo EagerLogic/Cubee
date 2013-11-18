@@ -1,8 +1,10 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.events.ClickEventArgs;
 import com.eagerlogic.cubee.client.events.Event;
 import com.eagerlogic.cubee.client.events.EventArgs;
+import com.eagerlogic.cubee.client.events.KeyEventArgs;
 import com.eagerlogic.cubee.client.events.MouseDownEventArgs;
 import com.eagerlogic.cubee.client.events.MouseEventTypes;
 import com.eagerlogic.cubee.client.events.MouseDragEventArgs;
@@ -68,10 +70,23 @@ public abstract class AComponent {
 		
 		@Override
 		public void onBrowserEvent(com.google.gwt.user.client.Event event) {
+			if (AComponent.this instanceof TextBox) {
+			if ((event.getTypeInt() & com.google.gwt.user.client.Event.ONKEYUP) > 0) {
+					EventQueue.getInstance().invokePrior(new Runnable() {
+
+						@Override
+						public void run() {
+							((TextBox)AComponent.this).textProperty().set(getElement().getPropertyString("value"));
+						}
+					});
+				}
+			}
+			
 			int x = event.getClientX();
 			int y = event.getClientY();
 			int wheelVelocity = event.getMouseWheelVelocityY();
 			AComponent parent;
+			KeyEventArgs keyArgs;
 			switch (event.getTypeInt()) {
 				case com.google.gwt.user.client.Event.ONMOUSEDOWN:
 				case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
@@ -125,6 +140,24 @@ public abstract class AComponent {
 					}
 					onMouseLeave.fireEvent(new EventArgs(AComponent.this));
 					break;
+				case com.google.gwt.user.client.Event.ONKEYDOWN:
+					event.stopPropagation();
+					keyArgs = new KeyEventArgs((char)event.getKeyCode(), event.getAltKey(), event.getCtrlKey(), 
+							event.getShiftKey(), event.getMetaKey(), AComponent.this);
+					onKeyDown.fireEvent(keyArgs);
+					break;
+				case com.google.gwt.user.client.Event.ONKEYPRESS:
+					event.stopPropagation();
+					keyArgs = new KeyEventArgs((char)event.getKeyCode(), event.getAltKey(), event.getCtrlKey(), 
+							event.getShiftKey(), event.getMetaKey(), AComponent.this);
+					onKeyPress.fireEvent(keyArgs);
+					break;
+				case com.google.gwt.user.client.Event.ONKEYUP:
+					event.stopPropagation();
+					keyArgs = new KeyEventArgs((char)event.getKeyCode(), event.getAltKey(), event.getCtrlKey(), 
+							event.getShiftKey(), event.getMetaKey(), AComponent.this);
+					onKeyUp.fireEvent(keyArgs);
+					break;
 			}
 		}
 	};
@@ -174,6 +207,10 @@ public abstract class AComponent {
 	private final Event<EventArgs> onMouseEnter = new Event<EventArgs>();
 	private final Event<EventArgs> onMouseLeave = new Event<EventArgs>();
 	private final Event<MouseWheelEventArgs> onMouseWheel = new Event<MouseWheelEventArgs>();
+	private final Event<KeyEventArgs> onKeyDown = new Event<KeyEventArgs>();
+	private final Event<KeyEventArgs> onKeyPress = new Event<KeyEventArgs>();
+	private final Event<KeyEventArgs> onKeyUp = new Event<KeyEventArgs>();
+	
 	private int left = 0;
 	private int top = 0;
 	private final Element element;
@@ -761,6 +798,18 @@ public abstract class AComponent {
 
 	public final Event<MouseWheelEventArgs> onMouseWheelEvent() {
 		return onMouseWheel;
+	}
+
+	public final Event<KeyEventArgs> onKeyDownEvent() {
+		return onKeyDown;
+	}
+
+	public final Event<KeyEventArgs> onKeyPressEvent() {
+		return onKeyPress;
+	}
+
+	public final Event<KeyEventArgs> onKeyUpEvent() {
+		return onKeyUp;
 	}
 
 	public final DoubleProperty alphaProperty() {

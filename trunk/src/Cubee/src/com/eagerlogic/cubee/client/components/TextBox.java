@@ -170,21 +170,6 @@ public class TextBox extends AComponent {
 			}
 		});
 		fontFamily.invalidate();
-		DOM.setEventListener((com.google.gwt.user.client.Element)getElement(), new EventListener() {
-
-			@Override
-			public void onBrowserEvent(com.google.gwt.user.client.Event event) {
-				if ((event.getTypeInt() & com.google.gwt.user.client.Event.ONKEYUP) > 0) {
-					EventQueue.getInstance().invokePrior(new Runnable() {
-
-						@Override
-						public void run() {
-							text.set(getElement().getPropertyString("value"));
-						}
-					});
-				}
-			}
-		});
 		background.addChangeListener(new IChangeListener() {
 
 			@Override
