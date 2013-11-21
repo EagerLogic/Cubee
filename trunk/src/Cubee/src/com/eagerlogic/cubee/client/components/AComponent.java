@@ -369,6 +369,17 @@ public abstract class AComponent {
 				requestLayout();
 			}
 		});
+		handlePointer.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (handlePointer.get()) {
+					getElement().getStyle().clearProperty("pointerEvents");
+				} else {
+					getElement().getStyle().setProperty("pointerEvents", "none");
+				}
+			}
+		});
 
 		measuredWidth.initReadonlyBind(measuredWidthSetter);
 		measuredHeight.initReadonlyBind(measuredHeightSetter);
@@ -1034,5 +1045,25 @@ public abstract class AComponent {
 		 (x < (poly[j][0] - poly[i][0]) * (y - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
 		 */
 		return ((ly1 > py) != (ly2 > py)) && (px < (lx2 - lx1) * ((double) (py - ly1)) / (ly2 - ly1) + lx1);
+	}
+
+	public final DoubleProperty rotateProperty() {
+		return rotate;
+	}
+
+	public final DoubleProperty scaleXProperty() {
+		return scaleX;
+	}
+
+	public final DoubleProperty scaleYProperty() {
+		return scaleY;
+	}
+
+	public final DoubleProperty transformCenterXProperty() {
+		return transformCenterX;
+	}
+
+	public final DoubleProperty transformCenterYProperty() {
+		return transformCenterY;
 	}
 }

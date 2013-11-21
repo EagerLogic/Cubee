@@ -48,6 +48,7 @@ public final class ScrollPanel extends AUserControl {
 	private double hScrollStartValue = 0;
 
 	public ScrollPanel() {
+		wheelPanel.getElement().getStyle().setProperty("pointerEvents", "none");
 		this.getChildren().add(contentPanel);
 		this.getChildren().add(vScrollBar);
 		this.getChildren().add(hScrollBar);
