@@ -10,6 +10,7 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.properties.StringProperty;
+import com.eagerlogic.cubee.client.styles.Border;
 import com.eagerlogic.cubee.client.styles.Color;
 import com.eagerlogic.cubee.client.styles.ColorBackground;
 import com.eagerlogic.cubee.client.styles.ETextAlign;
@@ -45,6 +46,8 @@ public class TextBox extends AComponent {
 	
 	TextBox(Element e) {
 		super(e);
+		getElement().getStyle().setOutlineStyle(Style.OutlineStyle.NONE);
+		this.borderProperty().set(new Border(1, Color.LIGHT_GRAY, 0));
 		width.addChangeListener(new IChangeListener() {
 			@Override
 			public void onChanged(Object sender) {
