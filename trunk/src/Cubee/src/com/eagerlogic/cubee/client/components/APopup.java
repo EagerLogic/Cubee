@@ -149,11 +149,11 @@ public abstract class APopup {
 		return glassColor;
 	}
 
-	protected IntegerProperty getTranslateX() {
+	protected IntegerProperty translateXProperty() {
 		return translateX;
 	}
 
-	protected IntegerProperty getTranslateY() {
+	protected IntegerProperty translateYProperty() {
 		return translateY;
 	}
 
