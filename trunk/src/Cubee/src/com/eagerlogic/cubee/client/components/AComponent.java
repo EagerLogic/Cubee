@@ -1066,4 +1066,12 @@ public abstract class AComponent {
 	public final DoubleProperty transformCenterYProperty() {
 		return transformCenterY;
 	}
+	
+	public final int getScreenX() {
+		return getElement().getAbsoluteLeft();
+	}
+	
+	public final int getScreenY() {
+		return getElement().getAbsoluteTop();
+	}
 }
