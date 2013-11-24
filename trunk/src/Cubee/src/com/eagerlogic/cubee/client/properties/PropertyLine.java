@@ -74,9 +74,6 @@ class PropertyLine<T> {
 		if (nextFrame == null || actFrame == null) {
 			property.set((T) keyFrames.getLast().getEndValue());
 			return true;
-		} else if (nextFrame == null) {
-			property.set((T) keyFrames.getLast().getEndValue());
-			return true;
 		} else {
 			double pos = ((double)(actTime - startTime - actFrame.getTime())) / (nextFrame.getTime() - actFrame.getTime());
 			pos = nextFrame.getInterpolator().interpolate(pos);
