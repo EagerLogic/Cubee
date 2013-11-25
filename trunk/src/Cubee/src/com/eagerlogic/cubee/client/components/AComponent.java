@@ -4,6 +4,7 @@ import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.events.ClickEventArgs;
 import com.eagerlogic.cubee.client.events.Event;
 import com.eagerlogic.cubee.client.events.EventArgs;
+import com.eagerlogic.cubee.client.events.IEventListener;
 import com.eagerlogic.cubee.client.events.KeyEventArgs;
 import com.eagerlogic.cubee.client.events.MouseDownEventArgs;
 import com.eagerlogic.cubee.client.events.MouseEventTypes;
@@ -26,6 +27,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.EventListener;
+
 import java.util.LinkedList;
 
 /**
@@ -198,6 +200,8 @@ public abstract class AComponent {
 	private final IntegerProperty minHeight = new IntegerProperty(null, true, false);
 	private final IntegerProperty maxWidth = new IntegerProperty(null, true, false);
 	private final IntegerProperty maxHeight = new IntegerProperty(null, true, false);
+	private final BooleanProperty hovered = new BooleanProperty(false, false, true);
+	private final BooleanProperty hoveredSetter = new BooleanProperty(false, false, true);
 	
 	private final Event<ClickEventArgs> onClick = new Event<ClickEventArgs>();
 	private final Event<MouseDownEventArgs> onMouseDown = new Event<MouseDownEventArgs>();
@@ -243,6 +247,7 @@ public abstract class AComponent {
 		scaleY.addChangeListener(transformChangedListener);
 		transformCenterX.addChangeListener(transformChangedListener);
 		transformCenterY.addChangeListener(transformChangedListener);
+		hovered.initReadonlyBind(hoveredSetter);
 		padding.addChangeListener(new IChangeListener() {
 			@Override
 			public void onChanged(Object sender) {
@@ -394,6 +399,20 @@ public abstract class AComponent {
 		// sinking all the events
 		DOM.sinkEvents((com.google.gwt.user.client.Element) getElement(), -1);
 
+		this.onMouseEnter.addListener(new IEventListener<EventArgs>() {
+			
+			@Override
+			public void onFired(EventArgs args) {
+				hoveredSetter.set(true);
+			}
+		});
+		this.onMouseLeave.addListener(new IEventListener<EventArgs>() {
+			
+			@Override
+			public void onFired(EventArgs args) {
+				hoveredSetter.set(false);
+			}
+		});
 	}
 
 	private void updateTransform() {
@@ -1074,4 +1093,9 @@ public abstract class AComponent {
 	public final int getScreenY() {
 		return getElement().getAbsoluteTop();
 	}
+	
+	public final BooleanProperty hoveredProperty() {
+		return this.hovered;
+	}
+	
 }
