@@ -49,18 +49,22 @@ public final class PopupMenu extends APopup implements ICloseable {
 		
 		this.root = new Panel();
 		this.setRootComponent(root);
+		this.backgroundProperty().set(new ColorBackground(Color.WHITE));
 		
 		VBox vb = new VBox();
 		root.getChildren().add(vb);
 		root.shadowProperty().set(new BoxShadow(2, 2, 10, 0, Color.getRgbColor(0x808080), false));
 		root.borderProperty().set(new Border(1, Color.LIGHT_GRAY, 0));
+		root.paddingProperty().set(new Padding(5));
 		
-		for (AMenuItem item : items) {
+		for (AMenuItem item : this.items) {
 			if (item == null) {
 				throw new NullPointerException("The 'items' parameter can't contains null elements.");
 			}
 			item.setCloseable(this);
 			item.minWidthProperty().bind(root.clientWidthProperty());
+			item.normalBackground.bind(normalItemBackground);
+			item.hoveredBackground.bind(selectedItemBackground);
 			vb.getChildren().add(item);
 		}
 	}
