@@ -18,6 +18,7 @@ public final class LabelMenuItem extends AMenuItem {
 	public LabelMenuItem() {
 		label = new Label();
 		label.handlePointerProperty().set(false);
+		label.fontSizeProperty().set(14);
 		this.getChildren().add(label);
 		
 		this.cursorProperty().set(ECursor.POINTER);
