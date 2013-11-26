@@ -201,7 +201,7 @@ public abstract class AComponent {
 	private final IntegerProperty maxWidth = new IntegerProperty(null, true, false);
 	private final IntegerProperty maxHeight = new IntegerProperty(null, true, false);
 	private final BooleanProperty hovered = new BooleanProperty(false, false, true);
-	private final BooleanProperty hoveredSetter = new BooleanProperty(false, false, true);
+	private final BooleanProperty hoveredSetter = new BooleanProperty(false, false, false);
 	
 	private final Event<ClickEventArgs> onClick = new Event<ClickEventArgs>();
 	private final Event<MouseDownEventArgs> onMouseDown = new Event<MouseDownEventArgs>();
