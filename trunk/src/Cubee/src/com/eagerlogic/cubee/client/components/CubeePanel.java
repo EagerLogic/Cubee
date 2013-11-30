@@ -4,6 +4,7 @@ import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.utils.ARunOnce;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.DOM;
@@ -33,6 +34,7 @@ public final class CubeePanel extends ALayout {
 
 	private CubeePanel() {
 		super(DOM.createDiv());
+		getElement().getStyle().setPosition(Position.FIXED);
 		getElement().getStyle().setLeft(0, Style.Unit.PX);
 		getElement().getStyle().setTop(0, Style.Unit.PX);
 		getElement().getStyle().setRight(0, Style.Unit.PX);
@@ -70,10 +72,10 @@ public final class CubeePanel extends ALayout {
 				@Override
 				protected void onRun() {
 					// TODO remove sout
-					long ss = System.currentTimeMillis();
+					//long ss = System.currentTimeMillis();
 					layout();
-					long es = System.currentTimeMillis();
-					System.out.println("!!! LAYING OUT !!!" + (es - ss) + "ms.");
+					//long es = System.currentTimeMillis();
+					//System.out.println("!!! LAYING OUT !!!" + (es - ss) + "ms.");
 				}
 			};
 		}
