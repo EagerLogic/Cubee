@@ -1,4 +1,4 @@
-Cubee is an UI library based on GWT. The main goal of this project is to create a UI library which can be used to easily create beutyfull, animated web applications in a desktop (JavaFX) like environment.
+Cubee is an UI library based on GWT. The main goal of this project is to create a UI library which can be used to easily create beautiful, animated web applications in a desktop (JavaFX) like environment.
 
 **Main Features**
 - Data binding
