@@ -11,7 +11,7 @@ Cubee is an UI library based on GWT. The main goal of this project is to create 
 Using the Property API you can use databinding very similar to JavaFX. You can bind properties to eachother and you can also bind properties to expressions to implement harder logic.
 
 # Timeline animations
-Using Cubee you can easily create beautifull animated components and webpages. In cubee, every property is animateable. And every every style and layout stuffs of a component is a property so you can animate nearly anithing (position, background color, opacity, border size and color, and many more).
+Using Cubee you can easily create beautiful animated components and webpages. In cubee, every property is animateable. And every every style and layout stuffs of a component is a property so you can animate nearly anithing (position, background color, opacity, border size and color, and many more).
 
 # Redesigned layout system
 Cubee's layout system is redesigned from the ground to eliminate tipical html misunderstanding and cross browser incompatibility. In Cubee, every component is using CSS: position: absolute. This doesn't mean that you need to position everything width absolute coordinates. The most common layout containers like horizontal and vertical layout (HBox, VBox) are all in your hand, but you can easily and safely use absolute position and overlapping elements inside a component.
