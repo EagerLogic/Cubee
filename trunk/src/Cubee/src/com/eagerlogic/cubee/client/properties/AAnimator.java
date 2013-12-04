@@ -1,7 +1,10 @@
 package com.eagerlogic.cubee.client.properties;
 
 import com.eagerlogic.cubee.client.EventQueue;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -9,7 +12,7 @@ import java.util.LinkedList;
  */
 public abstract class AAnimator {
 	
-	private static final LinkedList<AAnimator> animators = new LinkedList<AAnimator>();
+	private static final List<AAnimator> animators = new ArrayList<AAnimator>();
 	private static final Runnable ANIMATOR_TASK = new Runnable() {
 
 		@Override
@@ -19,7 +22,11 @@ public abstract class AAnimator {
 	};
 	
 	private static void animate() {
-		for (AAnimator animator : animators) {
+		for (int i = animators.size() -1; i >= 0; i--) {
+			if (animators.size() <= i) {
+				continue;
+			}
+			AAnimator animator = animators.get(i);
 			try {
 				animator.onAnimate();
 			} catch (Throwable t) {
@@ -36,7 +43,7 @@ public abstract class AAnimator {
 	
 	public void start() {
 		if (started) {
-			throw new IllegalStateException("This animator is already started.");
+			return;
 		}
 		
 		animators.add(this);
@@ -48,9 +55,11 @@ public abstract class AAnimator {
 	
 	public void stop() {
 		if (!started) {
-			throw new IllegalStateException("This animator is already stopped.");
+			return;
 		}
+		
 		started = false;
+		
 		animators.remove(this);
 	}
 
