@@ -125,7 +125,9 @@ public abstract class AComponent {
 						}
 						parent = parent.getParent();
 					}
-					onMouseEnter.fireEvent(new EventArgs(AComponent.this));
+					if (!hoveredProperty().get()) {
+						onMouseEnter.fireEvent(new EventArgs(AComponent.this));
+					}
 					break;
 				case com.google.gwt.user.client.Event.ONMOUSEOUT:
 					if (pointerTransparent.get()) {
@@ -140,7 +142,14 @@ public abstract class AComponent {
 						}
 						parent = parent.getParent();
 					}
-					onMouseLeave.fireEvent(new EventArgs(AComponent.this));
+					if (hoveredProperty().get()) {
+						/*int compX = getLeft();
+						int compY = getTop();
+						if (x >= compX && y >= compY && x <= compX + boundsWidthProperty().get() && y <= compY + boundsHeightProperty().get()) {
+							return;
+						}*/
+						onMouseLeave.fireEvent(new EventArgs(AComponent.this));
+					}
 					break;
 				case com.google.gwt.user.client.Event.ONKEYDOWN:
 					event.stopPropagation();
