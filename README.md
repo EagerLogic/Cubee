@@ -37,4 +37,7 @@ In the near feature a type-safe Java styling API will be implemented to get all 
 # Easy Custom Component creation
 One of the biggest advantage of Cubee is that you can create reusable Custom Components with custom properties and events. Lets create your cutting edge component and impress the world with it.
 
+#License
+Apache License, Version 2.0
+http://www.apache.org/licenses/LICENSE-2.0.html
 
