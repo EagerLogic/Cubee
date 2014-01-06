@@ -9,10 +9,9 @@ import com.eagerlogic.cubee.client.styles.Padding;
  */
 public final class PaddingProperty extends Property<Padding> {
 
-	public PaddingProperty(Padding defaultValue, boolean nullable, boolean readonly) {
-		super(defaultValue, nullable, readonly);
-	}
-	
-	// TODO implement fade
+    public PaddingProperty(Padding defaultValue, boolean nullable, boolean readonly) {
+        super(defaultValue, nullable, readonly);
+    }
 
+	// TODO implement fade
 }

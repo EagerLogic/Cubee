@@ -19,12 +19,12 @@ public final class IntegerProperty extends Property<Integer> {
         if (startValue == null) {
             startValue = 0;
         }
-        
+
         if (endValue == null) {
             endValue = 0;
         }
-        
+
         return (int) (startValue + ((endValue - startValue) * pos));
     }
-    
+
 }

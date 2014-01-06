@@ -8,8 +8,8 @@ import com.google.gwt.user.client.DOM;
  */
 public final class TextArea extends TextBox {
 
-	public TextArea() {
-		super(DOM.createTextArea());
-	}
+    public TextArea() {
+        super(DOM.createTextArea());
+    }
 
 }

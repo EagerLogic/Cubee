@@ -9,10 +9,9 @@ import com.eagerlogic.cubee.client.properties.Property;
  */
 public final class BorderProperty extends Property<Border> {
 
-	public BorderProperty(Border defaultValue, boolean nullable, boolean readonly) {
-		super(defaultValue, nullable, readonly);
-	}
-	
-	// TODO implement fade
+    public BorderProperty(Border defaultValue, boolean nullable, boolean readonly) {
+        super(defaultValue, nullable, readonly);
+    }
 
+	// TODO implement fade
 }

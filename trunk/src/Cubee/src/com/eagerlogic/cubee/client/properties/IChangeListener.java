@@ -9,7 +9,7 @@ package com.eagerlogic.cubee.client.properties;
  * @author dipacs
  */
 public interface IChangeListener {
-    
+
     public void onChanged(Object sender);
-    
+
 }

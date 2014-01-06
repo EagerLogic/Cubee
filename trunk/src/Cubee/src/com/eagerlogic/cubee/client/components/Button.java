@@ -29,110 +29,110 @@ import com.eagerlogic.cubee.client.styles.Padding;
  */
 public final class Button extends AUserControl {
 
-	private final Label label;
+    private final Label label;
 
-	public Button() {
-		this.paddingProperty().set(new Padding(5));
-		this.cursorProperty().set(ECursor.POINTER);
-		this.borderProperty().set(new Border(1, Color.getRgbColor(0x808080), 5));
-		LinearGradient lg = new LinearGradient(0.0, new ColorStop(0.0, Color.getRgbColor(0xe0e0e0)),
-				new ColorStop(1.0, Color.getRgbColor(0xc0c0c0)));
-		this.backgroundProperty().set(lg);
+    public Button() {
+        this.paddingProperty().set(new Padding(5));
+        this.cursorProperty().set(ECursor.POINTER);
+        this.borderProperty().set(new Border(1, Color.getRgbColor(0x808080), 5));
+        LinearGradient lg = new LinearGradient(0.0, new ColorStop(0.0, Color.getRgbColor(0xe0e0e0)),
+                new ColorStop(1.0, Color.getRgbColor(0xc0c0c0)));
+        this.backgroundProperty().set(lg);
 
-		label = new Label();
-		label.textOverflowProperty().set(ETextOverflow.ELLIPSIS);
-		label.widthProperty().bind(new AExpression<Integer>() {
-			
-			{
-				bind(widthProperty());
-			}
-			
-			@Override
-			public Integer calculate() {
-				if (widthProperty().get() == null) {
-					return null;
-				} else {
-					return widthProperty().get();
-				}
-			}
-		});
-		label.textAlignProperty().set(ETextAlign.CENTER);
-		label.pointerTransparentProperty().set(Boolean.TRUE);
-		label.selectableProperty().set(Boolean.FALSE);
-		this.getChildren().add(label);
+        label = new Label();
+        label.textOverflowProperty().set(ETextOverflow.ELLIPSIS);
+        label.widthProperty().bind(new AExpression<Integer>() {
 
-		this.onMouseDownEvent().addListener(new IEventListener<MouseDownEventArgs>() {
-			@Override
-			public void onFired(MouseDownEventArgs args) {
-				alphaProperty().set(0.5);
-			}
-		});
-		this.onMouseUpEvent().addListener(new IEventListener<MouseUpEventArgs>() {
-			@Override
-			public void onFired(MouseUpEventArgs args) {
-				alphaProperty().set(1.0);
-			}
-		});
-	}
+            {
+                bind(widthProperty());
+            }
 
-	@Override
-	public IntegerProperty widthProperty() {
-		return super.widthProperty();
-	}
+            @Override
+            public Integer calculate() {
+                if (widthProperty().get() == null) {
+                    return null;
+                } else {
+                    return widthProperty().get();
+                }
+            }
+        });
+        label.textAlignProperty().set(ETextAlign.CENTER);
+        label.pointerTransparentProperty().set(Boolean.TRUE);
+        label.selectableProperty().set(Boolean.FALSE);
+        this.getChildren().add(label);
 
-	@Override
-	public IntegerProperty heightProperty() {
-		return super.heightProperty();
-	}
+        this.onMouseDownEvent().addListener(new IEventListener<MouseDownEventArgs>() {
+            @Override
+            public void onFired(MouseDownEventArgs args) {
+                alphaProperty().set(0.5);
+            }
+        });
+        this.onMouseUpEvent().addListener(new IEventListener<MouseUpEventArgs>() {
+            @Override
+            public void onFired(MouseUpEventArgs args) {
+                alphaProperty().set(1.0);
+            }
+        });
+    }
 
-	@Override
-	public BackgroundProperty backgroundProperty() {
-		return super.backgroundProperty();
-	}
+    @Override
+    public IntegerProperty widthProperty() {
+        return super.widthProperty();
+    }
 
-	@Override
-	public PaddingProperty paddingProperty() {
-		return super.paddingProperty();
-	}
+    @Override
+    public IntegerProperty heightProperty() {
+        return super.heightProperty();
+    }
 
-	@Override
-	public BorderProperty borderProperty() {
-		return super.borderProperty();
-	}
+    @Override
+    public BackgroundProperty backgroundProperty() {
+        return super.backgroundProperty();
+    }
 
-	public final StringProperty textProperty() {
-		return label.textProperty();
-	}
+    @Override
+    public PaddingProperty paddingProperty() {
+        return super.paddingProperty();
+    }
 
-	public final Property<ETextOverflow> labelTextOverflowProperty() {
-		return label.textOverflowProperty();
-	}
+    @Override
+    public BorderProperty borderProperty() {
+        return super.borderProperty();
+    }
 
-	public ColorProperty labelForeColorProperty() {
-		return label.foreColorProperty();
-	}
+    public final StringProperty textProperty() {
+        return label.textProperty();
+    }
 
-	public BooleanProperty labelBoldProperty() {
-		return label.boldProperty();
-	}
+    public final Property<ETextOverflow> labelTextOverflowProperty() {
+        return label.textOverflowProperty();
+    }
 
-	public BooleanProperty labelItalicProperty() {
-		return label.italicProperty();
-	}
+    public ColorProperty labelForeColorProperty() {
+        return label.foreColorProperty();
+    }
 
-	public BooleanProperty labelUnderlineProperty() {
-		return label.underlineProperty();
-	}
+    public BooleanProperty labelBoldProperty() {
+        return label.boldProperty();
+    }
 
-	public Property<ETextAlign> labelTextAlignProperty() {
-		return label.textAlignProperty();
-	}
+    public BooleanProperty labelItalicProperty() {
+        return label.italicProperty();
+    }
 
-	public IntegerProperty labelFontSizeProperty() {
-		return label.fontSizeProperty();
-	}
+    public BooleanProperty labelUnderlineProperty() {
+        return label.underlineProperty();
+    }
 
-	public Property<FontFamily> labelFontFamilyProperty() {
-		return label.fontFamilyProperty();
-	}
+    public Property<ETextAlign> labelTextAlignProperty() {
+        return label.textAlignProperty();
+    }
+
+    public IntegerProperty labelFontSizeProperty() {
+        return label.fontSizeProperty();
+    }
+
+    public Property<FontFamily> labelFontFamilyProperty() {
+        return label.fontFamilyProperty();
+    }
 }

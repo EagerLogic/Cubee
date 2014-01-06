@@ -19,12 +19,12 @@ public final class FloatProperty extends Property<Float> {
         if (startValue == null) {
             startValue = 0.0f;
         }
-        
+
         if (endValue == null) {
             endValue = 0.0f;
         }
-        
-        return (float)(startValue + ((endValue - startValue) * pos));
+
+        return (float) (startValue + ((endValue - startValue) * pos));
     }
-    
+
 }

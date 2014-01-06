@@ -7,7 +7,7 @@ import com.google.gwt.dom.client.Element;
  * @author dipacs
  */
 public interface IStyle {
-	
-	public void apply(Element element);
+
+    public void apply(Element element);
 
 }

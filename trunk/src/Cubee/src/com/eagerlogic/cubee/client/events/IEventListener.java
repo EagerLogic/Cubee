@@ -9,7 +9,7 @@ package com.eagerlogic.cubee.client.events;
  * @author dipacs
  */
 public interface IEventListener<T extends EventArgs> {
-    
+
     public void onFired(T args);
-    
+
 }

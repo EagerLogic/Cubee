@@ -7,45 +7,45 @@ import com.eagerlogic.cubee.client.components.AComponent;
  * @author dipacs
  */
 final class MouseDownEventLog {
-	
-	private final AComponent component;
-	private final int screenX;
-	private final int screenY;
-	private final int x;
-	private final int y;
-	private final long timeStamp;
 
-	public MouseDownEventLog(AComponent component, int screenX, int screenY, int x, int y) {
-		this.component = component;
-		this.screenX = screenX;
-		this.screenY = screenY;
-		this.x = x;
-		this.y = y;
-		this.timeStamp = System.currentTimeMillis();
-	}
+    private final AComponent component;
+    private final int screenX;
+    private final int screenY;
+    private final int x;
+    private final int y;
+    private final long timeStamp;
 
-	public AComponent getComponent() {
-		return component;
-	}
+    public MouseDownEventLog(AComponent component, int screenX, int screenY, int x, int y) {
+        this.component = component;
+        this.screenX = screenX;
+        this.screenY = screenY;
+        this.x = x;
+        this.y = y;
+        this.timeStamp = System.currentTimeMillis();
+    }
 
-	public int getScreenX() {
-		return screenX;
-	}
+    public AComponent getComponent() {
+        return component;
+    }
 
-	public int getScreenY() {
-		return screenY;
-	}
+    public int getScreenX() {
+        return screenX;
+    }
 
-	public int getX() {
-		return x;
-	}
+    public int getScreenY() {
+        return screenY;
+    }
 
-	public int getY() {
-		return y;
-	}
+    public int getX() {
+        return x;
+    }
 
-	public long getTimeStamp() {
-		return timeStamp;
-	}
+    public int getY() {
+        return y;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
 
 }

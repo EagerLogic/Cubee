@@ -5,58 +5,58 @@ package com.eagerlogic.cubee.client.events;
  * @author dipacs
  */
 public class MouseUpEventArgs extends EventArgs {
-	
-	private final int screenX;
-	private final int screenY;
-	private final int deltaX;
-	private final int deltaY;
-	private final boolean altPressed;
-	private final boolean ctrlPressed;
-	private final boolean shiftPressed;
-	private final boolean metaPressed;
 
-	public MouseUpEventArgs(int screenX, int screenY, int deltaX, int deltaY, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, Object sender) {
-		super(sender);
-		this.screenX = screenX;
-		this.screenY = screenY;
-		this.deltaX = deltaX;
-		this.deltaY = deltaY;
-		this.altPressed = altPressed;
-		this.ctrlPressed = ctrlPressed;
-		this.shiftPressed = shiftPressed;
-		this.metaPressed = metaPressed;
-	}
+    private final int screenX;
+    private final int screenY;
+    private final int deltaX;
+    private final int deltaY;
+    private final boolean altPressed;
+    private final boolean ctrlPressed;
+    private final boolean shiftPressed;
+    private final boolean metaPressed;
 
-	public int getScreenX() {
-		return screenX;
-	}
+    public MouseUpEventArgs(int screenX, int screenY, int deltaX, int deltaY, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, Object sender) {
+        super(sender);
+        this.screenX = screenX;
+        this.screenY = screenY;
+        this.deltaX = deltaX;
+        this.deltaY = deltaY;
+        this.altPressed = altPressed;
+        this.ctrlPressed = ctrlPressed;
+        this.shiftPressed = shiftPressed;
+        this.metaPressed = metaPressed;
+    }
 
-	public int getScreenY() {
-		return screenY;
-	}
+    public int getScreenX() {
+        return screenX;
+    }
 
-	public int getDeltaX() {
-		return deltaX;
-	}
+    public int getScreenY() {
+        return screenY;
+    }
 
-	public int getDeltaY() {
-		return deltaY;
-	}
+    public int getDeltaX() {
+        return deltaX;
+    }
 
-	public boolean isAltPressed() {
-		return altPressed;
-	}
+    public int getDeltaY() {
+        return deltaY;
+    }
 
-	public boolean isCtrlPressed() {
-		return ctrlPressed;
-	}
+    public boolean isAltPressed() {
+        return altPressed;
+    }
 
-	public boolean isShiftPressed() {
-		return shiftPressed;
-	}
+    public boolean isCtrlPressed() {
+        return ctrlPressed;
+    }
 
-	public boolean isMetaPressed() {
-		return metaPressed;
-	}
+    public boolean isShiftPressed() {
+        return shiftPressed;
+    }
+
+    public boolean isMetaPressed() {
+        return metaPressed;
+    }
 
 }

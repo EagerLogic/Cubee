@@ -9,9 +9,11 @@ package com.eagerlogic.cubee.client.properties;
  * @author dipacs
  */
 public interface IBindable<T> {
-    
+
     public void bind(T source);
+
     public void unbind();
+
     public boolean isBound();
-    
+
 }

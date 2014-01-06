@@ -25,203 +25,203 @@ import com.eagerlogic.cubee.client.styles.Padding;
  * @author dipacs
  */
 public final class ComboBox<T> extends AUserControl {
-	
+
 //	private final BooleanProperty emptySelectionEnabled = new BooleanProperty(true, false, false);
-	private final IntegerProperty selectedIndex = new IntegerProperty(-1, false, false);
-	private final Property<T> selectedItem = new Property<T>(null, true, false);
-	private final StringProperty emptySelectionText = new StringProperty("-- Empty --", false, false);
-	
-	private T[] items;
-	
-	private final Label label = new Label();
-	
-	public ComboBox() {
-		this.paddingProperty().set(new Padding(5));
-		this.borderProperty().set(new Border(1, Color.getRgbColor(0x808080), 3));
-		this.backgroundProperty().set(new LinearGradient(0.0, 
-				new ColorStop(0.0, Color.getRgbColor(0xe0e0e0)),
-				new ColorStop(1.0, Color.getRgbColor(0xc0c0c0))
-				));
-		this.cursorProperty().set(ECursor.POINTER);
-		
-		label.textProperty().set(emptySelectionText.get());
-		label.pointerTransparentProperty().set(Boolean.TRUE);
-		label.translateXProperty().bind(new AExpression<Integer>() {
-			
-			{
-				bind(clientWidthProperty(), label.boundsWidthProperty());
-			}
+    private final IntegerProperty selectedIndex = new IntegerProperty(-1, false, false);
+    private final Property<T> selectedItem = new Property<T>(null, true, false);
+    private final StringProperty emptySelectionText = new StringProperty("-- Empty --", false, false);
 
-			@Override
-			public Integer calculate() {
-				if (clientWidthProperty().get() > label.boundsWidthProperty().get()) {
-					return (clientWidthProperty().get() - label.boundsWidthProperty().get()) / 2;
-				}
-				return 0;
-			}
-		});
-		this.getChildren().add(label);
-		
-		this.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
+    private T[] items;
 
-			@Override
-			public void onFired(ClickEventArgs args) {
-				final DefaultComboBoxDialog<T> dialog = new DefaultComboBoxDialog<T>();
-				dialog.onInit(selectedIndex.get(), items, true, emptySelectionText.get());
-				dialog.setCloseListener(new Runnable() {
+    private final Label label = new Label();
 
-					@Override
-					public void run() {
-						selectedIndex.set(dialog.getResultIndex());
-					}
-				});
-				dialog.show();
-			}
-		});
-		
-		this.label.textProperty().bind(new AExpression<String>() {
-			
-			{
-				this.bind(emptySelectionText, selectedIndex);
-			}
+    public ComboBox() {
+        this.paddingProperty().set(new Padding(5));
+        this.borderProperty().set(new Border(1, Color.getRgbColor(0x808080), 3));
+        this.backgroundProperty().set(new LinearGradient(0.0,
+                new ColorStop(0.0, Color.getRgbColor(0xe0e0e0)),
+                new ColorStop(1.0, Color.getRgbColor(0xc0c0c0))
+        ));
+        this.cursorProperty().set(ECursor.POINTER);
 
-			@Override
-			public String calculate() {
-				if (selectedIndex.get() < 0) {
-					return emptySelectionText.get();
-				}
-				int index = selectedIndex.get();
-				if (index > items.length - 1) {
-					return emptySelectionText.get();
-				}
-				// handles null properly
-				return "" + items[selectedIndex.get()];
-			}
-		});
-		this.selectedItem.addChangeListener(new IChangeListener() {
+        label.textProperty().set(emptySelectionText.get());
+        label.pointerTransparentProperty().set(Boolean.TRUE);
+        label.translateXProperty().bind(new AExpression<Integer>() {
 
-			@Override
-			public void onChanged(Object sender) {
-				int idx = -1;
-				T refItem = selectedItem.get();
-				if (refItem != null) {
-					int i = 0;
-					for (T item : items) {
-						if (item == refItem) {
-							idx = i;
-							break;
-						}
-						i++;
-					}
-				}
-				selectedIndex.set(idx);
-			}
-		});
-		this.selectedIndex.addChangeListener(new IChangeListener() {
+            {
+                bind(clientWidthProperty(), label.boundsWidthProperty());
+            }
 
-			@Override
-			public void onChanged(Object sender) {
-				if (selectedIndex.get() < 0) {
-					selectedItem.set(null);
-				}
-				int index = selectedIndex.get();
-				if (index > items.length - 1) {
-					selectedItem.set(null);
-				}
-				// handles null properly
-				selectedItem.set(items[selectedIndex.get()]);
-			}
-		});
-	}
+            @Override
+            public Integer calculate() {
+                if (clientWidthProperty().get() > label.boundsWidthProperty().get()) {
+                    return (clientWidthProperty().get() - label.boundsWidthProperty().get()) / 2;
+                }
+                return 0;
+            }
+        });
+        this.getChildren().add(label);
 
-	public T[] getItems() {
-		return items;
-	}
+        this.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
 
-	public void setItems(T[] items) {
-		this.items = items;
-		this.selectedIndex.set(-1);
-	}
+            @Override
+            public void onFired(ClickEventArgs args) {
+                final DefaultComboBoxDialog<T> dialog = new DefaultComboBoxDialog<T>();
+                dialog.onInit(selectedIndex.get(), items, true, emptySelectionText.get());
+                dialog.setCloseListener(new Runnable() {
 
-	public IntegerProperty selectedIndexProperty() {
-		return selectedIndex;
-	}
+                    @Override
+                    public void run() {
+                        selectedIndex.set(dialog.getResultIndex());
+                    }
+                });
+                dialog.show();
+            }
+        });
 
-	public Property<T> selectedItemProperty() {
-		return selectedItem;
-	}
+        this.label.textProperty().bind(new AExpression<String>() {
 
-	public StringProperty emptySelectionTextProperty() {
-		return emptySelectionText;
-	}
+            {
+                this.bind(emptySelectionText, selectedIndex);
+            }
 
-	@Override
-	public final IntegerProperty widthProperty() {
-		return super.widthProperty();
-	}
+            @Override
+            public String calculate() {
+                if (selectedIndex.get() < 0) {
+                    return emptySelectionText.get();
+                }
+                int index = selectedIndex.get();
+                if (index > items.length - 1) {
+                    return emptySelectionText.get();
+                }
+                // handles null properly
+                return "" + items[selectedIndex.get()];
+            }
+        });
+        this.selectedItem.addChangeListener(new IChangeListener() {
 
-	@Override
-	public final IntegerProperty heightProperty() {
-		return super.heightProperty();
-	}
+            @Override
+            public void onChanged(Object sender) {
+                int idx = -1;
+                T refItem = selectedItem.get();
+                if (refItem != null) {
+                    int i = 0;
+                    for (T item : items) {
+                        if (item == refItem) {
+                            idx = i;
+                            break;
+                        }
+                        i++;
+                    }
+                }
+                selectedIndex.set(idx);
+            }
+        });
+        this.selectedIndex.addChangeListener(new IChangeListener() {
 
-	@Override
-	public final BackgroundProperty backgroundProperty() {
-		return super.backgroundProperty();
-	}
+            @Override
+            public void onChanged(Object sender) {
+                if (selectedIndex.get() < 0) {
+                    selectedItem.set(null);
+                }
+                int index = selectedIndex.get();
+                if (index > items.length - 1) {
+                    selectedItem.set(null);
+                }
+                // handles null properly
+                selectedItem.set(items[selectedIndex.get()]);
+            }
+        });
+    }
 
-	@Override
-	public final PaddingProperty paddingProperty() {
-		return super.paddingProperty();
-	}
+    public T[] getItems() {
+        return items;
+    }
 
-	@Override
-	public final BorderProperty borderProperty() {
-		return super.borderProperty();
-	}
+    public void setItems(T[] items) {
+        this.items = items;
+        this.selectedIndex.set(-1);
+    }
 
-	@Override
-	public final IntegerProperty minWidthProperty() {
-		return super.minWidthProperty();
-	}
+    public IntegerProperty selectedIndexProperty() {
+        return selectedIndex;
+    }
 
-	@Override
-	public final IntegerProperty minHeightProperty() {
-		return super.minHeightProperty();
-	}
+    public Property<T> selectedItemProperty() {
+        return selectedItem;
+    }
 
-	@Override
-	public final IntegerProperty maxWidthProperty() {
-		return super.maxWidthProperty();
-	}
+    public StringProperty emptySelectionTextProperty() {
+        return emptySelectionText;
+    }
 
-	@Override
-	public final IntegerProperty maxHeightProperty() {
-		return super.maxHeightProperty();
-	}
+    @Override
+    public final IntegerProperty widthProperty() {
+        return super.widthProperty();
+    }
 
-	public final ColorProperty foreColorProperty() {
-		return label.foreColorProperty();
-	}
+    @Override
+    public final IntegerProperty heightProperty() {
+        return super.heightProperty();
+    }
 
-	public final BooleanProperty boldProperty() {
-		return label.boldProperty();
-	}
+    @Override
+    public final BackgroundProperty backgroundProperty() {
+        return super.backgroundProperty();
+    }
 
-	public final BooleanProperty italicProperty() {
-		return label.italicProperty();
-	}
+    @Override
+    public final PaddingProperty paddingProperty() {
+        return super.paddingProperty();
+    }
 
-	public final BooleanProperty underlineProperty() {
-		return label.underlineProperty();
-	}
+    @Override
+    public final BorderProperty borderProperty() {
+        return super.borderProperty();
+    }
 
-	public final IntegerProperty fontSizeProperty() {
-		return label.fontSizeProperty();
-	}
+    @Override
+    public final IntegerProperty minWidthProperty() {
+        return super.minWidthProperty();
+    }
 
-	public final Property<FontFamily> fontFamilyProperty() {
-		return label.fontFamilyProperty();
-	}
+    @Override
+    public final IntegerProperty minHeightProperty() {
+        return super.minHeightProperty();
+    }
+
+    @Override
+    public final IntegerProperty maxWidthProperty() {
+        return super.maxWidthProperty();
+    }
+
+    @Override
+    public final IntegerProperty maxHeightProperty() {
+        return super.maxHeightProperty();
+    }
+
+    public final ColorProperty foreColorProperty() {
+        return label.foreColorProperty();
+    }
+
+    public final BooleanProperty boldProperty() {
+        return label.boldProperty();
+    }
+
+    public final BooleanProperty italicProperty() {
+        return label.italicProperty();
+    }
+
+    public final BooleanProperty underlineProperty() {
+        return label.underlineProperty();
+    }
+
+    public final IntegerProperty fontSizeProperty() {
+        return label.fontSizeProperty();
+    }
+
+    public final Property<FontFamily> fontFamilyProperty() {
+        return label.fontFamilyProperty();
+    }
 
 }

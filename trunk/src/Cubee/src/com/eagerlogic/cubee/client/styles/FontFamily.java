@@ -7,8 +7,8 @@ import com.google.gwt.dom.client.Element;
  * @author dipacs
  */
 public class FontFamily implements IStyle {
-	
-	public static final FontFamily Georgia = new FontFamily("Georgia, serif");
+
+    public static final FontFamily Georgia = new FontFamily("Georgia, serif");
     public static final FontFamily PalatinoLinotype = new FontFamily("'Palatino Linotype', 'Book Antiqua', Palatino, serif");
     public static final FontFamily TimesNewRoman = new FontFamily("'Times New Roman', Times, serif");
     public static final FontFamily Arial = new FontFamily("Arial, Helvetica, sans-serif");
@@ -32,9 +32,9 @@ public class FontFamily implements IStyle {
         return this.css;
     }
 
-	@Override
-	public void apply(Element element) {
-		element.getStyle().setProperty("fontFamily", css);
-	}
+    @Override
+    public void apply(Element element) {
+        element.getStyle().setProperty("fontFamily", css);
+    }
 
 }

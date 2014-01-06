@@ -5,21 +5,21 @@ package com.eagerlogic.cubee.client.styles;
  * @author dipacs
  */
 public final class ColorStop {
-	
-	private final double position;
-	private final Color color;
 
-	public ColorStop(double position, Color color) {
-		this.position = position;
-		this.color = color;
-	}
+    private final double position;
+    private final Color color;
 
-	public double getPosition() {
-		return position;
-	}
+    public ColorStop(double position, Color color) {
+        this.position = position;
+        this.color = color;
+    }
 
-	public Color getColor() {
-		return color;
-	}
+    public double getPosition() {
+        return position;
+    }
+
+    public Color getColor() {
+        return color;
+    }
 
 }

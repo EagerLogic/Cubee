@@ -12,50 +12,50 @@ import com.eagerlogic.cubee.client.properties.Property;
  * @author dipacs
  */
 public final class HTMLComponent extends AUserControl {
-	
-	private final Property<String> html = new Property<String>(null, true, false);
 
-	public HTMLComponent() {
-		html.addChangeListener(new IChangeListener() {
+    private final Property<String> html = new Property<String>(null, true, false);
 
-			@Override
-			public void onChanged(Object sender) {
-				if (html.get() == null) {
-					getElement().setInnerHTML("");
-				} else {
-					getElement().setInnerHTML(html.get());
-				}
-			}
-		});
-	}
+    public HTMLComponent() {
+        html.addChangeListener(new IChangeListener() {
 
-	public Property<String> htmlProperty() {
-		return html;
-	}
+            @Override
+            public void onChanged(Object sender) {
+                if (html.get() == null) {
+                    getElement().setInnerHTML("");
+                } else {
+                    getElement().setInnerHTML(html.get());
+                }
+            }
+        });
+    }
 
-	@Override
-	public IntegerProperty widthProperty() {
-		return super.widthProperty();
-	}
+    public Property<String> htmlProperty() {
+        return html;
+    }
 
-	@Override
-	public IntegerProperty heightProperty() {
-		return super.heightProperty();
-	}
+    @Override
+    public IntegerProperty widthProperty() {
+        return super.widthProperty();
+    }
 
-	@Override
-	public BackgroundProperty backgroundProperty() {
-		return super.backgroundProperty();
-	}
+    @Override
+    public IntegerProperty heightProperty() {
+        return super.heightProperty();
+    }
 
-	@Override
-	public PaddingProperty paddingProperty() {
-		return super.paddingProperty();
-	}
+    @Override
+    public BackgroundProperty backgroundProperty() {
+        return super.backgroundProperty();
+    }
 
-	@Override
-	public BorderProperty borderProperty() {
-		return super.borderProperty();
-	}
+    @Override
+    public PaddingProperty paddingProperty() {
+        return super.paddingProperty();
+    }
+
+    @Override
+    public BorderProperty borderProperty() {
+        return super.borderProperty();
+    }
 
 }

@@ -19,12 +19,12 @@ public final class DoubleProperty extends Property<Double> {
         if (startValue == null) {
             startValue = 0.0;
         }
-        
+
         if (endValue == null) {
             endValue = 0.0;
         }
-        
+
         return (startValue + ((endValue - startValue) * pos));
     }
-    
+
 }

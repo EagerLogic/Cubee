@@ -20,85 +20,85 @@ import com.eagerlogic.cubee.client.styles.EVAlign;
  * @author dipacs
  */
 public final class CheckBox extends AUserControl {
-	
-	private final BooleanProperty checked = new BooleanProperty(false, false, false);
-	
-	private final HBox root;
-	private final Led led;
-	private final Label label;
 
-	public CheckBox() {
-		root = new HBox();
-		this.getChildren().add(root);
-		
-		led = new Led();
-		led.pointerTransparentProperty().set(true);
-		root.getChildren().add(led);
-		root.setCellVAlign(0, EVAlign.MIDDLE);
-		
-		root.getChildren().add(null);
-		root.setCellWidth(1, 10);
-		
-		label = new Label();
-		label.pointerTransparentProperty().set(true);
-		root.getChildren().add(label);
-		root.setCellVAlign(2, EVAlign.MIDDLE);
-		
-		this.cursorProperty().set(ECursor.POINTER);
-		
-		led.lightProperty().bind(checked);
-		
-		this.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
+    private final BooleanProperty checked = new BooleanProperty(false, false, false);
 
-			@Override
-			public void onFired(ClickEventArgs args) {
-				checked.set(!checked.get());
-			}
-		});
-	}
+    private final HBox root;
+    private final Led led;
+    private final Label label;
 
-	public Property<Color> ledColorProperty() {
-		return led.colorProperty();
-	}
+    public CheckBox() {
+        root = new HBox();
+        this.getChildren().add(root);
 
-	public IntegerProperty ledSizeProperty() {
-		return led.sizeProperty();
-	}
+        led = new Led();
+        led.pointerTransparentProperty().set(true);
+        root.getChildren().add(led);
+        root.setCellVAlign(0, EVAlign.MIDDLE);
 
-	public final IntegerProperty textWidthProperty() {
-		return label.widthProperty();
-	}
+        root.getChildren().add(null);
+        root.setCellWidth(1, 10);
 
-	public final StringProperty textProperty() {
-		return label.textProperty();
-	}
+        label = new Label();
+        label.pointerTransparentProperty().set(true);
+        root.getChildren().add(label);
+        root.setCellVAlign(2, EVAlign.MIDDLE);
 
-	public final Property<ETextOverflow> textOverflowProperty() {
-		return label.textOverflowProperty();
-	}
+        this.cursorProperty().set(ECursor.POINTER);
 
-	public ColorProperty foreColorProperty() {
-		return label.foreColorProperty();
-	}
+        led.lightProperty().bind(checked);
 
-	public BooleanProperty boldProperty() {
-		return label.boldProperty();
-	}
+        this.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
 
-	public BooleanProperty italicProperty() {
-		return label.italicProperty();
-	}
+            @Override
+            public void onFired(ClickEventArgs args) {
+                checked.set(!checked.get());
+            }
+        });
+    }
 
-	public BooleanProperty underlineProperty() {
-		return label.underlineProperty();
-	}
+    public Property<Color> ledColorProperty() {
+        return led.colorProperty();
+    }
 
-	public Property<ETextAlign> textAlignProperty() {
-		return label.textAlignProperty();
-	}
+    public IntegerProperty ledSizeProperty() {
+        return led.sizeProperty();
+    }
 
-	public IntegerProperty fontSizeProperty() {
-		return label.fontSizeProperty();
-	}
+    public final IntegerProperty textWidthProperty() {
+        return label.widthProperty();
+    }
+
+    public final StringProperty textProperty() {
+        return label.textProperty();
+    }
+
+    public final Property<ETextOverflow> textOverflowProperty() {
+        return label.textOverflowProperty();
+    }
+
+    public ColorProperty foreColorProperty() {
+        return label.foreColorProperty();
+    }
+
+    public BooleanProperty boldProperty() {
+        return label.boldProperty();
+    }
+
+    public BooleanProperty italicProperty() {
+        return label.italicProperty();
+    }
+
+    public BooleanProperty underlineProperty() {
+        return label.underlineProperty();
+    }
+
+    public Property<ETextAlign> textAlignProperty() {
+        return label.textAlignProperty();
+    }
+
+    public IntegerProperty fontSizeProperty() {
+        return label.fontSizeProperty();
+    }
 
 }

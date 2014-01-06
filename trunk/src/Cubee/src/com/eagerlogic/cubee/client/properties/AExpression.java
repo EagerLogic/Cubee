@@ -12,7 +12,7 @@ import java.util.LinkedList;
  * @author dipacs
  */
 public abstract class AExpression<T> implements IProperty<T>, IObservable {
-    
+
     private LinkedList<IProperty> bindingSources = new LinkedList<IProperty>();
     private IChangeListener bindingListener = new IChangeListener() {
 
@@ -22,30 +22,30 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
         }
     };
     private LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
-    
+
     public abstract T calculate();
     private boolean valid = false;
     private T value;
-    
+
     public T get() {
         if (!valid) {
             this.value = calculate();
             this.valid = true;
-        } 
-        
+        }
+
         return this.value;
     }
-    
+
     @Override
     public void addChangeListener(IChangeListener listener) {
         if (listener == null) {
             throw new NullPointerException("The listener parameter can not be null.");
         }
-        
+
         if (hasChangeListener(listener)) {
             return;
         }
-        
+
         changeListeners.add(listener);
         invalidate();
     }
@@ -76,31 +76,31 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
     public Object getObjectValue() {
         return this.get();
     }
-    
+
     protected void bind(IProperty property) {
         property.addChangeListener(bindingListener);
         this.bindingSources.add(property);
         this.invalidate();
     }
-	
-	protected void bind(IProperty property, IProperty... properties) {
+
+    protected void bind(IProperty property, IProperty... properties) {
         property.addChangeListener(bindingListener);
-		this.bindingSources.add(property);
-		
-		for (IProperty prop : properties) {
-			prop.addChangeListener(bindingListener);
-			this.bindingSources.add(prop);
-		}
-		
+        this.bindingSources.add(property);
+
+        for (IProperty prop : properties) {
+            prop.addChangeListener(bindingListener);
+            this.bindingSources.add(prop);
+        }
+
         this.invalidate();
-	}
-    
+    }
+
     @Override
     public final void invalidate() {
         this.valid = false;
         for (IChangeListener listener : changeListeners) {
-           listener.onChanged(this);
+            listener.onChanged(this);
         }
     }
-    
+
 }

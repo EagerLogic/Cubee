@@ -12,40 +12,40 @@ import com.eagerlogic.cubee.client.styles.ECursor;
 import com.eagerlogic.cubee.client.styles.FontFamily;
 
 public final class LabelMenuItem extends AMenuItem {
-	
-	private final Label label;
-	
-	public LabelMenuItem() {
-		label = new Label();
-		label.handlePointerProperty().set(false);
-		label.fontSizeProperty().set(14);
-		this.getChildren().add(label);
-		
-		this.cursorProperty().set(ECursor.POINTER);
-		selectedProperty().bind(hoveredProperty());
-		this.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
-			
-			@Override
-			public void onFired(ClickEventArgs args) {
-				closeMenu();
-			}
-		});
-	}
 
-	public final StringProperty textProperty() {
-		return label.textProperty();
-	}
+    private final Label label;
 
-	public PaddingProperty paddingProperty() {
-		return label.paddingProperty();
-	}
+    public LabelMenuItem() {
+        label = new Label();
+        label.handlePointerProperty().set(false);
+        label.fontSizeProperty().set(14);
+        this.getChildren().add(label);
 
-	public IntegerProperty fontSizeProperty() {
-		return label.fontSizeProperty();
-	}
+        this.cursorProperty().set(ECursor.POINTER);
+        selectedProperty().bind(hoveredProperty());
+        this.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
 
-	public Property<FontFamily> fontFamilyProperty() {
-		return label.fontFamilyProperty();
-	}
+            @Override
+            public void onFired(ClickEventArgs args) {
+                closeMenu();
+            }
+        });
+    }
+
+    public final StringProperty textProperty() {
+        return label.textProperty();
+    }
+
+    public PaddingProperty paddingProperty() {
+        return label.paddingProperty();
+    }
+
+    public IntegerProperty fontSizeProperty() {
+        return label.fontSizeProperty();
+    }
+
+    public Property<FontFamily> fontFamilyProperty() {
+        return label.fontFamilyProperty();
+    }
 
 }
