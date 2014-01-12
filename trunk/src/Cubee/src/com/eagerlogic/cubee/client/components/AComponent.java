@@ -1079,4 +1079,164 @@ public abstract class AComponent {
         return this.hovered;
     }
 
+    public int getTranslateX() {
+        return translateX.get();
+    }
+
+    public void setTranslateX(int translateX) {
+        this.translateX.set(translateX);
+    }
+
+    public int getTranslateY() {
+        return translateY.get();
+    }
+
+    public void setTranslateY(int translateY) {
+        this.translateY.set(translateY);
+    }
+
+    public double getRotate() {
+        return rotate.get();
+    }
+
+    public void setRotate(double rotate) {
+        this.rotate.set(rotate);
+    }
+
+    public double getScaleX() {
+        return scaleX.get();
+    }
+
+    public void setScaleX(double scaleX) {
+        this.scaleX.set(scaleX);
+    }
+
+    public double getScaleY() {
+        return scaleY.get();
+    }
+
+    public void setScaleY(double scaleY) {
+        this.scaleY.set(scaleY);
+    }
+
+    public double getTransformCenterX() {
+        return transformCenterX.get();
+    }
+
+    public void setTransformCenterX(double transformCenterX) {
+        this.transformCenterX.set(transformCenterX);
+    }
+
+    public double getTransformCenterY() {
+        return transformCenterY.get();
+    }
+
+    public void setTransformCenterY(double transformCenterY) {
+        this.transformCenterY.set(transformCenterY);
+    }
+
+    public Padding getPadding() {
+        return padding.get();
+    }
+
+    public void setPadding(Padding padding) {
+        this.padding.set(padding);
+    }
+
+    public Border getBorder() {
+        return border.get();
+    }
+
+    public void setBorder(Border border) {
+        this.border.set(border);
+    }
+
+    public ECursor getCursor() {
+        return cursor.get();
+    }
+
+    public void setCursor(ECursor cursor) {
+        this.cursor.set(cursor);
+    }
+
+    public boolean isPointerTransparent() {
+        return pointerTransparent.get();
+    }
+
+    public void setPointerTransparent(boolean pointerTransparent) {
+        this.pointerTransparent.set(pointerTransparent);
+    }
+
+    public boolean isHandlePointer() {
+        return handlePointer.get();
+    }
+
+    public void setHandlePointer(boolean handlePointer) {
+        this.handlePointer.set(handlePointer);
+    }
+
+    public boolean isVisible() {
+        return visible.get();
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible.set(visible);
+    }
+
+    public boolean isEnabled() {
+        return enabled.get();
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled.set(enabled);
+    }
+
+    public double getAlpha() {
+        return alpha.get();
+    }
+
+    public void setAlpha(double alpha) {
+        this.alpha.set(alpha);
+    }
+
+    public boolean isSelectable() {
+        return selectable.get();
+    }
+
+    public void setSelectable(boolean selectable) {
+        this.selectable.set(selectable);
+    }
+
+    protected Integer getMinWidth() {
+        return minWidth.get();
+    }
+
+    protected void setMinWidth(Integer minWidth) {
+        this.minWidth.set(minWidth);
+    }
+
+    protected Integer getMinHeight() {
+        return minHeight.get();
+    }
+
+    protected void setMinHeight(Integer minHeight) {
+        this.minHeight.set(minHeight);
+    }
+
+    protected Integer getMaxWidth() {
+        return maxWidth.get();
+    }
+
+    protected void setMaxWidth(Integer maxWidth) {
+        this.maxWidth.set(maxWidth);
+    }
+
+    protected Integer getMaxHeight() {
+        return maxHeight.get();
+    }
+
+    protected void setMaxHeight(Integer maxHeight) {
+        this.maxHeight.set(maxHeight);
+    }
+
 }

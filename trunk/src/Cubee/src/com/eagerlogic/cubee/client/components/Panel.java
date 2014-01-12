@@ -6,6 +6,7 @@ import com.eagerlogic.cubee.client.styles.ECursor;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.styles.ABackground;
 import com.eagerlogic.cubee.client.styles.BoxShadow;
 
 /**
@@ -67,6 +68,81 @@ public final class Panel extends AUserControl {
     @Override
     public IntegerProperty maxHeightProperty() {
         return super.maxHeightProperty();
+    }
+
+    @Override
+    public void setShadow(BoxShadow shadow) {
+        super.setShadow(shadow);
+    }
+
+    @Override
+    public BoxShadow getShadow() {
+        return super.getShadow();
+    }
+
+    @Override
+    public void setBackground(ABackground background) {
+        super.setBackground(background);
+    }
+
+    @Override
+    public ABackground getBackground() {
+        return super.getBackground();
+    }
+
+    @Override
+    public void setHeight(Integer height) {
+        super.setHeight(height);
+    }
+
+    @Override
+    public Integer getHeight() {
+        return super.getHeight();
+    }
+
+    @Override
+    public void setWidth(Integer width) {
+        super.setWidth(width);
+    }
+
+    @Override
+    public Integer getWidth() {
+        return super.getWidth();
+    }
+
+    @Override
+    public void setMaxHeight(Integer maxHeight) {
+        super.setMaxHeight(maxHeight);
+    }
+
+    @Override
+    public Integer getMaxHeight() {
+        return super.getMaxHeight();
+    }
+
+    @Override
+    public void setMaxWidth(Integer maxWidth) {
+        super.setMaxWidth(maxWidth);
+    }
+
+    @Override
+    public Integer getMaxWidth() {
+        return super.getMaxWidth();
+    }
+
+    @Override
+    public void setMinHeight(Integer minHeight) {
+        super.setMinHeight(minHeight);
+    }
+
+    @Override
+    public void setMinWidth(Integer minWidth) {
+        super.setMinWidth(minWidth);
+    }
+
+    @Override
+    public Integer getMinWidth() {
+        return super.getMinWidth();
     }
 
 }

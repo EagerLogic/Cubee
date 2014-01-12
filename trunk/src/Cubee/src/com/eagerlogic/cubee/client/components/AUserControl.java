@@ -4,6 +4,7 @@ import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.styles.ABackground;
 import com.eagerlogic.cubee.client.styles.BoxShadow;
 import com.eagerlogic.cubee.client.styles.Color;
 import com.eagerlogic.cubee.client.styles.ColorBackground;
@@ -17,10 +18,10 @@ import com.google.gwt.user.client.DOM;
  */
 public abstract class AUserControl extends ALayout {
 
-    private final IntegerProperty width = new IntegerProperty(null, true, false);
-    private final IntegerProperty height = new IntegerProperty(null, true, false);
-    private final BackgroundProperty background = new BackgroundProperty(new ColorBackground(Color.TRANSPARENT), true, false);
-    private final Property<BoxShadow> shadow = new Property<BoxShadow>(null, true, false);
+    private IntegerProperty width = new IntegerProperty(null, true, false);
+    private IntegerProperty height = new IntegerProperty(null, true, false);
+    private BackgroundProperty background = new BackgroundProperty(new ColorBackground(Color.TRANSPARENT), true, false);
+    private Property<BoxShadow> shadow = new Property<BoxShadow>(null, true, false);
 
     public AUserControl() {
         super(DOM.createDiv());
@@ -151,5 +152,37 @@ public abstract class AUserControl extends ALayout {
 
             setSize(maxW, maxH);
         }
+    }
+
+    protected Integer getWidth() {
+        return width.get();
+    }
+
+    protected void setWidth(Integer width) {
+        this.width.set(width);
+    }
+
+    protected Integer getHeight() {
+        return height.get();
+    }
+
+    protected void setHeight(Integer height) {
+        this.height.set(height);
+    }
+
+    protected ABackground getBackground() {
+        return background.get();
+    }
+
+    protected void setBackground(ABackground background) {
+        this.background.set(background);
+    }
+
+    protected BoxShadow getShadow() {
+        return shadow.get();
+    }
+
+    protected void setShadow(BoxShadow shadow) {
+        this.shadow.set(shadow);
     }
 }
