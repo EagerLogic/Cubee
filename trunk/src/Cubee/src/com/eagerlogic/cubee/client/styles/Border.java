@@ -23,6 +23,9 @@ public final class Border implements IStyle {
     private final int bottomLeftBorderRadius;
 
     public Border(int size, Color color, int radius) {
+        if (color == null) {
+            throw new NullPointerException("The color property can not be null.");
+        }
         this.leftBorderSize = size;
         this.topBorderSize = size;
         this.rightBorderSize = size;
@@ -40,6 +43,18 @@ public final class Border implements IStyle {
     public Border(int leftBorderSize, int topBorderSize, int rightBorderSize, int bottomBorderSize,
             Color leftBorderColor, Color topBorderColor, Color rightBorderColor, Color bottomBorderColor,
             int topLeftBorderRadius, int topRightBorderRadius, int bottomRightBorderRadius, int bottomLeftBorderRadius) {
+        if (leftBorderColor == null) {
+            throw new NullPointerException("The leftBorderColor property can not be null.");
+        }
+        if (topBorderColor == null) {
+            throw new NullPointerException("The topBorderColor property can not be null.");
+        }
+        if (rightBorderColor == null) {
+            throw new NullPointerException("The rightBorderColor property can not be null.");
+        }
+        if (bottomBorderColor == null) {
+            throw new NullPointerException("The bottomBorderColor property can not be null.");
+        }
         this.leftBorderSize = leftBorderSize;
         this.topBorderSize = topBorderSize;
         this.rightBorderSize = rightBorderSize;
