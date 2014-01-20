@@ -91,8 +91,8 @@ public final class CubeePanel extends ALayout {
         this.rootComponent = null;
         if (rootComponent != null) {
             this.contentPanel.getChildren().add(rootComponent);
+            this.rootComponent = rootComponent;
         }
-        this.rootComponent = rootComponent;
     }
 
     @Override
