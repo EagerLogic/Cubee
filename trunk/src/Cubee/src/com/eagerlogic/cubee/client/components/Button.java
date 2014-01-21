@@ -13,6 +13,7 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.properties.StringProperty;
+import com.eagerlogic.cubee.client.properties.ext.VCenterExp;
 import com.eagerlogic.cubee.client.styles.Border;
 import com.eagerlogic.cubee.client.styles.Color;
 import com.eagerlogic.cubee.client.styles.ColorStop;
@@ -57,6 +58,7 @@ public final class Button extends AUserControl {
             }
         });
         label.textAlignProperty().set(ETextAlign.CENTER);
+        label.translateYProperty().bind(new VCenterExp(this, label));
         label.pointerTransparentProperty().set(Boolean.TRUE);
         label.selectableProperty().set(Boolean.FALSE);
         this.getChildren().add(label);
