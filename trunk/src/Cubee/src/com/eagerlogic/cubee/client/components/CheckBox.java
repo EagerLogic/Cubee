@@ -101,4 +101,8 @@ public final class CheckBox extends AUserControl {
         return label.fontSizeProperty();
     }
 
+    public BooleanProperty checkedProperty() {
+        return checked;
+    }
+
 }
