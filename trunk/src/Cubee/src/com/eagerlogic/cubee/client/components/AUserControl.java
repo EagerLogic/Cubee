@@ -155,34 +155,34 @@ public abstract class AUserControl extends ALayout {
     }
 
     protected Integer getWidth() {
-        return width.get();
+        return widthProperty().get();
     }
 
     protected void setWidth(Integer width) {
-        this.width.set(width);
+        this.widthProperty().set(width);
     }
 
     protected Integer getHeight() {
-        return height.get();
+        return heightProperty().get();
     }
 
     protected void setHeight(Integer height) {
-        this.height.set(height);
+        this.heightProperty().set(height);
     }
 
     protected ABackground getBackground() {
-        return background.get();
+        return backgroundProperty().get();
     }
 
     protected void setBackground(ABackground background) {
-        this.background.set(background);
+        this.backgroundProperty().set(background);
     }
 
     protected BoxShadow getShadow() {
-        return shadow.get();
+        return shadowProperty().get();
     }
 
     protected void setShadow(BoxShadow shadow) {
-        this.shadow.set(shadow);
+        this.shadowProperty().set(shadow);
     }
 }

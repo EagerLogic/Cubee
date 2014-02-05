@@ -4,7 +4,6 @@ import com.eagerlogic.cubee.client.events.ClickEventArgs;
 import com.eagerlogic.cubee.client.events.IEventListener;
 import com.eagerlogic.cubee.client.properties.AExpression;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
-import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.styles.Color;
 import com.eagerlogic.cubee.client.styles.ColorBackground;
@@ -159,6 +158,30 @@ public abstract class APopup {
 
     protected BooleanProperty centerProperty() {
         return center;
+    }
+    
+    protected int getTranslateX() {
+        return translateXProperty().get();
+    }
+    
+    protected void setTranslateX(int translateX) {
+        this.translateXProperty().set(translateX);
+    }
+    
+    protected int getTranslateY() {
+        return translateYProperty().get();
+    }
+    
+    protected void setTranslateY(int translateY) {
+        this.translateYProperty().set(translateY);
+    }
+    
+    protected boolean isCenter() {
+        return centerProperty().get();
+    }
+    
+    protected void setCenter(boolean center) {
+        this.centerProperty().set(center);
     }
 
 }

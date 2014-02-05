@@ -33,6 +33,14 @@ public abstract class AMenuItem extends AUserControl {
     protected BooleanProperty selectedProperty() {
         return selected;
     }
+    
+    protected boolean isSelected() {
+        return selected.get();
+    }
+    
+    protected void setSelected(boolean selected) {
+        this.selected.set(selected);
+    }
 
     void setCloseable(ICloseable closeable) {
         this.closeable = closeable;
