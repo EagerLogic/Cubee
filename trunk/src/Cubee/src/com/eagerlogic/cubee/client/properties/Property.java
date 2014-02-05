@@ -25,8 +25,11 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
             invalidate();
         }
     };
-    ;
+
     private IProperty<T> readonlyBind;
+    private Property<T> bidirectionalBindProperty;
+    private IChangeListener bidirectionalChangeListenerThis;
+    private IChangeListener bidirectionalChangeListenerOther;
 
     public Property(T defaultValue, boolean nullable, boolean readonly) {
         this.value = defaultValue;
@@ -70,8 +73,8 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
             throw new IllegalStateException("Can not change the value of a readonly property.");
         }
 
-        if (this.bindingSource != null) {
-            throw new IllegalStateException("Can not set the value of a bound property");
+        if (isBound()) {
+            throw new IllegalStateException("Can not change the value of a bound property.");
         }
 
         if (!this.nullable && newValue == null) {
@@ -157,8 +160,8 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
             throw new NullPointerException("The source can not be null.");
         }
 
-        if (this.bindingSource != null) {
-            this.bindingSource.removeChangeListener(this.bindListener);
+        if (isBound()) {
+            throw new IllegalStateException("This property is already bound.");
         }
 
         if (readonly) {
@@ -170,17 +173,66 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
         this.invalidate();
     }
 
+    public void bidirectionalBind(Property<T> other) {
+        if (other == null) {
+            throw new NullPointerException("The other parameter can not be null.");
+        }
+        if (other == this) {
+            throw new IllegalArgumentException("Can not bound a property bidirectionally for themself.");
+        }
+        if (isBound()) {
+            throw new IllegalStateException("This property is already bound.");
+        }
+
+        this.bidirectionalBindProperty = other;
+        this.bidirectionalChangeListenerOther = new IChangeListener() {
+
+            @Override
+            public void onChanged(Object sender) {
+                set(bidirectionalBindProperty.get());
+            }
+        };
+        other.addChangeListener(bidirectionalChangeListenerOther);
+        this.bidirectionalChangeListenerThis = new IChangeListener() {
+
+            @Override
+            public void onChanged(Object sender) {
+                bidirectionalBindProperty.set(get());
+            }
+        };
+        this.addChangeListener(bidirectionalChangeListenerThis);
+
+        other.bidirectionalBindProperty = this;
+        other.bidirectionalChangeListenerOther = bidirectionalChangeListenerThis;
+        other.bidirectionalChangeListenerThis = bidirectionalChangeListenerOther;
+
+    }
+
     @Override
     public void unbind() {
         if (this.bindingSource != null) {
             this.bindingSource.removeChangeListener(this.bindListener);
             invalidate();
+        } else if (this.isBidirectionalBound()) {
+            this.removeChangeListener(bidirectionalChangeListenerThis);
+            bidirectionalBindProperty.removeChangeListener(bidirectionalChangeListenerOther);
+            this.removeChangeListener(bidirectionalChangeListenerThis);
+            bidirectionalBindProperty.bidirectionalBindProperty = null;
+            bidirectionalBindProperty.bidirectionalChangeListenerOther = null;
+            bidirectionalBindProperty.bidirectionalChangeListenerThis = null;
+            bidirectionalBindProperty = null;
+            bidirectionalChangeListenerOther = null;
+            bidirectionalChangeListenerThis = null;
         }
     }
 
     @Override
     public final boolean isBound() {
         return this.bindingSource != null;
+    }
+
+    public final boolean isBidirectionalBound() {
+        return this.bidirectionalBindProperty != null;
     }
 
     public final boolean isNullable() {
