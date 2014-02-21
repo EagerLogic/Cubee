@@ -15,6 +15,7 @@ import com.eagerlogic.cubee.client.properties.StringProperty;
 import com.eagerlogic.cubee.client.properties.ext.AlignMiddleExp;
 import com.eagerlogic.cubee.client.styles.Border;
 import com.eagerlogic.cubee.client.styles.Color;
+import com.eagerlogic.cubee.client.styles.ColorBackground;
 import com.eagerlogic.cubee.client.styles.ColorStop;
 import com.eagerlogic.cubee.client.styles.ECursor;
 import com.eagerlogic.cubee.client.styles.ETextAlign;
@@ -34,10 +35,8 @@ public final class Button extends AUserControl {
     public Button() {
         this.paddingProperty().set(new Padding(5));
         this.cursorProperty().set(ECursor.POINTER);
-        this.borderProperty().set(new Border(1, Color.getRgbColor(0x808080), 5));
-        LinearGradient lg = new LinearGradient(0.0, new ColorStop(0.0, Color.getRgbColor(0xe0e0e0)),
-                new ColorStop(1.0, Color.getRgbColor(0xc0c0c0)));
-        this.backgroundProperty().set(lg);
+        this.borderProperty().set(new Border(1, Color.getRgbColor(0xc0c0c0), 0));
+        this.backgroundProperty().set(new ColorBackground(Color.getRgbColor(0xf0f0f0)));
 
         label = new Label();
         label.textOverflowProperty().set(ETextOverflow.ELLIPSIS);
