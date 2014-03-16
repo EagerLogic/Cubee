@@ -1,6 +1,5 @@
 package com.eagerlogic.cubee.client.components;
 
-import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
@@ -19,7 +18,6 @@ import com.eagerlogic.cubee.client.styles.FontFamily;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.EventListener;
 
 /**
  *
@@ -78,7 +76,9 @@ public class TextBox extends AComponent {
 
             @Override
             public void onChanged(Object sender) {
-                getElement().setPropertyString("value", text.get());
+                if (!text.get().equals(getElement().getPropertyString("value"))) {
+                    getElement().setPropertyString("value", text.get());
+                }
             }
         });
         foreColor.addChangeListener(new IChangeListener() {
@@ -185,6 +185,14 @@ public class TextBox extends AComponent {
             }
         });
         background.invalidate();
+    }
+
+    public int getCaretPosition() {
+        return 0;
+    }
+
+    public void setCaretPosition(int pos) {
+
     }
 
     public final IntegerProperty widthProperty() {

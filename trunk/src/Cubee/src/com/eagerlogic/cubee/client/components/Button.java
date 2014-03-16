@@ -16,12 +16,10 @@ import com.eagerlogic.cubee.client.properties.ext.AlignMiddleExp;
 import com.eagerlogic.cubee.client.styles.Border;
 import com.eagerlogic.cubee.client.styles.Color;
 import com.eagerlogic.cubee.client.styles.ColorBackground;
-import com.eagerlogic.cubee.client.styles.ColorStop;
 import com.eagerlogic.cubee.client.styles.ECursor;
 import com.eagerlogic.cubee.client.styles.ETextAlign;
 import com.eagerlogic.cubee.client.styles.ETextOverflow;
 import com.eagerlogic.cubee.client.styles.FontFamily;
-import com.eagerlogic.cubee.client.styles.LinearGradient;
 import com.eagerlogic.cubee.client.styles.Padding;
 
 /**

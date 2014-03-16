@@ -37,7 +37,7 @@ public final class ComboBox<T> extends AUserControl {
 
     public ComboBox() {
         this.paddingProperty().set(new Padding(5));
-        this.borderProperty().set(new Border(1, Color.getRgbColor(0x808080), 3));
+        this.borderProperty().set(new Border(1, Color.getRgbColor(0xc0c0c0), 0));
         this.backgroundProperty().set(new LinearGradient(0.0,
                 new ColorStop(0.0, Color.getRgbColor(0xe0e0e0)),
                 new ColorStop(1.0, Color.getRgbColor(0xc0c0c0))

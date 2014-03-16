@@ -212,6 +212,7 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
     public void unbind() {
         if (this.bindingSource != null) {
             this.bindingSource.removeChangeListener(this.bindListener);
+            this.bindingSource = null;
             invalidate();
         } else if (this.isBidirectionalBound()) {
             this.removeChangeListener(bidirectionalChangeListenerThis);

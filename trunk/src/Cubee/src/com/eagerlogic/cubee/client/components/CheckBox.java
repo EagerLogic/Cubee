@@ -1,9 +1,7 @@
 package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.events.ClickEventArgs;
-import com.eagerlogic.cubee.client.events.EventArgs;
 import com.eagerlogic.cubee.client.events.IEventListener;
-import com.eagerlogic.cubee.client.events.MouseEventTypes;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.ColorProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;

@@ -10,6 +10,7 @@ import com.eagerlogic.cubee.client.properties.AExpression;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.DoubleProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
+import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.styles.Border;
 import com.eagerlogic.cubee.client.styles.Color;
@@ -344,8 +345,8 @@ public final class ScrollPanel extends AUserControl {
         vScrollBar.backgroundProperty().bind(scrollBarBackground);
         vScrollBar.widthProperty().set(10);
         hScrollBar.heightProperty().set(10);
-        hScrollBar.borderProperty().set(new Border(0, Color.TRANSPARENT, 5));
-        vScrollBar.borderProperty().set(new Border(0, Color.TRANSPARENT, 5));
+        hScrollBar.borderProperty().set(new Border(0, Color.TRANSPARENT, 0));
+        vScrollBar.borderProperty().set(new Border(0, Color.TRANSPARENT, 0));
 
         scrollWidth.initReadonlyBind(contentPanel.boundsWidthProperty());
         scrollHeight.initReadonlyBind(contentPanel.boundsHeightProperty());
@@ -428,4 +429,5 @@ public final class ScrollPanel extends AUserControl {
     public IntegerProperty maxHeightProperty() {
         return super.maxHeightProperty();
     }
+    
 }

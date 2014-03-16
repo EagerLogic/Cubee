@@ -21,6 +21,29 @@ public class FontFamily implements IStyle {
     public static final FontFamily Verdana = new FontFamily("Verdana, Geneva, sans-serif");
     public static final FontFamily CourierNew = new FontFamily("'Courier New', Courier, monospace");
     public static final FontFamily LucidaConsole = new FontFamily("'Lucida Console', Monaco, monospace");
+    
+    static {
+        initFontContainerStyle();
+    }
+    
+    private static native void initFontContainerStyle() /*-{
+        $wnd.fontsStyle = document.createElement('style');
+        $wnd.fontsStyle.type = "text/css";
+        $doc.getElementsByTagName('head')[0].appendChild($wnd.fontsStyle);
+    }-*/;
+    
+    public static native void registerFont(String name, String src, String extra) /*-{
+        var ex = extra;
+        if (ex == null) {
+            ex = '';
+        }
+        var ct = "@font-face {font-family: '" + name + "'; src: url('" + src + "');" + ex + "}";
+        var ih = $wnd.fontsStyle.innerHTML;
+        if (ih == null) {
+            ih = '';
+        }
+        $wnd.fontsStyle.innerHTML = ih + ct;
+    }-*/;
 
     private final String css;
 
@@ -28,12 +51,12 @@ public class FontFamily implements IStyle {
         this.css = css;
     }
 
-    public String toCSS() {
+    public final String toCSS() {
         return this.css;
     }
 
     @Override
-    public void apply(Element element) {
+    public final void apply(Element element) {
         element.getStyle().setProperty("fontFamily", css);
     }
 
