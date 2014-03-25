@@ -10,6 +10,8 @@ import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ColorBackground;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -17,6 +19,8 @@ import com.google.gwt.user.client.DOM;
  */
 public abstract class AUserControl extends ALayout {
 
+    @Getter
+    @Setter
     public static class StyleClass<T extends AUserControl> extends AComponent.StyleClass<T> {
 
         private Integer width;

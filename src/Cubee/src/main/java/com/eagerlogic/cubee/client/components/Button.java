@@ -22,6 +22,8 @@ import com.eagerlogic.cubee.client.style.styles.ETextAlign;
 import com.eagerlogic.cubee.client.style.styles.ETextOverflow;
 import com.eagerlogic.cubee.client.style.styles.FontFamily;
 import com.eagerlogic.cubee.client.style.styles.Padding;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -29,6 +31,8 @@ import com.eagerlogic.cubee.client.style.styles.Padding;
  */
 public final class Button extends AUserControl {
 
+    @Getter
+    @Setter
     public static class StyleClass<T extends Button> extends AUserControl.StyleClass<T> {
 
         private boolean bold = false;
@@ -53,83 +57,6 @@ public final class Button extends AUserControl {
             component.textAlignProperty().set(textAlign);
             component.textOverflowProperty().set(textOverflow);
         }
-
-        public boolean isBold() {
-            return bold;
-        }
-
-        public void setBold(boolean bold) {
-            this.bold = bold;
-        }
-
-        public boolean isItalic() {
-            return italic;
-        }
-
-        public void setItalic(boolean italic) {
-            this.italic = italic;
-        }
-
-        public boolean isUnderline() {
-            return underline;
-        }
-
-        public void setUnderline(boolean underline) {
-            this.underline = underline;
-        }
-
-        public FontFamily getFontFamily() {
-            return fontFamily;
-        }
-
-        public void setFontFamily(FontFamily fontFamily) {
-            if (fontFamily == null) {
-                throw new NullPointerException("This value can not be null.");
-            }
-            this.fontFamily = fontFamily;
-        }
-
-        public int getFontSize() {
-            return fontSize;
-        }
-
-        public void setFontSize(int fontSize) {
-            this.fontSize = fontSize;
-        }
-
-        public Color getForeColor() {
-            return foreColor;
-        }
-
-        public void setForeColor(Color foreColor) {
-            if (foreColor == null) {
-                throw new NullPointerException("This value can not be null.");
-            }
-            this.foreColor = foreColor;
-        }
-
-        public ETextAlign getTextAlign() {
-            return textAlign;
-        }
-
-        public void setTextAlign(ETextAlign textAlign) {
-            if (textAlign == null) {
-                throw new NullPointerException("This value can not be null.");
-            }
-            this.textAlign = textAlign;
-        }
-
-        public ETextOverflow getTextOverflow() {
-            return textOverflow;
-        }
-
-        public void setTextOverflow(ETextOverflow textOverflow) {
-            if (textOverflow == null) {
-                throw new NullPointerException("This value can not be null.");
-            }
-            this.textOverflow = textOverflow;
-        }
-
 
         @Override
         public void setBackground(ABackground background) {

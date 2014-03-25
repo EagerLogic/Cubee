@@ -6,7 +6,6 @@
 package com.eagerlogic.cubee.client.components.shapes;
 
 import com.eagerlogic.cubee.client.components.AComponent;
-import com.eagerlogic.cubee.client.components.AUserControl;
 import com.eagerlogic.cubee.client.properties.AExpression;
 import com.eagerlogic.cubee.client.properties.ColorProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
@@ -29,6 +28,7 @@ public final class Triangle extends AComponent {
     private final IntegerProperty height = new IntegerProperty(100, false, false);
 
     public Triangle() {
+        // TODO box into an AUserControl and handle correct translation
         super(DOM.createDiv());
         getElement().getStyle().setWidth(0, Style.Unit.PX);
         getElement().getStyle().setHeight(0, Style.Unit.PX);
@@ -67,7 +67,7 @@ public final class Triangle extends AComponent {
                     case RIGHT:
                         rightWidth = 0;
                         topWidth = height.get() / 2;
-                        bottomWidth = height.get() - leftWidth;
+                        bottomWidth = height.get() - topWidth;
                         leftWidth = width.get();
                         leftColor = color.get();
                         break;
@@ -90,40 +90,8 @@ public final class Triangle extends AComponent {
         return orientation;
     }
 
-    public final EOrientation getOrientation() {
-        return orientation.get();
-    }
-
-    public final void setOrientation(EOrientation newValue) {
-        orientation.set(newValue);
-    }
-
-    public void setColor(Color color) {
-        this.color.set(color);
-    }
-
-    public Color getColor() {
-        return color.get();
-    }
-
     public ColorProperty colorProperty() {
         return color;
-    }
-
-    public void setHeight(Integer height) {
-        this.height.set(height);
-    }
-
-    public Integer getHeight() {
-        return this.height.get();
-    }
-
-    public void setWidth(Integer width) {
-        this.width.set(width);
-    }
-
-    public Integer getWidth() {
-        return this.width.get();
     }
 
     public IntegerProperty heightProperty() {

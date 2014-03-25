@@ -8,20 +8,79 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.properties.StringProperty;
+import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ECursor;
 import com.eagerlogic.cubee.client.style.styles.ETextAlign;
 import com.eagerlogic.cubee.client.style.styles.ETextOverflow;
 import com.eagerlogic.cubee.client.style.styles.EVAlign;
 import com.eagerlogic.cubee.client.style.styles.FontFamily;
+import com.eagerlogic.cubee.client.style.styles.Padding;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author dipacs
  */
 public final class Hyperlink extends AComponent {
+    
+    @Getter
+    @Setter
+    public static class StyleClass<T extends Hyperlink> extends AComponent.StyleClass<T> {
+        
+        private Integer width;
+        private Integer height;
+        private ETextOverflow textOverflow = ETextOverflow.ELLIPSIS;
+        private Color foreColor = Color.BLACK;
+        private ETextAlign textAlign = ETextAlign.LEFT;
+        private EVAlign verticalAlign = EVAlign.TOP;
+        private boolean bold;
+        private boolean italic;
+        private boolean underline;
+        private int fontSize;
+        private FontFamily fontFamily = FontFamily.Arial;
+
+        @Override
+        public void apply(T component) {
+            super.apply(component);
+            
+            component.widthProperty().set(width);
+            component.heightProperty().set(height);
+            component.textOverflowProperty().set(textOverflow);
+            component.foreColorProperty().set(foreColor);
+            component.textAlignProperty().set(textAlign);
+            component.verticalAlignProperty().set(verticalAlign);
+            component.boldProperty().set(bold);
+            component.italicProperty().set(italic);
+            component.underlineProperty().set(underline);
+            component.fontSizeProperty().set(fontSize);
+            component.fontFamilyProperty().set(fontFamily);
+        }
+
+        @Override
+        public Padding getPadding() {
+            return super.getPadding(); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void setPadding(Padding padding) {
+            super.setPadding(padding); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Border getBorder() {
+            return super.getBorder(); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void setBorder(Border border) {
+            super.setBorder(border); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+    }
 
     private final IntegerProperty width = new IntegerProperty(null, true, false);
     private final IntegerProperty height = new IntegerProperty(null, true, false);

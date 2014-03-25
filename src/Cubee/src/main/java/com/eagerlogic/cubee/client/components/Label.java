@@ -17,6 +17,8 @@ import com.eagerlogic.cubee.client.style.styles.FontFamily;
 import com.eagerlogic.cubee.client.style.styles.Padding;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -24,6 +26,8 @@ import com.google.gwt.user.client.DOM;
  */
 public final class Label extends AComponent {
 
+    @Getter
+    @Setter
     public static class StyleClass<T extends Label> extends AComponent.StyleClass<Label> {
 
         private Integer width;
@@ -68,153 +72,62 @@ public final class Label extends AComponent {
             component.maxHeightProperty().set(maxHeight);
         }
 
-        public Integer getWidth() {
-            return width;
-        }
-
-        public void setWidth(Integer width) {
-            this.width = width;
-        }
-
-        public Integer getHeight() {
-            return height;
-        }
-
-        public void setHeight(Integer height) {
-            this.height = height;
-        }
-
-        public ETextOverflow getTextOverflow() {
-            return textOverflow;
-        }
-
-        public void setTextOverflow(ETextOverflow textOverflow) {
-            if (textOverflow == null) {
-                throw new NullPointerException("The new value can not be null.");
-            }
-            this.textOverflow = textOverflow;
-        }
-
-        public Color getForeColor() {
-            return foreColor;
-        }
-
-        public void setForeColor(Color foreColor) {
-            if (foreColor == null) {
-                throw new NullPointerException("The new value can not be null.");
-            }
-            this.foreColor = foreColor;
-        }
-
-        public ETextAlign getTextAlign() {
-            return textAlign;
-        }
-
-        public void setTextAlign(ETextAlign textAlign) {
-            if (textAlign == null) {
-                throw new NullPointerException("The new value can not be null.");
-            }
-            this.textAlign = textAlign;
-        }
-
-        public EVAlign getVerticalAlign() {
-            return verticalAlign;
-        }
-
-        public void setVerticalAlign(EVAlign verticalAlign) {
-            if (verticalAlign == null) {
-                throw new NullPointerException("The new value can not be null.");
-            }
-            this.verticalAlign = verticalAlign;
-        }
-
-        public boolean isBold() {
-            return bold;
-        }
-
-        public void setBold(boolean bold) {
-            this.bold = bold;
-        }
-
-        public boolean isItalic() {
-            return italic;
-        }
-
-        public void setItalic(boolean italic) {
-            this.italic = italic;
-        }
-
-        public boolean isUnderline() {
-            return underline;
-        }
-
-        public void setUnderline(boolean underline) {
-            this.underline = underline;
-        }
-
-        public int getFontSize() {
-            return fontSize;
-        }
-
-        public void setFontSize(int fontSize) {
-            this.fontSize = fontSize;
-        }
-
-        public FontFamily getFontFamily() {
-            return fontFamily;
-        }
-
-        public void setFontFamily(FontFamily fontFamily) {
-            if (fontFamily == null) {
-                throw new NullPointerException("The new value can not be null.");
-            }
-            this.fontFamily = fontFamily;
-        }
-
+        @Override
         public Padding getPadding() {
             return padding;
         }
 
+        @Override
         public void setPadding(Padding padding) {
             this.padding = padding;
         }
 
+        @Override
         public Border getBorder() {
             return border;
         }
 
+        @Override
         public void setBorder(Border border) {
             this.border = border;
         }
 
+        @Override
         public Integer getMinWidth() {
             return minWidth;
         }
 
+        @Override
         public void setMinWidth(Integer minWidth) {
             this.minWidth = minWidth;
         }
 
+        @Override
         public Integer getMinHeight() {
             return minHeight;
         }
 
+        @Override
         public void setMinHeight(Integer minHeight) {
             this.minHeight = minHeight;
         }
 
+        @Override
         public Integer getMaxWidth() {
             return maxWidth;
         }
 
+        @Override
         public void setMaxWidth(Integer maxWidth) {
             this.maxWidth = maxWidth;
         }
 
+        @Override
         public Integer getMaxHeight() {
             return maxHeight;
         }
 
+        @Override
         public void setMaxHeight(Integer maxHeight) {
             this.maxHeight = maxHeight;
         }

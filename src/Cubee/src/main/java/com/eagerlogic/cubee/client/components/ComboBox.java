@@ -20,6 +20,8 @@ import com.eagerlogic.cubee.client.style.styles.ECursor;
 import com.eagerlogic.cubee.client.style.styles.FontFamily;
 import com.eagerlogic.cubee.client.style.styles.LinearGradient;
 import com.eagerlogic.cubee.client.style.styles.Padding;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -27,6 +29,8 @@ import com.eagerlogic.cubee.client.style.styles.Padding;
  */
 public final class ComboBox<T> extends AUserControl {
 
+    @Getter
+    @Setter
     public static class StyleClass<T extends ComboBox> extends AUserControl.StyleClass<T> {
 
         private FontFamily fontFamily = FontFamily.Arial;
@@ -46,54 +50,6 @@ public final class ComboBox<T> extends AUserControl {
             component.boldProperty().set(bold);
             component.italicProperty().set(italic);
             component.underlineProperty().set(underline);
-        }
-
-        public FontFamily getFontFamily() {
-            return fontFamily;
-        }
-
-        public void setFontFamily(FontFamily fontFamily) {
-            this.fontFamily = fontFamily;
-        }
-
-        public int getFontSize() {
-            return fontSize;
-        }
-
-        public void setFontSize(int fontSize) {
-            this.fontSize = fontSize;
-        }
-
-        public Color getForeColor() {
-            return foreColor;
-        }
-
-        public void setForeColor(Color foreColor) {
-            this.foreColor = foreColor;
-        }
-
-        public boolean isBold() {
-            return bold;
-        }
-
-        public void setBold(boolean bold) {
-            this.bold = bold;
-        }
-
-        public boolean isItalic() {
-            return italic;
-        }
-
-        public void setItalic(boolean italic) {
-            this.italic = italic;
-        }
-
-        public boolean isUnderline() {
-            return underline;
-        }
-
-        public void setUnderline(boolean underline) {
-            this.underline = underline;
         }
 
         @Override

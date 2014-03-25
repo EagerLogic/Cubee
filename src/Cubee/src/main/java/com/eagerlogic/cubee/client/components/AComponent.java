@@ -29,6 +29,8 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.EventListener;
 import java.util.LinkedList;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This class is the base class of all the components in Cubee. This class wraps a html element. You can inherite from
@@ -38,6 +40,8 @@ import java.util.LinkedList;
  */
 public abstract class AComponent {
 
+    @Getter
+    @Setter
     public static class StyleClass<T extends AComponent> extends AStyleClass<T> {
 
         private double rotate = 0.0;
@@ -81,105 +85,6 @@ public abstract class AComponent {
             component.minHeightProperty().set(minHeight);
             component.maxWidthProperty().set(maxWidth);
             component.maxHeightProperty().set(maxHeight);
-        }
-
-        public double getRotate() {
-            return rotate;
-        }
-
-        public void setRotate(double rotate) {
-            this.rotate = rotate;
-        }
-
-        public double getScaleX() {
-            return scaleX;
-        }
-
-        public void setScaleX(double scaleX) {
-            this.scaleX = scaleX;
-        }
-
-        public double getScaleY() {
-            return scaleY;
-        }
-
-        public void setScaleY(double scaleY) {
-            this.scaleY = scaleY;
-        }
-
-        public double getTransformCenterX() {
-            return transformCenterX;
-        }
-
-        public void setTransformCenterX(double transformCenterX) {
-            this.transformCenterX = transformCenterX;
-        }
-
-        public double getTransformCenterY() {
-            return transformCenterY;
-        }
-
-        public void setTransformCenterY(double transformCenterY) {
-            this.transformCenterY = transformCenterY;
-        }
-
-        public ECursor getCursor() {
-            return cursor;
-        }
-
-        public void setCursor(ECursor cursor) {
-            if (cursor == null) {
-                throw new NullPointerException("This value can not be null.");
-            }
-            this.cursor = cursor;
-        }
-
-        public boolean isVisible() {
-            return visible;
-        }
-
-        public void setVisible(boolean visible) {
-            this.visible = visible;
-        }
-
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public boolean isPointerTransparent() {
-            return pointerTransparent;
-        }
-
-        public void setPointerTransparent(boolean pointerTransparent) {
-            this.pointerTransparent = pointerTransparent;
-        }
-
-        public boolean isHandlePointer() {
-            return handlePointer;
-        }
-
-        public void setHandlePointer(boolean handlePointer) {
-            this.handlePointer = handlePointer;
-        }
-
-        public double getAlpha() {
-            return alpha;
-        }
-
-        public void setAlpha(double alpha) {
-            this.alpha = alpha;
-        }
-
-        public boolean isSelectable() {
-            return selectable;
-        }
-
-        public void setSelectable(boolean selectable) {
-            this.selectable = selectable;
         }
 
         protected Padding getPadding() {
@@ -649,6 +554,7 @@ public abstract class AComponent {
         element.getStyle().setProperty("webkitTransformOrigin", centerX + " " + centerY);
         element.getStyle().setProperty("webkitTransform", "translate(" + translateX.get() + "px, " + translateY.get()
                 + "px) rotate(" + angleStr + ") scaleX( " + sX + ") scaleY(" + sY + ")");
+        element.getStyle().setProperty("webkitBackfaceVisibility", "hidden");
     }
 
     /**
@@ -774,7 +680,7 @@ public abstract class AComponent {
      *
      * @return The translateX property instance.
      */
-    public final IntegerProperty translateXProperty() {
+    public IntegerProperty translateXProperty() {
         return translateX;
     }
 
@@ -783,7 +689,7 @@ public abstract class AComponent {
      *
      * @return The translateY property instance.
      */
-    public final IntegerProperty translateYProperty() {
+    public IntegerProperty translateYProperty() {
         return translateY;
     }
 
@@ -1181,7 +1087,7 @@ public abstract class AComponent {
     protected final void registerDownEvent(int screenX, int screenY, int x, int y, boolean altPressed,
             boolean ctrlPressed,
             boolean shiftPressed, boolean metaPressed) {
-        logPointerDownEvent(new MouseDownEventLog(this, x, y, screenX, screenY));
+        logPointerDownEvent(new MouseDownEventLog(this, screenX, screenY, x, y));
     }
 
     /**

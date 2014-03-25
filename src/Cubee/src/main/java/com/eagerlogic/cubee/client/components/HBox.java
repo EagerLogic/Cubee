@@ -235,4 +235,8 @@ public class HBox extends ALayout {
     public LayoutChildren getChildren() {
         return super.getChildren();
     }
+
+    public IntegerProperty heightProperty() {
+        return height;
+    }
 }
