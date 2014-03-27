@@ -12,8 +12,6 @@ import com.eagerlogic.cubee.client.style.styles.ECursor;
 import com.eagerlogic.cubee.client.style.styles.ETextAlign;
 import com.eagerlogic.cubee.client.style.styles.ETextOverflow;
 import com.eagerlogic.cubee.client.style.styles.EVAlign;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
@@ -21,8 +19,6 @@ import lombok.Setter;
  */
 public final class CheckBox extends AUserControl {
 
-    @Getter
-    @Setter
     public static class StyleClass extends AUserControl.StyleClass<CheckBox> {
 
         private boolean bold = false;
@@ -50,6 +46,86 @@ public final class CheckBox extends AUserControl {
             component.textOverflowProperty().set(textOverflow);
             component.textWidthProperty().set(textWidth);
             component.underlineProperty().set(underline);
+        }
+
+        public boolean isBold() {
+            return bold;
+        }
+
+        public void setBold(boolean bold) {
+            this.bold = bold;
+        }
+
+        public int getFontSize() {
+            return fontSize;
+        }
+
+        public void setFontSize(int fontSize) {
+            this.fontSize = fontSize;
+        }
+
+        public Color getForeColor() {
+            return foreColor;
+        }
+
+        public void setForeColor(Color foreColor) {
+            this.foreColor = foreColor;
+        }
+
+        public boolean isItalic() {
+            return italic;
+        }
+
+        public void setItalic(boolean italic) {
+            this.italic = italic;
+        }
+
+        public Color getLedColor() {
+            return ledColor;
+        }
+
+        public void setLedColor(Color ledColor) {
+            this.ledColor = ledColor;
+        }
+
+        public int getLedSize() {
+            return ledSize;
+        }
+
+        public void setLedSize(int ledSize) {
+            this.ledSize = ledSize;
+        }
+
+        public ETextAlign getTextAlign() {
+            return textAlign;
+        }
+
+        public void setTextAlign(ETextAlign textAlign) {
+            this.textAlign = textAlign;
+        }
+
+        public ETextOverflow getTextOverflow() {
+            return textOverflow;
+        }
+
+        public void setTextOverflow(ETextOverflow textOverflow) {
+            this.textOverflow = textOverflow;
+        }
+
+        public Integer getTextWidth() {
+            return textWidth;
+        }
+
+        public void setTextWidth(Integer textWidth) {
+            this.textWidth = textWidth;
+        }
+
+        public boolean isUnderline() {
+            return underline;
+        }
+
+        public void setUnderline(boolean underline) {
+            this.underline = underline;
         }
 
     }

@@ -5,6 +5,8 @@ import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.properties.DoubleProperty;
 import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.style.Style;
+import com.eagerlogic.cubee.client.style.styles.ABackground;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.BoxShadow;
 import com.eagerlogic.cubee.client.style.styles.Color;
@@ -14,8 +16,56 @@ import java.util.List;
 
 public final class PopupMenu extends APopup implements ICloseable {
 
-    private BackgroundProperty normalItemBackground = new BackgroundProperty(null, true, false);
-    private BackgroundProperty selectedItemBackground = new BackgroundProperty(new ColorBackground(Color.FUNKY_BLUE), true, false);
+    public static class StyleClass<T extends PopupMenu> extends APopup.StyleClass<T> {
+
+        private final Style<ABackground> normalItemBackground = new Style<ABackground>(null, true);
+        private final Style<ABackground> selectedItemBackground = new Style<ABackground>(null, true);
+        private final Style<Double> alpha = new Style<Double>(null, false);
+        private final Style<ABackground> background = new Style<ABackground>(null, true);
+        private final Style<Border> border = new Style<Border>(null, true);
+        private final Style<BoxShadow> shadow = new Style<BoxShadow>(null, true);
+
+        @Override
+        public void apply(T component) {
+            super.apply(component);
+
+            normalItemBackground.apply(component.normalItemBackgroundProperty());
+            selectedItemBackground.apply(component.selectedItemBackgroundProperty());
+            alpha.apply(component.alphaProperty());
+            background.apply(component.backgroundProperty());
+            border.apply(component.borderProperty());
+            shadow.apply(component.shadowProperty());
+        }
+
+        public Style<ABackground> getNormalItemBackground() {
+            return normalItemBackground;
+        }
+
+        public Style<ABackground> getSelectedItemBackground() {
+            return selectedItemBackground;
+        }
+
+        public Style<Double> getAlpha() {
+            return alpha;
+        }
+
+        public Style<ABackground> getBackground() {
+            return background;
+        }
+
+        public Style<Border> getBorder() {
+            return border;
+        }
+
+        public Style<BoxShadow> getShadow() {
+            return shadow;
+        }
+
+    }
+
+
+    private final BackgroundProperty normalItemBackground = new BackgroundProperty(null, true, false);
+    private final BackgroundProperty selectedItemBackground = new BackgroundProperty(new ColorBackground(Color.FUNKY_BLUE), true, false);
 
     private final AMenuItem[] items;
     private final Panel root;
@@ -101,6 +151,14 @@ public final class PopupMenu extends APopup implements ICloseable {
 
     public final DoubleProperty alphaProperty() {
         return root.alphaProperty();
+    }
+
+    public BackgroundProperty normalItemBackgroundProperty() {
+        return normalItemBackground;
+    }
+
+    public BackgroundProperty selectedItemBackgroundProperty() {
+        return selectedItemBackground;
     }
 
 }

@@ -8,6 +8,7 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.properties.StringProperty;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ETextAlign;
@@ -15,10 +16,7 @@ import com.eagerlogic.cubee.client.style.styles.ETextOverflow;
 import com.eagerlogic.cubee.client.style.styles.EVAlign;
 import com.eagerlogic.cubee.client.style.styles.FontFamily;
 import com.eagerlogic.cubee.client.style.styles.Padding;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
@@ -26,110 +24,109 @@ import lombok.Setter;
  */
 public final class Label extends AComponent {
 
-    @Getter
-    @Setter
-    public static class StyleClass<T extends Label> extends AComponent.StyleClass<Label> {
+    public static class StyleClass<T extends Label> extends AComponent.StyleClass<T> {
 
-        private Integer width;
-        private Integer height;
-        private ETextOverflow textOverflow = ETextOverflow.CLIP;
-        private Color foreColor = Color.BLACK;
-        private ETextAlign textAlign = ETextAlign.LEFT;
-        private EVAlign verticalAlign = EVAlign.TOP;
-        private boolean bold = false;
-        private boolean italic = false;
-        private boolean underline = false;
-        private int fontSize = 12;
-        private FontFamily fontFamily = FontFamily.Arial;
-
-        private Padding padding;
-        private Border border;
-        private Integer minWidth;
-        private Integer minHeight;
-        private Integer maxWidth;
-        private Integer maxHeight;
+        private final Style<Integer> width = new Style<Integer>(null, true);
+        private final Style<Integer> height = new Style<Integer>(null, true);
+        private final Style<ETextOverflow> textOverflow = new Style<ETextOverflow>(null, false);
+        private final Style<Color> foreColor = new Style<Color>(null, false);
+        private final Style<ETextAlign> textAlign = new Style<ETextAlign>(null, false);
+        private final Style<EVAlign> verticalAlign = new Style<EVAlign>(null, false);
+        private final Style<Boolean> bold = new Style<Boolean>(null, false);
+        private final Style<Boolean> italic = new Style<Boolean>(null, false);
+        private final Style<Boolean> underline = new Style<Boolean>(null, false);
+        private final Style<Integer> fontSize = new Style<Integer>(null, false);
+        private final Style<FontFamily> fontFamily = new Style<FontFamily>(null, false);
 
         @Override
-        public void apply(Label component) {
+        public void apply(T component) {
             super.apply(component);
 
-            component.width.set(width);
-            component.height.set(height);
-            component.textOverFlow.set(textOverflow);
-            component.foreColor.set(foreColor);
-            component.textAlign.set(textAlign);
-            component.verticalAlign.set(verticalAlign);
-            component.bold.set(bold);
-            component.italic.set(italic);
-            component.underline.set(underline);
-            component.fontSize.set(fontSize);
-            component.fontFamily.set(fontFamily);
-            component.paddingProperty().set(padding);
-            component.borderProperty().set(border);
-            component.minWidthProperty().set(minWidth);
-            component.minHeightProperty().set(minHeight);
-            component.maxWidthProperty().set(maxWidth);
-            component.maxHeightProperty().set(maxHeight);
+            width.apply(component.widthProperty());
+            height.apply(component.heightProperty());
+            textOverflow.apply(component.textOverflowProperty());
+            foreColor.apply(component.foreColorProperty());
+            textAlign.apply(component.textAlignProperty());
+            verticalAlign.apply(component.verticalAlignProperty());
+            bold.apply(component.boldProperty());
+            italic.apply(component.italicProperty());
+            underline.apply(component.underlineProperty());
+            fontSize.apply(component.fontSizeProperty());
+            fontFamily.apply(component.fontFamilyProperty());
         }
 
         @Override
-        public Padding getPadding() {
-            return padding;
+        public Style<Integer> getMaxHeight() {
+            return super.getMaxHeight();
         }
 
         @Override
-        public void setPadding(Padding padding) {
-            this.padding = padding;
+        public Style<Integer> getMaxWidth() {
+            return super.getMaxWidth();
         }
 
         @Override
-        public Border getBorder() {
-            return border;
+        public Style<Integer> getMinHeight() {
+            return super.getMinHeight();
         }
 
         @Override
-        public void setBorder(Border border) {
-            this.border = border;
+        public Style<Integer> getMinWidth() {
+            return super.getMinWidth();
         }
 
         @Override
-        public Integer getMinWidth() {
-            return minWidth;
+        public Style<Border> getBorder() {
+            return super.getBorder();
         }
 
         @Override
-        public void setMinWidth(Integer minWidth) {
-            this.minWidth = minWidth;
+        public Style<Padding> getPadding() {
+            return super.getPadding();
         }
 
-        @Override
-        public Integer getMinHeight() {
-            return minHeight;
+        public Style<Integer> getWidth() {
+            return width;
         }
 
-        @Override
-        public void setMinHeight(Integer minHeight) {
-            this.minHeight = minHeight;
+        public Style<Integer> getHeight() {
+            return height;
         }
 
-        @Override
-        public Integer getMaxWidth() {
-            return maxWidth;
+        public Style<ETextOverflow> getTextOverflow() {
+            return textOverflow;
         }
 
-        @Override
-        public void setMaxWidth(Integer maxWidth) {
-            this.maxWidth = maxWidth;
+        public Style<Color> getForeColor() {
+            return foreColor;
         }
 
-        @Override
-        public Integer getMaxHeight() {
-            return maxHeight;
+        public Style<ETextAlign> getTextAlign() {
+            return textAlign;
         }
 
-        @Override
-        public void setMaxHeight(Integer maxHeight) {
-            this.maxHeight = maxHeight;
+        public Style<EVAlign> getVerticalAlign() {
+            return verticalAlign;
+        }
+
+        public Style<Boolean> getBold() {
+            return bold;
+        }
+
+        public Style<Boolean> getItalic() {
+            return italic;
+        }
+
+        public Style<Boolean> getUnderline() {
+            return underline;
+        }
+
+        public Style<Integer> getFontSize() {
+            return fontSize;
+        }
+
+        public Style<FontFamily> getFontFamily() {
+            return fontFamily;
         }
 
     }
@@ -153,13 +150,13 @@ public final class Label extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 if (width.get() == null) {
-                    getElement().getStyle().setWhiteSpace(Style.WhiteSpace.NOWRAP);
-                    getElement().getStyle().setOverflowX(Style.Overflow.VISIBLE);
+                    getElement().getStyle().setWhiteSpace(com.google.gwt.dom.client.Style.WhiteSpace.NOWRAP);
+                    getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.VISIBLE);
                     getElement().getStyle().clearWidth();
                 } else {
-                    getElement().getStyle().setWhiteSpace(Style.WhiteSpace.NORMAL);
-                    getElement().getStyle().setWidth(width.get(), Style.Unit.PX);
-                    getElement().getStyle().setOverflowX(Style.Overflow.HIDDEN);
+                    getElement().getStyle().setWhiteSpace(com.google.gwt.dom.client.Style.WhiteSpace.NORMAL);
+                    getElement().getStyle().setWidth(width.get(), com.google.gwt.dom.client.Style.Unit.PX);
+                    getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 }
                 requestLayout();
             }
@@ -170,10 +167,10 @@ public final class Label extends AComponent {
             public void onChanged(Object sender) {
                 if (height.get() == null) {
                     getElement().getStyle().clearHeight();
-                    getElement().getStyle().setOverflowY(Style.Overflow.VISIBLE);
+                    getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.VISIBLE);
                 } else {
-                    getElement().getStyle().setHeight(height.get(), Style.Unit.PX);
-                    getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+                    getElement().getStyle().setHeight(height.get(), com.google.gwt.dom.client.Style.Unit.PX);
+                    getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 }
                 requestLayout();
             }
@@ -223,11 +220,11 @@ public final class Label extends AComponent {
             public void onChanged(Object sender) {
                 EVAlign ta = verticalAlign.get();
                 if (ta == EVAlign.TOP) {
-                    getElement().getStyle().setVerticalAlign(Style.VerticalAlign.TOP);
+                    getElement().getStyle().setVerticalAlign(com.google.gwt.dom.client.Style.VerticalAlign.TOP);
                 } else if (ta == EVAlign.MIDDLE) {
-                    getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
+                    getElement().getStyle().setVerticalAlign(com.google.gwt.dom.client.Style.VerticalAlign.MIDDLE);
                 } else if (ta == EVAlign.BOTTOM) {
-                    getElement().getStyle().setVerticalAlign(Style.VerticalAlign.BOTTOM);
+                    getElement().getStyle().setVerticalAlign(com.google.gwt.dom.client.Style.VerticalAlign.BOTTOM);
                 }
             }
         });
@@ -237,9 +234,9 @@ public final class Label extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 if (underline.get()) {
-                    getElement().getStyle().setTextDecoration(Style.TextDecoration.UNDERLINE);
+                    getElement().getStyle().setTextDecoration(com.google.gwt.dom.client.Style.TextDecoration.UNDERLINE);
                 } else {
-                    getElement().getStyle().setTextDecoration(Style.TextDecoration.NONE);
+                    getElement().getStyle().setTextDecoration(com.google.gwt.dom.client.Style.TextDecoration.NONE);
                 }
                 requestLayout();
             }
@@ -250,9 +247,9 @@ public final class Label extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 if (bold.get()) {
-                    getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
+                    getElement().getStyle().setFontWeight(com.google.gwt.dom.client.Style.FontWeight.BOLD);
                 } else {
-                    getElement().getStyle().setFontWeight(Style.FontWeight.NORMAL);
+                    getElement().getStyle().setFontWeight(com.google.gwt.dom.client.Style.FontWeight.NORMAL);
                 }
                 requestLayout();
             }
@@ -263,9 +260,9 @@ public final class Label extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 if (italic.get()) {
-                    getElement().getStyle().setFontStyle(Style.FontStyle.ITALIC);
+                    getElement().getStyle().setFontStyle(com.google.gwt.dom.client.Style.FontStyle.ITALIC);
                 } else {
-                    getElement().getStyle().setFontStyle(Style.FontStyle.NORMAL);
+                    getElement().getStyle().setFontStyle(com.google.gwt.dom.client.Style.FontStyle.NORMAL);
                 }
                 requestLayout();
             }
@@ -275,7 +272,7 @@ public final class Label extends AComponent {
 
             @Override
             public void onChanged(Object sender) {
-                getElement().getStyle().setFontSize(fontSize.get(), Style.Unit.PX);
+                getElement().getStyle().setFontSize(fontSize.get(), com.google.gwt.dom.client.Style.Unit.PX);
                 requestLayout();
             }
         });
@@ -289,6 +286,8 @@ public final class Label extends AComponent {
             }
         });
         fontFamily.invalidate();
+
+        this.applyDefaultStyle(Label.class);
     }
 
     public final IntegerProperty widthProperty() {

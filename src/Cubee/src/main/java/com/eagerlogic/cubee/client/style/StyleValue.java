@@ -9,8 +9,16 @@ package com.eagerlogic.cubee.client.style;
  *
  * @author dipacs
  */
-public abstract class AStyleClass<T> {
+public class StyleValue<T> {
 
-    public abstract void apply(T component);
+    private T value;
+
+    public StyleValue(T value) {
+        this.value = value;
+    }
+
+    public T getValue() {
+        return value;
+    }
 
 }

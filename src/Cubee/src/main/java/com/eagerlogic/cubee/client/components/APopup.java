@@ -5,6 +5,8 @@ import com.eagerlogic.cubee.client.events.IEventListener;
 import com.eagerlogic.cubee.client.properties.AExpression;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
+import com.eagerlogic.cubee.client.style.AStyleClass;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ColorBackground;
 
@@ -13,6 +15,33 @@ import com.eagerlogic.cubee.client.style.styles.ColorBackground;
  * @author dipacs
  */
 public abstract class APopup {
+
+    public static class StyleClass<T extends APopup> extends AStyleClass<T> {
+
+        private final Style<Integer> translateX = new Style<Integer>(null, false);
+        private final Style<Integer> translateY = new Style<Integer>(null, false);
+        private final Style<Boolean> center = new Style<Boolean>(null, false);
+
+        @Override
+        public void apply(T component) {
+            translateX.apply(component.translateXProperty());
+            translateY.apply(component.translateYProperty());
+            center.apply(component.centerProperty());
+        }
+
+        public Style<Integer> getTranslateX() {
+            return translateX;
+        }
+
+        public Style<Integer> getTranslateY() {
+            return translateY;
+        }
+
+        public Style<Boolean> getCenter() {
+            return center;
+        }
+
+    }
 
     private final boolean modal;
     private final boolean autoClose;
@@ -64,7 +93,8 @@ public abstract class APopup {
             public Integer calculate() {
                 int baseX = 0;
                 if (center.get()) {
-                    baseX = (popupRoot.clientWidthProperty().get() - rootComponentContainer.boundsWidthProperty().get()) / 2;
+                    baseX = (popupRoot.clientWidthProperty().get() - rootComponentContainer.boundsWidthProperty().get())
+                            / 2;
                 }
                 return baseX + translateX.get();
             }
@@ -80,7 +110,8 @@ public abstract class APopup {
             public Integer calculate() {
                 int baseY = 0;
                 if (center.get()) {
-                    baseY = (popupRoot.boundsHeightProperty().get() - rootComponentContainer.boundsHeightProperty().get()) / 2;
+                    baseY = (popupRoot.boundsHeightProperty().get()
+                            - rootComponentContainer.boundsHeightProperty().get()) / 2;
                 }
                 return baseY + translateY.get();
             }
@@ -159,27 +190,27 @@ public abstract class APopup {
     protected BooleanProperty centerProperty() {
         return center;
     }
-    
+
     protected int getTranslateX() {
         return translateXProperty().get();
     }
-    
+
     protected void setTranslateX(int translateX) {
         this.translateXProperty().set(translateX);
     }
-    
+
     protected int getTranslateY() {
         return translateYProperty().get();
     }
-    
+
     protected void setTranslateY(int translateY) {
         this.translateYProperty().set(translateY);
     }
-    
+
     protected boolean isCenter() {
         return centerProperty().get();
     }
-    
+
     protected void setCenter(boolean center) {
         this.centerProperty().set(center);
     }

@@ -8,6 +8,7 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.properties.StringProperty;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ECursor;
@@ -16,70 +17,119 @@ import com.eagerlogic.cubee.client.style.styles.ETextOverflow;
 import com.eagerlogic.cubee.client.style.styles.EVAlign;
 import com.eagerlogic.cubee.client.style.styles.FontFamily;
 import com.eagerlogic.cubee.client.style.styles.Padding;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
  * @author dipacs
  */
 public final class Hyperlink extends AComponent {
-    
-    @Getter
-    @Setter
+
     public static class StyleClass<T extends Hyperlink> extends AComponent.StyleClass<T> {
-        
-        private Integer width;
-        private Integer height;
-        private ETextOverflow textOverflow = ETextOverflow.ELLIPSIS;
-        private Color foreColor = Color.BLACK;
-        private ETextAlign textAlign = ETextAlign.LEFT;
-        private EVAlign verticalAlign = EVAlign.TOP;
-        private boolean bold;
-        private boolean italic;
-        private boolean underline;
-        private int fontSize;
-        private FontFamily fontFamily = FontFamily.Arial;
+
+        private final Style<Integer> width = new Style<Integer>(null, true);
+        private final Style<Integer> height = new Style<Integer>(null, true);
+        private final Style<ETextOverflow> textOverflow = new Style<ETextOverflow>(null, false);
+        private final Style<Color> foreColor = new Style<Color>(null, false);
+        private final Style<ETextAlign> textAlign = new Style<ETextAlign>(null, false);
+        private final Style<EVAlign> verticalAlign = new Style<EVAlign>(null, false);
+        private final Style<Boolean> bold = new Style<Boolean>(null, false);
+        private final Style<Boolean> italic = new Style<Boolean>(null, false);
+        private final Style<Boolean> underline = new Style<Boolean>(null, false);
+        private final Style<Integer> fontSize = new Style<Integer>(null, false);
+        private final Style<FontFamily> fontFamily = new Style<FontFamily>(null, false);
 
         @Override
         public void apply(T component) {
             super.apply(component);
-            
-            component.widthProperty().set(width);
-            component.heightProperty().set(height);
-            component.textOverflowProperty().set(textOverflow);
-            component.foreColorProperty().set(foreColor);
-            component.textAlignProperty().set(textAlign);
-            component.verticalAlignProperty().set(verticalAlign);
-            component.boldProperty().set(bold);
-            component.italicProperty().set(italic);
-            component.underlineProperty().set(underline);
-            component.fontSizeProperty().set(fontSize);
-            component.fontFamilyProperty().set(fontFamily);
+
+            width.apply(component.widthProperty());
+            height.apply(component.heightProperty());
+            textOverflow.apply(component.textOverflowProperty());
+            foreColor.apply(component.foreColorProperty());
+            textAlign.apply(component.textAlignProperty());
+            verticalAlign.apply(component.verticalAlignProperty());
+            bold.apply(component.boldProperty());
+            italic.apply(component.italicProperty());
+            underline.apply(component.underlineProperty());
+            fontSize.apply(component.fontSizeProperty());
+            fontFamily.apply(component.fontFamilyProperty());
         }
 
         @Override
-        public Padding getPadding() {
-            return super.getPadding(); //To change body of generated methods, choose Tools | Templates.
+        protected Style<Integer> getMaxHeight() {
+            return super.getMaxHeight();
         }
 
         @Override
-        public void setPadding(Padding padding) {
-            super.setPadding(padding); //To change body of generated methods, choose Tools | Templates.
+        public Style<Integer> getMaxWidth() {
+            return super.getMaxWidth();
         }
 
         @Override
-        public Border getBorder() {
-            return super.getBorder(); //To change body of generated methods, choose Tools | Templates.
+        public Style<Integer> getMinHeight() {
+            return super.getMinHeight();
         }
 
         @Override
-        public void setBorder(Border border) {
-            super.setBorder(border); //To change body of generated methods, choose Tools | Templates.
+        public Style<Integer> getMinWidth() {
+            return super.getMinWidth();
         }
-        
+
+        @Override
+        public Style<Border> getBorder() {
+            return super.getBorder();
+        }
+
+        @Override
+        public Style<Padding> getPadding() {
+            return super.getPadding();
+        }
+
+        public Style<Integer> getWidth() {
+            return width;
+        }
+
+        public Style<Integer> getHeight() {
+            return height;
+        }
+
+        public Style<ETextOverflow> getTextOverflow() {
+            return textOverflow;
+        }
+
+        public Style<Color> getForeColor() {
+            return foreColor;
+        }
+
+        public Style<ETextAlign> getTextAlign() {
+            return textAlign;
+        }
+
+        public Style<EVAlign> getVerticalAlign() {
+            return verticalAlign;
+        }
+
+        public Style<Boolean> getBold() {
+            return bold;
+        }
+
+        public Style<Boolean> getItalic() {
+            return italic;
+        }
+
+        public Style<Boolean> getUnderline() {
+            return underline;
+        }
+
+        public Style<Integer> getFontSize() {
+            return fontSize;
+        }
+
+        public Style<FontFamily> getFontFamily() {
+            return fontFamily;
+        }
+
     }
 
     private final IntegerProperty width = new IntegerProperty(null, true, false);
@@ -94,7 +144,6 @@ public final class Hyperlink extends AComponent {
     private final BooleanProperty underline = new BooleanProperty(false, false, false);
     private final IntegerProperty fontSize = new IntegerProperty(12, false, false);
     private final Property<FontFamily> fontFamily = new Property<FontFamily>(FontFamily.Arial, false, false);
-    private final BooleanProperty selectable = new BooleanProperty(Boolean.TRUE, false, false);
     private final Property<String> targetUrl = new Property<String>(null, true, false);
     private final BooleanProperty openInNewTab = new BooleanProperty(false, false, false);
 
@@ -125,12 +174,12 @@ public final class Hyperlink extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 if (width.get() == null) {
-                    getElement().getStyle().setWhiteSpace(Style.WhiteSpace.NOWRAP);
-                    getElement().getStyle().setOverflowX(Style.Overflow.VISIBLE);
+                    getElement().getStyle().setWhiteSpace(com.google.gwt.dom.client.Style.WhiteSpace.NOWRAP);
+                    getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.VISIBLE);
                 } else {
-                    getElement().getStyle().setWhiteSpace(Style.WhiteSpace.NORMAL);
-                    getElement().getStyle().setWidth(width.get(), Style.Unit.PX);
-                    getElement().getStyle().setOverflowX(Style.Overflow.HIDDEN);
+                    getElement().getStyle().setWhiteSpace(com.google.gwt.dom.client.Style.WhiteSpace.NORMAL);
+                    getElement().getStyle().setWidth(width.get(), com.google.gwt.dom.client.Style.Unit.PX);
+                    getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 }
                 requestLayout();
             }
@@ -141,10 +190,10 @@ public final class Hyperlink extends AComponent {
             public void onChanged(Object sender) {
                 if (height.get() == null) {
                     getElement().getStyle().clearHeight();
-                    getElement().getStyle().setOverflowY(Style.Overflow.VISIBLE);
+                    getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.VISIBLE);
                 } else {
-                    getElement().getStyle().setHeight(height.get(), Style.Unit.PX);
-                    getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+                    getElement().getStyle().setHeight(height.get(), com.google.gwt.dom.client.Style.Unit.PX);
+                    getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 }
                 requestLayout();
             }
@@ -189,11 +238,11 @@ public final class Hyperlink extends AComponent {
             public void onChanged(Object sender) {
                 EVAlign ta = verticalAlign.get();
                 if (ta == EVAlign.TOP) {
-                    getElement().getStyle().setVerticalAlign(Style.VerticalAlign.TOP);
+                    getElement().getStyle().setVerticalAlign(com.google.gwt.dom.client.Style.VerticalAlign.TOP);
                 } else if (ta == EVAlign.MIDDLE) {
-                    getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
+                    getElement().getStyle().setVerticalAlign(com.google.gwt.dom.client.Style.VerticalAlign.MIDDLE);
                 } else if (ta == EVAlign.BOTTOM) {
-                    getElement().getStyle().setVerticalAlign(Style.VerticalAlign.BOTTOM);
+                    getElement().getStyle().setVerticalAlign(com.google.gwt.dom.client.Style.VerticalAlign.BOTTOM);
                 }
             }
         });
@@ -203,9 +252,9 @@ public final class Hyperlink extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 if (underline.get()) {
-                    getElement().getStyle().setTextDecoration(Style.TextDecoration.UNDERLINE);
+                    getElement().getStyle().setTextDecoration(com.google.gwt.dom.client.Style.TextDecoration.UNDERLINE);
                 } else {
-                    getElement().getStyle().setTextDecoration(Style.TextDecoration.NONE);
+                    getElement().getStyle().setTextDecoration(com.google.gwt.dom.client.Style.TextDecoration.NONE);
                 }
                 requestLayout();
             }
@@ -216,9 +265,9 @@ public final class Hyperlink extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 if (bold.get()) {
-                    getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
+                    getElement().getStyle().setFontWeight(com.google.gwt.dom.client.Style.FontWeight.BOLD);
                 } else {
-                    getElement().getStyle().setFontWeight(Style.FontWeight.NORMAL);
+                    getElement().getStyle().setFontWeight(com.google.gwt.dom.client.Style.FontWeight.NORMAL);
                 }
                 requestLayout();
             }
@@ -229,9 +278,9 @@ public final class Hyperlink extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 if (italic.get()) {
-                    getElement().getStyle().setFontStyle(Style.FontStyle.ITALIC);
+                    getElement().getStyle().setFontStyle(com.google.gwt.dom.client.Style.FontStyle.ITALIC);
                 } else {
-                    getElement().getStyle().setFontStyle(Style.FontStyle.NORMAL);
+                    getElement().getStyle().setFontStyle(com.google.gwt.dom.client.Style.FontStyle.NORMAL);
                 }
                 requestLayout();
             }
@@ -241,7 +290,7 @@ public final class Hyperlink extends AComponent {
 
             @Override
             public void onChanged(Object sender) {
-                getElement().getStyle().setFontSize(fontSize.get(), Style.Unit.PX);
+                getElement().getStyle().setFontSize(fontSize.get(), com.google.gwt.dom.client.Style.Unit.PX);
                 requestLayout();
             }
         });
@@ -255,25 +304,8 @@ public final class Hyperlink extends AComponent {
             }
         });
         fontFamily.invalidate();
-        selectable.addChangeListener(new IChangeListener() {
 
-            @Override
-            public void onChanged(Object sender) {
-                if (selectable.get()) {
-                    getElement().getStyle().clearProperty("mozUserSelect");
-                    getElement().getStyle().clearProperty("khtmlUserSelect");
-                    getElement().getStyle().clearProperty("webkitUserSelect");
-                    getElement().getStyle().clearProperty("msUserSelect");
-                    getElement().getStyle().clearProperty("userSelect");
-                } else {
-                    getElement().getStyle().setProperty("mozUserSelect", "none");
-                    getElement().getStyle().setProperty("khtmlUserSelect", "none");
-                    getElement().getStyle().setProperty("webkitUserSelect", "none");
-                    getElement().getStyle().setProperty("msUserSelect", "none");
-                    getElement().getStyle().setProperty("userSelect", "none");
-                }
-            }
-        });
+        this.applyDefaultStyle(Hyperlink.class);
     }
 
     public final IntegerProperty widthProperty() {
@@ -334,8 +366,9 @@ public final class Hyperlink extends AComponent {
         return fontFamily;
     }
 
+    @Override
     public BooleanProperty selectableProperty() {
-        return selectable;
+        return super.selectableProperty();
     }
 
     public Property<String> targetUrlProperty() {

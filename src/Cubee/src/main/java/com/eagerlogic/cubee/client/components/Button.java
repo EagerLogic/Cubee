@@ -13,6 +13,7 @@ import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.properties.StringProperty;
 import com.eagerlogic.cubee.client.properties.ext.AlignMiddleExp;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.ABackground;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.Color;
@@ -22,8 +23,6 @@ import com.eagerlogic.cubee.client.style.styles.ETextAlign;
 import com.eagerlogic.cubee.client.style.styles.ETextOverflow;
 import com.eagerlogic.cubee.client.style.styles.FontFamily;
 import com.eagerlogic.cubee.client.style.styles.Padding;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
@@ -31,81 +30,86 @@ import lombok.Setter;
  */
 public final class Button extends AUserControl {
 
-    @Getter
-    @Setter
     public static class StyleClass<T extends Button> extends AUserControl.StyleClass<T> {
 
-        private boolean bold = false;
-        private boolean italic = false;
-        private boolean underline = false;
-        private FontFamily fontFamily = FontFamily.Arial;
-        private int fontSize = 12;
-        private Color foreColor = Color.BLACK;
-        private ETextAlign textAlign = ETextAlign.CENTER;
-        private ETextOverflow textOverflow = ETextOverflow.ELLIPSIS;
+        private final Style<Boolean> bold = new Style<Boolean>(null, false);
+        private final Style<Boolean> italic = new Style<Boolean>(null, false);
+        private final Style<Boolean> underline = new Style<Boolean>(null, false);
+        private final Style<FontFamily> fontFamily = new Style<FontFamily>(null, false);
+        private final Style<Integer> fontSize = new Style<Integer>(null, false);
+        private final Style<Color> foreColor = new Style<Color>(null, false);
+        private final Style<ETextAlign> textAlign = new Style<ETextAlign>(null, false);
+        private final Style<ETextOverflow> textOverflow = new Style<ETextOverflow>(null, false);
 
         @Override
         public void apply(T component) {
             super.apply(component);
 
-            component.boldProperty().set(bold);
-            component.italicProperty().set(italic);
-            component.underlineProperty().set(underline);
-            component.fontFamilyProperty().set(fontFamily);
-            component.fontSizeProperty().set(fontSize);
-            component.foreColorProperty().set(foreColor);
-            component.textAlignProperty().set(textAlign);
-            component.textOverflowProperty().set(textOverflow);
+            bold.apply(component.boldProperty());
+            italic.apply(component.italicProperty());
+            underline.apply(component.underlineProperty());
+            fontFamily.apply(component.fontFamilyProperty());
+            fontSize.apply(component.fontSizeProperty());
+            foreColor.apply(component.foreColorProperty());
+            textAlign.apply(component.textAlignProperty());
+            textOverflow.apply(component.textOverflowProperty());
         }
 
         @Override
-        public void setBackground(ABackground background) {
-            super.setBackground(background);
-        }
-
-        @Override
-        public ABackground getBackground() {
+        public Style<ABackground> getBackground() {
             return super.getBackground();
         }
 
         @Override
-        public void setHeight(Integer height) {
-            super.setHeight(height);
-        }
-
-        @Override
-        public Integer getHeight() {
+        public Style<Integer> getHeight() {
             return super.getHeight();
         }
 
         @Override
-        public void setWidth(Integer width) {
-            super.setWidth(width);
-        }
-
-        @Override
-        public Integer getWidth() {
+        public Style<Integer> getWidth() {
             return super.getWidth();
         }
 
         @Override
-        public void setBorder(Border border) {
-            super.setBorder(border);
-        }
-
-        @Override
-        public Border getBorder() {
+        public Style<Border> getBorder() {
             return super.getBorder();
         }
 
         @Override
-        public void setPadding(Padding padding) {
-            super.setPadding(padding);
+        public Style<Padding> getPadding() {
+            return super.getPadding();
         }
 
-        @Override
-        public Padding getPadding() {
-            return super.getPadding();
+        public Style<Boolean> getBold() {
+            return bold;
+        }
+
+        public Style<Boolean> getItalic() {
+            return italic;
+        }
+
+        public Style<Boolean> getUnderline() {
+            return underline;
+        }
+
+        public Style<FontFamily> getFontFamily() {
+            return fontFamily;
+        }
+
+        public Style<Integer> getFontSize() {
+            return fontSize;
+        }
+
+        public Style<Color> getForeColor() {
+            return foreColor;
+        }
+
+        public Style<ETextAlign> getTextAlign() {
+            return textAlign;
+        }
+
+        public Style<ETextOverflow> getTextOverflow() {
+            return textOverflow;
         }
 
     }

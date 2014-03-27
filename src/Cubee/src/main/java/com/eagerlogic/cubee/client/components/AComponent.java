@@ -20,6 +20,7 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.style.AStyleClass;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.StyleSheet;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.ECursor;
@@ -29,8 +30,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.EventListener;
 import java.util.LinkedList;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * This class is the base class of all the components in Cubee. This class wraps a html element. You can inherite from
@@ -40,99 +39,121 @@ import lombok.Setter;
  */
 public abstract class AComponent {
 
-    @Getter
-    @Setter
     public static class StyleClass<T extends AComponent> extends AStyleClass<T> {
 
-        private double rotate = 0.0;
-        private double scaleX = 1.0;
-        private double scaleY = 1.0;
-        private double transformCenterX = 0.5;
-        private double transformCenterY = 0.5;
-        private ECursor cursor = ECursor.AUTO;
-        private boolean visible = true;
-        private boolean enabled = true;
-        private boolean pointerTransparent = false;
-        private boolean handlePointer = true;
-        private double alpha = 1.0;
-        private boolean selectable = false;
+        private final Style<Double> rotate = new Style<Double>(null, false);
+        private final Style<Double> scaleX = new Style<Double>(null, false);
+        private final Style<Double> scaleY = new Style<Double>(null, false);
+        private final Style<Double> transformCenterX = new Style<Double>(null, false);
+        private final Style<Double> transformCenterY = new Style<Double>(null, false);
+        private final Style<ECursor> cursor = new Style<ECursor>(null, false);
+        private final Style<Double> alpha = new Style<Double>(null, false);
+        private final Style<Boolean> visible = new Style<Boolean>(null, false);
+        private final Style<Boolean> enabled = new Style<Boolean>(null, false);
+        private final Style<Boolean> pointerTransparent = new Style<Boolean>(null, false);
+        private final Style<Boolean> handlePointer = new Style<Boolean>(null, false);
+        private final Style<Boolean> selectable = new Style<Boolean>(null, false);
 
-        private Padding padding;
-        private Border border;
-        private Integer minWidth;
-        private Integer minHeight;
-        private Integer maxWidth;
-        private Integer maxHeight;
+        private final Style<Padding> padding = new Style<Padding>(null, true);
+        private final Style<Border> border = new Style<Border>(null, true);
+        private final Style<Integer> minWidth = new Style<Integer>(null, true);
+        private final Style<Integer> minHeight = new Style<Integer>(null, true);
+        private final Style<Integer> maxWidth = new Style<Integer>(null, true);
+        private final Style<Integer> maxHeight = new Style<Integer>(null, true);
 
         @Override
         public void apply(T component) {
-            component.rotateProperty().set(rotate);
-            component.scaleXProperty().set(scaleX);
-            component.scaleYProperty().set(scaleY);
-            component.transformCenterXProperty().set(transformCenterX);
-            component.transformCenterYProperty().set(transformCenterY);
-            component.cursorProperty().set(cursor);
-            component.visibleProperty().set(visible);
-            component.enabledProperty().set(enabled);
-            component.pointerTransparentProperty().set(pointerTransparent);
-            component.handlePointerProperty().set(handlePointer);
-            component.alphaProperty().set(alpha);
-            component.selectableProperty().set(selectable);
+            rotate.apply(component.rotateProperty());
+            scaleX.apply(component.scaleXProperty());
+            scaleY.apply(component.scaleYProperty());
+            transformCenterX.apply(component.transformCenterXProperty());
+            transformCenterY.apply(component.transformCenterYProperty());
+            cursor.apply(component.cursorProperty());
+            visible.apply(component.visibleProperty());
+            enabled.apply(component.enabledProperty());
+            pointerTransparent.apply(component.pointerTransparentProperty());
+            handlePointer.apply(component.handlePointerProperty());
+            alpha.apply(component.alphaProperty());
+            selectable.apply(component.selectableProperty());
 
-            component.paddingProperty().set(padding);
-            component.borderProperty().set(border);
-            component.minWidthProperty().set(minWidth);
-            component.minHeightProperty().set(minHeight);
-            component.maxWidthProperty().set(maxWidth);
-            component.maxHeightProperty().set(maxHeight);
+            padding.apply(component.paddingProperty());
+            border.apply(component.borderProperty());
+            minWidth.apply(component.minWidthProperty());
+            minHeight.apply(component.minHeightProperty());
+            maxWidth.apply(component.maxWidthProperty());
+            maxHeight.apply(component.maxHeightProperty());
         }
 
-        protected Padding getPadding() {
+        protected Style<Padding> getPadding() {
             return padding;
         }
 
-        protected void setPadding(Padding padding) {
-            this.padding = padding;
-        }
-
-        protected Border getBorder() {
+        protected Style<Border> getBorder() {
             return border;
         }
 
-        protected void setBorder(Border border) {
-            this.border = border;
-        }
-
-        protected Integer getMinWidth() {
+        protected Style<Integer> getMinWidth() {
             return minWidth;
         }
 
-        protected void setMinWidth(Integer minWidth) {
-            this.minWidth = minWidth;
-        }
-
-        protected Integer getMinHeight() {
+        protected Style<Integer> getMinHeight() {
             return minHeight;
         }
 
-        protected void setMinHeight(Integer minHeight) {
-            this.minHeight = minHeight;
-        }
-
-        protected Integer getMaxWidth() {
+        protected Style<Integer> getMaxWidth() {
             return maxWidth;
         }
 
-        protected void setMaxWidth(Integer maxWidth) {
-            this.maxWidth = maxWidth;
-        }
-
-        protected Integer getMaxHeight() {
+        protected Style<Integer> getMaxHeight() {
             return maxHeight;
         }
 
-        protected void setMaxHeight(Integer maxHeight) {
-            this.maxHeight = maxHeight;
+        public Style<Double> getRotate() {
+            return rotate;
+        }
+
+        public Style<Double> getScaleX() {
+            return scaleX;
+        }
+
+        public Style<Double> getScaleY() {
+            return scaleY;
+        }
+
+        public Style<Double> getTransformCenterX() {
+            return transformCenterX;
+        }
+
+        public Style<Double> getTransformCenterY() {
+            return transformCenterY;
+        }
+
+        public Style<ECursor> getCursor() {
+            return cursor;
+        }
+
+        public Style<Double> getAlpha() {
+            return alpha;
+        }
+
+        public Style<Boolean> getVisible() {
+            return visible;
+        }
+
+        public Style<Boolean> getEnabled() {
+            return enabled;
+        }
+
+        public Style<Boolean> getPointerTransparent() {
+            return pointerTransparent;
+        }
+
+        public Style<Boolean> getHandlePointer() {
+            return handlePointer;
+        }
+
+        public Style<Boolean> getSelectable() {
+            return selectable;
         }
 
     }

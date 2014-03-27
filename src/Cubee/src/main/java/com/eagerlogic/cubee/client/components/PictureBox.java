@@ -4,16 +4,17 @@ import com.eagerlogic.cubee.client.events.EventArgs;
 import com.eagerlogic.cubee.client.events.IEventListener;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
-import com.eagerlogic.cubee.client.style.styles.EPictureSizeMode;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.style.Style;
+import com.eagerlogic.cubee.client.style.styles.ABackground;
+import com.eagerlogic.cubee.client.style.styles.Border;
+import com.eagerlogic.cubee.client.style.styles.EPictureSizeMode;
 import com.eagerlogic.cubee.client.style.styles.Image;
+import com.eagerlogic.cubee.client.style.styles.Padding;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.LoadEvent;
-import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.DOM;
 
 /**
@@ -21,6 +22,58 @@ import com.google.gwt.user.client.DOM;
  * @author dipacs
  */
 public final class PictureBox extends AComponent {
+
+    public static class StyleClass<T extends PictureBox> extends AComponent.StyleClass<T> {
+
+        private final Style<Integer> width = new Style<Integer>(null, false);
+        private final Style<Integer> height = new Style<Integer>(null, false);
+        private final Style<EPictureSizeMode> pictureSizeMode = new Style<EPictureSizeMode>(null, false);
+        private final Style<Image> image = new Style<Image>(null, true);
+        private final Style<ABackground> background = new Style<ABackground>(null, true);
+
+        @Override
+        public void apply(T component) {
+            super.apply(component);
+
+            width.apply(component.widthProperty());
+            height.apply(component.heightProperty());
+            pictureSizeMode.apply(component.pictureSizeModeProperty());
+            image.apply(component.imageProperty());
+            background.apply(component.backgroundProperty());
+        }
+
+        @Override
+        public Style<Border> getBorder() {
+            return super.getBorder();
+        }
+
+        @Override
+        public Style<Padding> getPadding() {
+            return super.getPadding();
+        }
+
+        public Style<Integer> getWidth() {
+            return width;
+        }
+
+        public Style<Integer> getHeight() {
+            return height;
+        }
+
+        public Style<EPictureSizeMode> getPictureSizeMode() {
+            return pictureSizeMode;
+        }
+
+        public Style<Image> getImage() {
+            return image;
+        }
+
+        public Style<ABackground> getBackground() {
+            return background;
+        }
+
+
+    }
 
     private final IntegerProperty width = new IntegerProperty(50, false, false);
     private final IntegerProperty height = new IntegerProperty(50, false, false);
@@ -31,9 +84,9 @@ public final class PictureBox extends AComponent {
 
     public PictureBox() {
         super(DOM.createDiv());
-        getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
+        getElement().getStyle().setOverflow(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
         imgElement = DOM.createImg();
-        imgElement.getStyle().setPosition(Style.Position.ABSOLUTE);
+        imgElement.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
         getElement().appendChild(imgElement);
         // TODO create one instance of change listener and replace multiple implementation
         width.addChangeListener(new IChangeListener() {
@@ -93,8 +146,8 @@ public final class PictureBox extends AComponent {
     }
 
     private void recalculateSize() {
-        getElement().getStyle().setWidth(width.get(), Style.Unit.PX);
-        getElement().getStyle().setHeight(height.get(), Style.Unit.PX);
+        getElement().getStyle().setWidth(width.get(), com.google.gwt.dom.client.Style.Unit.PX);
+        getElement().getStyle().setHeight(height.get(), com.google.gwt.dom.client.Style.Unit.PX);
         EPictureSizeMode psm = pictureSizeMode.get();
         int imgWidth = 0;
         int imgHeight = 0;
@@ -170,10 +223,10 @@ public final class PictureBox extends AComponent {
                 }
             }
         }
-        imgElement.getStyle().setLeft(cx, Style.Unit.PX);
-        imgElement.getStyle().setTop(cy, Style.Unit.PX);
-        imgElement.getStyle().setWidth(cw, Style.Unit.PX);
-        imgElement.getStyle().setHeight(ch, Style.Unit.PX);
+        imgElement.getStyle().setLeft(cx, com.google.gwt.dom.client.Style.Unit.PX);
+        imgElement.getStyle().setTop(cy, com.google.gwt.dom.client.Style.Unit.PX);
+        imgElement.getStyle().setWidth(cw, com.google.gwt.dom.client.Style.Unit.PX);
+        imgElement.getStyle().setHeight(ch, com.google.gwt.dom.client.Style.Unit.PX);
         requestLayout();
     }
 

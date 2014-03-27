@@ -4,14 +4,13 @@ import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.ABackground;
 import com.eagerlogic.cubee.client.style.styles.BoxShadow;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ColorBackground;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
@@ -19,14 +18,12 @@ import lombok.Setter;
  */
 public abstract class AUserControl extends ALayout {
 
-    @Getter
-    @Setter
     public static class StyleClass<T extends AUserControl> extends AComponent.StyleClass<T> {
 
-        private Integer width;
-        private Integer height;
-        private ABackground background;
-        private BoxShadow shadow;
+        private final Style<Integer> width = new Style<Integer>(null, true);
+        private final Style<Integer> height = new Style<Integer>(null, true);
+        private final Style<ABackground> background = new Style<ABackground>(null, true);
+        private final Style<BoxShadow> shadow = new Style<BoxShadow>(null, true);
 
         public StyleClass() {
 
@@ -36,42 +33,26 @@ public abstract class AUserControl extends ALayout {
         public void apply(T component) {
             super.apply(component);
 
-            component.widthProperty().set(width);
-            component.heightProperty().set(height);
-            component.backgroundProperty().set(background);
-            component.shadowProperty().set(shadow);
+            width.apply(component.widthProperty());
+            height.apply(component.heightProperty());
+            background.apply(component.backgroundProperty());
+            shadow.apply(component.shadowProperty());
         }
 
-        protected Integer getWidth() {
+        protected Style<Integer> getWidth() {
             return width;
         }
 
-        protected void setWidth(Integer width) {
-            this.width = width;
-        }
-
-        protected Integer getHeight() {
+        protected Style<Integer> getHeight() {
             return height;
         }
 
-        protected void setHeight(Integer height) {
-            this.height = height;
-        }
-
-        protected ABackground getBackground() {
+        protected Style<ABackground> getBackground() {
             return background;
         }
 
-        protected void setBackground(ABackground background) {
-            this.background = background;
-        }
-
-        protected BoxShadow getShadow() {
+        protected Style<BoxShadow> getShadow() {
             return shadow;
-        }
-
-        protected void setShadow(BoxShadow shadow) {
-            this.shadow = shadow;
         }
 
     }
@@ -184,8 +165,8 @@ public abstract class AUserControl extends ALayout {
 
     @Override
     protected final void onLayout() {
-        if (widthProperty().get() != null && heightProperty().get() != null) {
-            setSize(widthProperty().get(), heightProperty().get());
+        if (width.get() != null && height.get() != null) {
+            setSize(width.get(), height.get());
         } else {
             int maxW = 0;
             int maxH = 0;
@@ -204,11 +185,11 @@ public abstract class AUserControl extends ALayout {
                 }
             }
 
-            if (widthProperty().get() != null) {
+            if (width.get() != null) {
                 maxW = widthProperty().get();
             }
 
-            if (heightProperty().get() != null) {
+            if (height.get() != null) {
                 maxH = heightProperty().get();
             }
 

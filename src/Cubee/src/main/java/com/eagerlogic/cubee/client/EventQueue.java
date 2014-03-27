@@ -44,6 +44,7 @@ public final class EventQueue {
                         }
                     }
                 } catch (Throwable t) {
+                    t.printStackTrace();
                     LOG.log(Level.SEVERE, t.getMessage(), t);
                 }
 

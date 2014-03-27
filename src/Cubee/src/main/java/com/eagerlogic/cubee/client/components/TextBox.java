@@ -25,6 +25,10 @@ import com.google.gwt.user.client.DOM;
  */
 public class TextBox extends AComponent {
 
+    public static class StyleClass<T extends TextBox> extends AComponent.StyleClass<T> {
+
+    }
+
     private final IntegerProperty width = new IntegerProperty(null, true, false);
     private final IntegerProperty height = new IntegerProperty(null, true, false);
     private final StringProperty text = new StringProperty("", false, false);
