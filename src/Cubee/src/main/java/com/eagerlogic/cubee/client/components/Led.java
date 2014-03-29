@@ -5,6 +5,7 @@ import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ColorStop;
@@ -15,6 +16,29 @@ import com.eagerlogic.cubee.client.style.styles.LinearGradient;
  * @author dipacs
  */
 public final class Led extends AUserControl {
+    
+    public static class StyleClass<T extends Led> extends AUserControl.StyleClass<T> {
+        
+        private final Style<Color> color = new Style<Color>(null, false);
+        private final Style<Integer> size = new Style<Integer>(null, false);
+
+        @Override
+        public void apply(T component) {
+            super.apply(component);
+            
+            color.apply(component.colorProperty());
+            size.apply(component.sizeProperty());
+        }
+
+        public Style<Color> getColor() {
+            return color;
+        }
+
+        public Style<Integer> getSize() {
+            return size;
+        }
+        
+    } 
 
     private final BooleanProperty light = new BooleanProperty(false, false, false);
     private final Property<Color> color = new Property<Color>(Color.getRgbColor(0x00c0ff), false, false);
