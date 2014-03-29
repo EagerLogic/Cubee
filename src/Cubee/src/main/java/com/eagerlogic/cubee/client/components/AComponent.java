@@ -390,6 +390,7 @@ public abstract class AComponent {
                 requestLayout();
             }
         });
+        padding.invalidate();
         border.addChangeListener(new IChangeListener() {
             @Override
             public void onChanged(Object sender) {

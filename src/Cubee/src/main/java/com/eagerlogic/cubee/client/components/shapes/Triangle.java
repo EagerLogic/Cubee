@@ -100,7 +100,6 @@ public final class Triangle extends AUserControl {
         private final IntegerProperty height = new IntegerProperty(100, false, false);
 
         public TriangleInner() {
-            // TODO box into an AUserControl and handle correct translation
             super(DOM.createDiv());
             getElement().getStyle().setWidth(0, com.google.gwt.dom.client.Style.Unit.PX);
             getElement().getStyle().setHeight(0, com.google.gwt.dom.client.Style.Unit.PX);

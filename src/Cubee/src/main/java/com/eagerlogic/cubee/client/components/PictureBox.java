@@ -136,7 +136,8 @@ public final class PictureBox extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 if (background.get() == null) {
-                    // TODO clear background
+                    getElement().getStyle().clearBackgroundColor();
+                    getElement().getStyle().clearBackgroundImage();
                 } else {
                     background.get().apply(getElement());
                 }
