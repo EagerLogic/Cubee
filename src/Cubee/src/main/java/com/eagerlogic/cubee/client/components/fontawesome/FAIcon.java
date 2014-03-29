@@ -5,6 +5,7 @@
  */
 package com.eagerlogic.cubee.client.components.fontawesome;
 
+import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.components.AUserControl;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
@@ -86,6 +87,8 @@ public final class FAIcon extends AUserControl {
         }
     };
 
+
+
     public FAIcon(EIcon icon) {
         if (icon == null) {
             throw new NullPointerException("The icon parameter can not be null.");
@@ -93,6 +96,7 @@ public final class FAIcon extends AUserControl {
 
         this.widthProperty().bind(size);
         this.heightProperty().bind(size);
+        this.icon.set(icon);
 
         iElement = DOM.createElement("i");
         this.getElement().appendChild(iElement);
@@ -102,7 +106,7 @@ public final class FAIcon extends AUserControl {
         spin.addChangeListener(changeListener);
         this.icon.addChangeListener(changeListener);
 
-        this.getElement().getStyle().setTextAlign(com.google.gwt.dom.client.Style.TextAlign.CENTER);
+        iElement.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
 
         refreshStyle();
     }
@@ -118,6 +122,20 @@ public final class FAIcon extends AUserControl {
         if (spin.get()) {
             iElement.addClassName("fa-spin");
         }
+
+        final int s = size.get();
+        final int width = iElement.getClientWidth();
+        EventQueue.getInstance().invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                iElement.getStyle().setProperty("transform", "translate(" + ((s - width) / 2) + "px, 0px)");
+                iElement.getStyle().setProperty("msTransform", "translate(" + ((s - width) / 2) + "px, 0px)");
+                iElement.getStyle().setProperty("webkitTransform", "translate(" + ((s - width) / 2) + "px, 0px)");
+            }
+        });
+
+        iElement.getStyle().setProperty("webkitBackfaceVisibility", "hidden");
     }
 
     @Override
