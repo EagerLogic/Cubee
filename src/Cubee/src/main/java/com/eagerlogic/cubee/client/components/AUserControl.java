@@ -64,7 +64,6 @@ public abstract class AUserControl extends ALayout {
 
     public AUserControl() {
         super(DOM.createDiv());
-        getElement().getStyle().setOverflow(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
         width.addChangeListener(new IChangeListener() {
             @Override
             public void onChanged(Object sender) {

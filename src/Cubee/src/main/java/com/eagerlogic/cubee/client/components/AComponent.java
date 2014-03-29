@@ -368,7 +368,9 @@ public abstract class AComponent {
         this.element = rootElement;
         this.element.setAttribute("draggabe", "false");
         this.element.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
-        //this.element.getStyle().setProperty("pointerEvents", "none");
+        getElement().getStyle().setOutlineStyle(com.google.gwt.dom.client.Style.OutlineStyle.NONE);
+        getElement().getStyle().setOutlineWidth(0, com.google.gwt.dom.client.Style.Unit.PX);
+        getElement().getStyle().setMargin(0.0, com.google.gwt.dom.client.Style.Unit.PX);
         this.element.getStyle().setProperty("pointerEvents", "all");
         translateX.addChangeListener(transformChangedListener);
         translateY.addChangeListener(transformChangedListener);

@@ -133,7 +133,6 @@ public class TextBox extends AComponent {
 
     TextBox(Element e) {
         super(e);
-        getElement().getStyle().setOutlineStyle(com.google.gwt.dom.client.Style.OutlineStyle.NONE);
         this.borderProperty().set(new Border(1, Color.LIGHT_GRAY, 0));
         width.addChangeListener(new IChangeListener() {
             @Override
