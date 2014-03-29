@@ -9,7 +9,7 @@
     <groupId>com.eagerlogic</groupId>
     <artifactId>Cubee</artifactId>
     <packaging>jar</packaging>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2-Beta</version>
     <name>Cubee</name>
 
     <properties>
