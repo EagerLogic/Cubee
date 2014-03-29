@@ -11,6 +11,8 @@ import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.DoubleProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
+import com.eagerlogic.cubee.client.style.Style;
+import com.eagerlogic.cubee.client.style.styles.ABackground;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ColorBackground;
@@ -20,6 +22,70 @@ import com.eagerlogic.cubee.client.style.styles.ColorBackground;
  * @author dipacs
  */
 public final class ScrollPanel extends AUserControl {
+
+    public static class StyleClass<T extends ScrollPanel> extends AUserControl.StyleClass<T> {
+
+        private final Style<EScrollBarPolicy> horizontalScrollBarPolicy = new Style<EScrollBarPolicy>(null, false);
+        private final Style<EScrollBarPolicy> verticalScrollBarPolicy = new Style<EScrollBarPolicy>(null, false);
+        private final Style<ABackground> scrollBarBackground = new Style<ABackground>(null, false);
+
+        @Override
+        public void apply(T component) {
+            super.apply(component);
+
+            horizontalScrollBarPolicy.apply(component.horizontalScrollBarPolicyProperty());
+            verticalScrollBarPolicy.apply(component.verticalScrollBarPolicyProperty());
+            scrollBarBackground.apply(component.scrollBarBackgroundProperty());
+        }
+
+        @Override
+        public Style<ABackground> getBackground() {
+            return super.getBackground();
+        }
+
+        @Override
+        public Style<Integer> getHeight() {
+            return super.getHeight();
+        }
+
+        @Override
+        public Style<Integer> getWidth() {
+            return super.getWidth();
+        }
+
+        @Override
+        public Style<Integer> getMaxHeight() {
+            return super.getMaxHeight();
+        }
+
+        @Override
+        public Style<Integer> getMaxWidth() {
+            return super.getMaxWidth();
+        }
+
+        @Override
+        public Style<Integer> getMinHeight() {
+            return super.getMinHeight();
+        }
+
+        @Override
+        public Style<Integer> getMinWidth() {
+            return super.getMinWidth();
+        }
+
+        public Style<EScrollBarPolicy> getHorizontalScrollBarPolicy() {
+            return horizontalScrollBarPolicy;
+        }
+
+        public Style<EScrollBarPolicy> getVerticalScrollBarPolicy() {
+            return verticalScrollBarPolicy;
+        }
+
+        public Style<ABackground> getScrollBarBackground() {
+            return scrollBarBackground;
+        }
+
+    }
 
     private final Property<EScrollBarPolicy> horizontalScrollBarPolicy = new Property<EScrollBarPolicy>(EScrollBarPolicy.AUTO, false, false);
     private final Property<EScrollBarPolicy> verticalScrollBarPolicy = new Property<EScrollBarPolicy>(EScrollBarPolicy.AUTO, false, false);
