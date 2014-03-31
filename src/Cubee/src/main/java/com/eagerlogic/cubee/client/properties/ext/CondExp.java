@@ -2,7 +2,6 @@ package com.eagerlogic.cubee.client.properties.ext;
 
 import com.eagerlogic.cubee.client.properties.AExpression;
 import com.eagerlogic.cubee.client.properties.IProperty;
-import com.eagerlogic.cubee.client.properties.Property;
 
 /**
  * This class is a conditional expression which can be used when you need an expression which returns 2 different values
@@ -47,8 +46,8 @@ public final class CondExp<T> extends AExpression<T> {
      * Creates a new instance of ConditionalExpression using property values for both cases.
      *
      * @param condition The condition which will be evaluated when deciding what to return.
-     * @param trueValue The property which value will be returned when the condition is true.
-     * @param falseValue The property which value will be returned when the condition is false.
+     * @param trueProperty The property which value will be returned when the condition is true.
+     * @param falseProperty The property which value will be returned when the condition is false.
      */
     public CondExp(IProperty<Boolean> condition, IProperty<T> trueProperty, IProperty<T> falseProperty) {
         if (condition == null) {
@@ -78,7 +77,7 @@ public final class CondExp<T> extends AExpression<T> {
      *
      * @param condition The condition which will be evaluated when deciding what to return.
      * @param trueValue The value which will be returned when the condition is true.
-     * @param falseValue The property which value will be returned when the condition is false.
+     * @param falseProperty The property which value will be returned when the condition is false.
      */
     public CondExp(IProperty<Boolean> condition, T trueValue, IProperty<T> falseProperty) {
         if (condition == null) {
@@ -103,7 +102,7 @@ public final class CondExp<T> extends AExpression<T> {
      * the false case.
      *
      * @param condition The condition which will be evaluated when deciding what to return.
-     * @param trueValue The property which value will be returned when the condition is true.
+     * @param trueProperty The property which value will be returned when the condition is true.
      * @param falseValue The value which will be returned when the condition is false.
      */
     public CondExp(IProperty<Boolean> condition, IProperty<T> trueProperty, T falseValue) {

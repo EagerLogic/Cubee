@@ -1040,8 +1040,6 @@ public abstract class AComponent {
      *
      * @param screenX The x coordinate of the pointer relative to the screen's top-left corner.
      * @param screenY The y coordinate of the pointer relative to the screen's top-left corner.
-     * @param parentScreenX The x coordinate of the pointer relative to the parent's top-left corner.
-     * @param parentScreenY The y coordinate of the pointer relative to the parent's top-left corner.
      * @param x The x coordinate of the pointer relative to this component's top-left corner.
      * @param y The y coordinate of the pointer relative to this component's top-left corner.
      * @param wheelVelocity The mouse wheel velocity value.
@@ -1066,8 +1064,6 @@ public abstract class AComponent {
      *
      * @param screenX The x coordinate of the pointer relative to the screen's top-left corner.
      * @param screenY The y coordinate of the pointer relative to the screen's top-left corner.
-     * @param parentScreenX The x coordinate of the pointer relative to the parent's top-left corner.
-     * @param parentScreenY The y coordinate of the pointer relative to the parent's top-left corner.
      * @param x The x coordinate of the pointer relative to this component's top-left corner.
      * @param y The y coordinate of the pointer relative to this component's top-left corner.
      * @param wheelVelocity The mouse wheel velocity value.
