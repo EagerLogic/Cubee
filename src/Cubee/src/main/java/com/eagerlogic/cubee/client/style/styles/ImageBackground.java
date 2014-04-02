@@ -1,4 +1,4 @@
-package com.eagerlogic.cubee.client.properties;
+package com.eagerlogic.cubee.client.style.styles;
 
 import com.eagerlogic.cubee.client.style.styles.ABackground;
 import com.eagerlogic.cubee.client.style.styles.EHAlign;
