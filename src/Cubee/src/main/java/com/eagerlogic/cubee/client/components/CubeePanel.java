@@ -1,6 +1,8 @@
 package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
+import com.eagerlogic.cubee.client.style.styles.Color;
+import com.eagerlogic.cubee.client.style.styles.ColorBackground;
 import com.eagerlogic.cubee.client.utils.ARunOnce;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
@@ -38,7 +40,6 @@ public final class CubeePanel extends ALayout {
         getElement().getStyle().setTop(0, Style.Unit.PX);
         getElement().getStyle().setRight(0, Style.Unit.PX);
         getElement().getStyle().setBottom(0, Style.Unit.PX);
-        getElement().getStyle().setBackgroundColor("#f0f0f0");
         Window.addResizeHandler(new ResizeHandler() {
 
             @Override
@@ -52,6 +53,7 @@ public final class CubeePanel extends ALayout {
         this.contentPanel.widthProperty().bind(this.clientWidthProperty());
         this.contentPanel.heightProperty().bind(this.clientHeightProperty());
         this.contentPanel.pointerTransparentProperty().set(true);
+        this.contentPanel.backgroundProperty().set(new ColorBackground(Color.getRgbColor(0xf0f0f0)));
         this.getChildren().add(this.contentPanel);
 
         this.popupPanel = new Panel();

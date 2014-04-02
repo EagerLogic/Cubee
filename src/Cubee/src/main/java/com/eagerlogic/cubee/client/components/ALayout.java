@@ -13,6 +13,8 @@ public abstract class ALayout extends AComponent {
 
     public ALayout(Element element) {
         super(element);
+
+        this.applyDefaultStyle(ALayout.class);
     }
 
     protected LayoutChildren getChildren() {

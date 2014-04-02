@@ -3,37 +3,31 @@ package com.eagerlogic.cubee.client.components;
 import com.eagerlogic.cubee.client.properties.AExpression;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.ABackground;
 
 public abstract class AMenuItem extends AUserControl {
 
     public static class StyleClass<T extends AMenuItem> extends AUserControl.StyleClass<T> {
 
-        private ABackground normalBackground;
-        private ABackground hoveredBackground;
+        private final Style<ABackground> normalBackground = new Style<ABackground>(null, true);
+        private final Style<ABackground> hoveredBackground = new Style<ABackground>(null, true);
 
         @Override
         public void apply(T component) {
             super.apply(component);
 
-            component.normalBackground.set(normalBackground);
-            component.hoveredBackground.set(hoveredBackground);
+            normalBackground.apply(component.normalBackgroundProperty());
+            hoveredBackground.apply(component.hoveredBackgroundProperty());
+
         }
 
-        public ABackground getNormalBackground() {
+        protected Style<ABackground> getNormalBackground() {
             return normalBackground;
         }
 
-        public void setNormalBackground(ABackground normalBackground) {
-            this.normalBackground = normalBackground;
-        }
-
-        public ABackground getHoveredBackground() {
+        protected Style<ABackground> getHoveredBackground() {
             return hoveredBackground;
-        }
-
-        public void setHoveredBackground(ABackground hoveredBackground) {
-            this.hoveredBackground = hoveredBackground;
         }
 
     }
@@ -75,6 +69,14 @@ public abstract class AMenuItem extends AUserControl {
 
     void setCloseable(ICloseable closeable) {
         this.closeable = closeable;
+    }
+
+    protected BackgroundProperty normalBackgroundProperty() {
+        return normalBackground;
+    }
+
+    protected BackgroundProperty hoveredBackgroundProperty() {
+        return hoveredBackground;
     }
 
     protected void closeMenu() {

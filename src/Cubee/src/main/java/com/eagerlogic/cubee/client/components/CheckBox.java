@@ -25,6 +25,8 @@ import com.eagerlogic.cubee.client.style.styles.EVAlign;
  */
 public final class CheckBox extends AUserControl {
 
+    // TODO make styleable
+
     private final BooleanProperty checked = new BooleanProperty(false, false, false);
 
     private final HBox root;

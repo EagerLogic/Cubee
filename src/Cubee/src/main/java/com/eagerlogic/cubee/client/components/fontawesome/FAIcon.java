@@ -129,9 +129,9 @@ public final class FAIcon extends AUserControl {
 
             @Override
             public void run() {
-                iElement.getStyle().setProperty("transform", "translate(" + ((s - width) / 2) + "px, 0px)");
-                iElement.getStyle().setProperty("msTransform", "translate(" + ((s - width) / 2) + "px, 0px)");
-                iElement.getStyle().setProperty("webkitTransform", "translate(" + ((s - width) / 2) + "px, 0px)");
+//                iElement.getStyle().setProperty("transform", "translate(" + ((s - width) / 2) + "px, 0px)");
+//                iElement.getStyle().setProperty("msTransform", "translate(" + ((s - width) / 2) + "px, 0px)");
+//                iElement.getStyle().setProperty("webkitTransform", "translate(" + ((s - width) / 2) + "px, 0px)");
             }
         });
 
