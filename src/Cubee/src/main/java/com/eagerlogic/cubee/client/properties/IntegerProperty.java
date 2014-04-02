@@ -4,14 +4,35 @@
  */
 package com.eagerlogic.cubee.client.properties;
 
+import com.eagerlogic.cubee.shared.utils.AValidator;
+
 /**
  *
  * @author dipacs
  */
 public final class IntegerProperty extends Property<Integer> {
 
+    public IntegerProperty() {
+    }
+
+    public IntegerProperty(Integer defaultValue) {
+        super(defaultValue);
+    }
+
+    public IntegerProperty(Integer defaultValue, boolean nullable) {
+        super(defaultValue, nullable);
+    }
+
+    public IntegerProperty(Integer defaultValue, AValidator<Integer> validator) {
+        super(defaultValue, validator);
+    }
+
     public IntegerProperty(Integer defaultValue, boolean nullable, boolean readonly) {
         super(defaultValue, nullable, readonly);
+    }
+
+    public IntegerProperty(Integer defaultValue, boolean nullable, boolean readonly, AValidator<Integer> validator) {
+        super(defaultValue, nullable, readonly, validator);
     }
 
     @Override

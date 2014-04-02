@@ -4,14 +4,35 @@
  */
 package com.eagerlogic.cubee.client.properties;
 
+import com.eagerlogic.cubee.shared.utils.AValidator;
+
 /**
  *
  * @author dipacs
  */
 public final class DoubleProperty extends Property<Double> {
 
+    public DoubleProperty() {
+    }
+
+    public DoubleProperty(Double defaultValue) {
+        super(defaultValue);
+    }
+
+    public DoubleProperty(Double defaultValue, boolean nullable) {
+        super(defaultValue, nullable);
+    }
+
+    public DoubleProperty(Double defaultValue, AValidator<Double> validator) {
+        super(defaultValue, validator);
+    }
+
     public DoubleProperty(Double defaultValue, boolean nullable, boolean readonly) {
         super(defaultValue, nullable, readonly);
+    }
+
+    public DoubleProperty(Double defaultValue, boolean nullable, boolean readonly, AValidator<Double> validator) {
+        super(defaultValue, nullable, readonly, validator);
     }
 
     @Override

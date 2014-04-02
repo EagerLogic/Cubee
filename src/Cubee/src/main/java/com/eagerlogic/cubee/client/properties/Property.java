@@ -4,22 +4,25 @@
  */
 package com.eagerlogic.cubee.client.properties;
 
+import com.eagerlogic.cubee.shared.utils.AValidator;
+import com.eagerlogic.cubee.shared.utils.ValidationException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
  *
  * @author dipacs
+ * @param <T> The type of the value which is boxed in this property.
  */
 public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IProperty<T>> {
 
-    private LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
+    private final LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
     private T value;
     private boolean valid = false;
     private final boolean nullable;
     private final boolean readonly;
     private IProperty<T> bindingSource;
-    private IChangeListener bindListener = new IChangeListener() {
+    private final IChangeListener bindListener = new IChangeListener() {
         @Override
         public void onChanged(Object sender) {
             invalidate();
@@ -31,13 +34,78 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
     private IChangeListener bidirectionalChangeListenerThis;
     private IChangeListener bidirectionalChangeListenerOther;
 
+    private final AValidator<T> validator;
+
+    /**
+     * Creates a new nullable, writeable Property instance with null default value and null validator.
+     */
+    public Property() {
+        this(null, true, false, null);
+    }
+
+    /**
+     * Creates a new nullable, writeable Property instance with null validator.
+     *
+     * @param defaultValue The default value of this property.
+     */
+    public Property(T defaultValue) {
+        this(defaultValue, true, false, null);
+    }
+
+    /**
+     * Creates a new writeable Property instance with null validator.
+     *
+     * @param defaultValue The default value of this property.
+     */
+    public Property(T defaultValue, boolean nullable) {
+        this(defaultValue, nullable, false, null);
+    }
+
+    /**
+     * Creates a new nullable, writable Property instance.
+     *
+     * @param defaultValue The default value of this property.
+     * @param validator The validator which called every time this property get's a new value. This can be null.
+     */
+    public Property(T defaultValue, AValidator<T> validator) {
+        this(defaultValue, true, false, validator);
+    }
+
+    /**
+     * Creates a new Property instance with null validator.
+     *
+     * @param defaultValue The default value of this Property.
+     * @param nullable Indicates if this property is nullable.
+     * @param readonly Indicates if this property is readonly.
+     */
     public Property(T defaultValue, boolean nullable, boolean readonly) {
+        this(defaultValue, nullable, readonly, null);
+    }
+
+    /**
+     * Creates a new Property instance.
+     *
+     * @param defaultValue The default value of this Property.
+     * @param nullable Indicates if this property is nullable.
+     * @param readonly Indicates if this property is readonly.
+     * @param validator The validator which called every time this property get's a new value. This can be null.
+     */
+    public Property(T defaultValue, boolean nullable, boolean readonly, AValidator<T> validator) {
         this.value = defaultValue;
         this.nullable = nullable;
         this.readonly = readonly;
+        this.validator = validator;
 
         if (value == null && nullable == false) {
             throw new IllegalArgumentException("A nullable property can not be null.");
+        }
+
+        if (this.value != null && validator != null) {
+            try {
+                this.value = validator.validate(value);
+            } catch (ValidationException ex) {
+                throw new RuntimeException("Validator exception", ex);
+            }
         }
 
         invalidate();
@@ -58,10 +126,24 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
         this.valid = true;
 
         if (bindingSource != null) {
+            if (validator != null) {
+                try {
+                    return validator.validate((T) bindingSource.getObjectValue());
+                } catch (ValidationException ex) {
+                    throw new RuntimeException("Validator exception", ex);
+                }
+            }
             return (T) bindingSource.getObjectValue();
         }
 
         if (readonlyBind != null) {
+            if (validator != null) {
+                try {
+                    return validator.validate((T) readonlyBind.getObjectValue());
+                } catch (ValidationException ex) {
+                    throw new RuntimeException("Validator exception", ex);
+                }
+            }
             return (T) readonlyBind.getObjectValue();
         }
 
@@ -79,6 +161,14 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
 
         if (!this.nullable && newValue == null) {
             throw new IllegalStateException("Can not set the value to null of a non nullable property.");
+        }
+
+        if (validator != null) {
+            try {
+                newValue = validator.validate(newValue);
+            } catch (ValidationException ex) {
+                throw new RuntimeException("Validator exception", ex);
+            }
         }
 
         if (this.value == newValue) {

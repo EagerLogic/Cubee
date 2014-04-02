@@ -1,6 +1,7 @@
 package com.eagerlogic.cubee.client.properties;
 
 import com.eagerlogic.cubee.client.utils.Rectangle;
+import com.eagerlogic.cubee.shared.utils.AValidator;
 
 /**
  *
@@ -8,8 +9,27 @@ import com.eagerlogic.cubee.client.utils.Rectangle;
  */
 public final class RectangleProperty extends Property<Rectangle> {
 
+    public RectangleProperty() {
+    }
+
+    public RectangleProperty(Rectangle defaultValue) {
+        super(defaultValue);
+    }
+
+    public RectangleProperty(Rectangle defaultValue, boolean nullable) {
+        super(defaultValue, nullable);
+    }
+
+    public RectangleProperty(Rectangle defaultValue, AValidator<Rectangle> validator) {
+        super(defaultValue, validator);
+    }
+
     public RectangleProperty(Rectangle defaultValue, boolean nullable, boolean readonly) {
         super(defaultValue, nullable, readonly);
+    }
+
+    public RectangleProperty(Rectangle defaultValue, boolean nullable, boolean readonly, AValidator<Rectangle> validator) {
+        super(defaultValue, nullable, readonly, validator);
     }
 
     @Override

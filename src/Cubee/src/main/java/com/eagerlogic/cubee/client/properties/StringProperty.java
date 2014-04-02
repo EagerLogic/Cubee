@@ -1,5 +1,6 @@
 package com.eagerlogic.cubee.client.properties;
 
+import com.eagerlogic.cubee.shared.utils.AValidator;
 import java.util.Random;
 
 /**
@@ -8,8 +9,27 @@ import java.util.Random;
  */
 public class StringProperty extends Property<String> {
 
+    public StringProperty() {
+    }
+
+    public StringProperty(String defaultValue) {
+        super(defaultValue);
+    }
+
+    public StringProperty(String defaultValue, boolean nullable) {
+        super(defaultValue, nullable);
+    }
+
+    public StringProperty(String defaultValue, AValidator<String> validator) {
+        super(defaultValue, validator);
+    }
+
     public StringProperty(String defaultValue, boolean nullable, boolean readonly) {
         super(defaultValue, nullable, readonly);
+    }
+
+    public StringProperty(String defaultValue, boolean nullable, boolean readonly, AValidator<String> validator) {
+        super(defaultValue, nullable, readonly, validator);
     }
 
     @Override

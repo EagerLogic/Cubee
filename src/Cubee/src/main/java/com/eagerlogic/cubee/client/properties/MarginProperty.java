@@ -1,7 +1,7 @@
 package com.eagerlogic.cubee.client.properties;
 
-import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.style.styles.Margin;
+import com.eagerlogic.cubee.shared.utils.AValidator;
 
 /**
  *
@@ -9,8 +9,27 @@ import com.eagerlogic.cubee.client.style.styles.Margin;
  */
 public final class MarginProperty extends Property<Margin> {
 
+    public MarginProperty() {
+    }
+
+    public MarginProperty(Margin defaultValue) {
+        super(defaultValue);
+    }
+
+    public MarginProperty(Margin defaultValue, boolean nullable) {
+        super(defaultValue, nullable);
+    }
+
+    public MarginProperty(Margin defaultValue, AValidator<Margin> validator) {
+        super(defaultValue, validator);
+    }
+
     public MarginProperty(Margin defaultValue, boolean nullable, boolean readonly) {
         super(defaultValue, nullable, readonly);
+    }
+
+    public MarginProperty(Margin defaultValue, boolean nullable, boolean readonly, AValidator<Margin> validator) {
+        super(defaultValue, nullable, readonly, validator);
     }
 
     @Override
