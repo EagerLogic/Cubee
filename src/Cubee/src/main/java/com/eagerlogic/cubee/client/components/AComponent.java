@@ -550,6 +550,12 @@ public abstract class AComponent {
         this.applyDefaultStyle(AComponent.class);
     }
 
+    /**
+     * This method applies the default style for this component. Called at the end of the constructor.
+     *
+     * @param <T>
+     * @param componentClass The componentClass which style will be applyed to this component.
+     */
     protected final <T extends AComponent> void applyDefaultStyle(Class<T> componentClass) {
         AStyleClass<T> style = StyleSheet.getDefault().getStyle(componentClass);
         if (style != null) {
