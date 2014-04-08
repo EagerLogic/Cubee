@@ -196,9 +196,4 @@ public abstract class AUserControl extends ALayout {
         }
     }
 
-    @Override
-    public Class<? extends AComponent> getStyleClass() {
-        return AUserControl.class;
-    }
-
 }

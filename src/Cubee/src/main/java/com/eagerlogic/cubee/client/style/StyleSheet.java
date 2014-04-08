@@ -52,7 +52,7 @@ public class StyleSheet {
     }
 
     public <T extends AComponent> void applyStyle(T component) {
-        AStyleClass<T> style = getStyle((Class<T>) component.getStyleClass());
+        AStyleClass<T> style = getStyle((Class<T>) component.getClass());
         if (style != null) {
             style.apply(component);
         }

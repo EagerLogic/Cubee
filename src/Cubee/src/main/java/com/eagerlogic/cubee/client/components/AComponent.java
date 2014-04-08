@@ -557,6 +557,9 @@ public abstract class AComponent {
      * @param componentClass The componentClass which style will be applyed to this component.
      */
     protected final <T extends AComponent> void applyDefaultStyle(Class<T> componentClass) {
+        if (componentClass != this.getClass()) {
+            return;
+        }
         AStyleClass<T> style = StyleSheet.getDefault().getStyle(componentClass);
         if (style != null) {
             style.apply((T) this);
@@ -1221,10 +1224,6 @@ public abstract class AComponent {
 
     public final BooleanProperty hoveredProperty() {
         return this.hovered;
-    }
-
-    public Class<? extends AComponent> getStyleClass() {
-        return AComponent.class;
     }
 
 }
