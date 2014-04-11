@@ -7,13 +7,10 @@ package com.eagerlogic.cubee.client.components.fontawesome;
 
 import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.components.AUserControl;
-import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
-import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.properties.ColorProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
-import com.eagerlogic.cubee.client.properties.PaddingProperty;
 import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.Color;
@@ -136,21 +133,6 @@ public final class FAIcon extends AUserControl {
         });
 
         iElement.getStyle().setProperty("webkitBackfaceVisibility", "hidden");
-    }
-
-    @Override
-    public BackgroundProperty backgroundProperty() {
-        return super.backgroundProperty();
-    }
-
-    @Override
-    public BorderProperty borderProperty() {
-        return super.borderProperty();
-    }
-
-    @Override
-    public PaddingProperty paddingProperty() {
-        return super.paddingProperty();
     }
 
     public IntegerProperty sizeProperty() {
