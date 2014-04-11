@@ -9,7 +9,7 @@ import com.eagerlogic.cubee.client.components.AComponent;
 import com.eagerlogic.cubee.client.components.ALayout;
 import com.eagerlogic.cubee.client.components.AMenuItem;
 import com.eagerlogic.cubee.client.components.AUserControl;
-import com.eagerlogic.cubee.client.components.AView;
+import com.eagerlogic.cubee.client.components.AFillView;
 import com.eagerlogic.cubee.client.components.Button;
 import com.eagerlogic.cubee.client.components.CheckBox;
 import com.eagerlogic.cubee.client.components.CollapseLabel;
@@ -45,7 +45,7 @@ public class DefaultStyleSheet extends StyleSheet {
         this.setStyle(ALayout.class, ALayoutStyle());
         this.setStyle(AMenuItem.class, AMenuItemStyle());
         this.setStyle(AUserControl.class, AUserControlStyle());
-        this.setStyle(AView.class, AViewStyle());
+        this.setStyle(AFillView.class, AViewStyle());
         this.setStyle(Button.class, ButtonStyle());
         this.setStyle(CheckBox.class, CheckBoxStyle());
         this.setStyle(CollapseLabel.class, CollapseLabelStyle());
@@ -86,8 +86,8 @@ public class DefaultStyleSheet extends StyleSheet {
         return res;
     }
 
-    private AView.StyleClass<AView> AViewStyle() {
-        AView.StyleClass<AView> res = new AView.StyleClass<AView>();
+    private AFillView.StyleClass<AFillView> AViewStyle() {
+        AFillView.StyleClass<AFillView> res = new AFillView.StyleClass<AFillView>();
         return res;
     }
 

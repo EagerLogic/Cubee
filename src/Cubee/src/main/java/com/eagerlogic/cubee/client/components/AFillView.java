@@ -11,9 +11,9 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
  *
  * @author dipacs
  */
-public abstract class AView extends AUserControl {
+public abstract class AFillView extends AUserControl {
 
-    public AView() {
+    public AFillView() {
     }
 
     @Override

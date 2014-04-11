@@ -13,13 +13,13 @@ import com.eagerlogic.cubee.client.properties.IntegerProperty;
  */
 public final class ViewSwitcher extends AUserControl {
 
-    private AView currentView;
+    private AFillView currentView;
 
     public ViewSwitcher() {
 
     }
 
-    public void showView(AView view) {
+    public void showView(AFillView view) {
         if (view == currentView) {
             return;
         }
@@ -37,7 +37,7 @@ public final class ViewSwitcher extends AUserControl {
         currentView = view;
     }
 
-    public AView getView() {
+    public AFillView getView() {
         return currentView;
     }
 

@@ -17,7 +17,7 @@ import com.eagerlogic.cubee.client.properties.Timeline;
 public class AnimatedViewSwitcher extends AUserControl {
 
     private final IntegerProperty selectedIndex = new IntegerProperty(0, false, false);
-    private AView[] views;
+    private AFillView[] views;
     private int lastSelectedIndex = 0;
     private Timeline tl;
 
@@ -53,10 +53,10 @@ public class AnimatedViewSwitcher extends AUserControl {
         });
     }
 
-    public void initViews(AView... views) {
+    public void initViews(AFillView... views) {
         this.views = views;
         boolean first = true;
-        for (AView view : views) {
+        for (AFillView view : views) {
             view.hiddenWidthProperty().bind(this.clientWidthProperty());
             view.hiddenHeightProperty().bind(this.clientHeightProperty());
             if (!first) {
