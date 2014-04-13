@@ -1,7 +1,6 @@
 package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.events.IEventListener;
-import com.eagerlogic.cubee.client.events.MouseDownEventArgs;
 import com.eagerlogic.cubee.client.events.MouseDragEventArgs;
 import com.eagerlogic.cubee.client.properties.AExpression;
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
@@ -10,6 +9,7 @@ import com.eagerlogic.cubee.client.properties.DoubleProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.ext.AlignCenterExp;
 import com.eagerlogic.cubee.client.properties.ext.AlignMiddleExp;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.ABackground;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.Color;
@@ -21,17 +21,46 @@ import com.eagerlogic.cubee.client.style.styles.ECursor;
  * @author dipacs
  */
 public class HSplitPanel extends AUserControl {
-    
+
+    public static class StyleClass<T extends VSplitPanel> extends AUserControl.StyleClass<T> {
+
+        private final Style<Integer> separatorHeight = new Style<Integer>(null, false);
+        private final Style<ABackground> separatorBackground = new Style<ABackground>(null, true);
+        private final Style<Color> separatorDotColor = new Style<Color>(null, true);
+
+        @Override
+        public void apply(T component) {
+            super.apply(component);
+
+            separatorHeight.apply(component.separatorHeightProperty());
+            separatorBackground.apply(component.separatorBackgroundProperty());
+            separatorDotColor.apply(component.separatorDotColorProperty());
+        }
+
+        public Style<Integer> getSeparatorHeight() {
+            return separatorHeight;
+        }
+
+        public Style<ABackground> getSeparatorBackground() {
+            return separatorBackground;
+        }
+
+        public Style<Color> getSeparatorDotColor() {
+            return separatorDotColor;
+        }
+
+    }
+
     private final IntegerProperty separatorWidth = new IntegerProperty(10, false, false);
     private final BackgroundProperty separatorBackground = new BackgroundProperty(new ColorBackground(Color.getRgbColor(
             0xf0f0f0)), true, false);
     private final ColorProperty separatorDotColor = new ColorProperty(Color.GRAY, true, false);
     private final DoubleProperty separatorPosition = new DoubleProperty(0.5, false, false, new SplitPanelSeparatorPositionValidator());
-    
+
     private Panel leftPanel;
     private Panel rightPanel;
     private Panel separatorPanel;
-    
+
     private AFillView leftContent;
     private AFillView rightContent;
 
@@ -42,7 +71,7 @@ public class HSplitPanel extends AUserControl {
             {
                 bind(clientWidthProperty(), separatorWidth, separatorPosition);
             }
-            
+
             @Override
             public Integer calculate() {
                 int fullWidth = clientWidthProperty().get();
@@ -52,19 +81,19 @@ public class HSplitPanel extends AUserControl {
         });
         leftPanel.heightProperty().bind(this.clientHeightProperty());
         this.getChildren().add(leftPanel);
-        
+
         rightPanel = new Panel();
         rightPanel.widthProperty().bind(new AExpression<Integer>() {
 
             {
                 bind(clientWidthProperty(), separatorWidth, separatorPosition);
             }
-            
+
             @Override
             public Integer calculate() {
                 int fullWidth = clientWidthProperty().get();
                 int usableWidth = fullWidth - separatorWidth.get();
-                return  usableWidth - ((int)(usableWidth * separatorPosition.get()));
+                return usableWidth - ((int) (usableWidth * separatorPosition.get()));
             }
         });
         rightPanel.translateXProperty().bind(new AExpression<Integer>() {
@@ -72,7 +101,7 @@ public class HSplitPanel extends AUserControl {
             {
                 bind(separatorWidth, leftPanel.boundsWidthProperty());
             }
-            
+
             @Override
             public Integer calculate() {
                 return separatorWidth.get() + leftPanel.boundsWidthProperty().get();
@@ -80,7 +109,7 @@ public class HSplitPanel extends AUserControl {
         });
         rightPanel.heightProperty().bind(this.clientHeightProperty());
         this.getChildren().add(rightPanel);
-        
+
         separatorPanel = new Panel();
         separatorPanel.backgroundProperty().bind(separatorBackground);
         separatorPanel.widthProperty().bind(separatorWidth);
@@ -88,43 +117,44 @@ public class HSplitPanel extends AUserControl {
         separatorPanel.cursorProperty().set(ECursor.E_RESIZE);
         separatorPanel.translateXProperty().bind(leftPanel.widthProperty());
         this.getChildren().add(separatorPanel);
-        
+
         AComponent dots = createDots();
         dots.translateXProperty().bind(new AlignCenterExp(separatorPanel, dots));
         dots.translateYProperty().bind(new AlignMiddleExp(separatorPanel, dots));
         separatorPanel.getChildren().add(dots);
-        
+
         separatorPanel.onMouseDragEvent().addListener(new IEventListener<MouseDragEventArgs>() {
 
             @Override
             public void onFired(MouseDragEventArgs args) {
                 int componentLeft = HSplitPanel.this.getScreenX();
-                separatorPosition.set((args.getScreenX() - componentLeft) / ((double)HSplitPanel.this.clientWidthProperty().get()));
+                separatorPosition.set((args.getScreenX() - componentLeft)
+                        / ((double) HSplitPanel.this.clientWidthProperty().get()));
             }
         });
     }
-    
+
     private AComponent createDots() {
         VBox res = new VBox();
         res.handlePointerProperty().set(false);
-        
+
         res.getChildren().add(createDot());
-        
+
         AComponent sep = createDot();
         sep.alphaProperty().set(0.0);
         res.getChildren().add(sep);
-        
+
         res.getChildren().add(createDot());
-        
+
         sep = createDot();
         sep.alphaProperty().set(0.0);
         res.getChildren().add(sep);
-        
+
         res.getChildren().add(createDot());
-        
+
         return res;
     }
-    
+
     private AComponent createDot() {
         Panel res = new Panel();
         res.backgroundProperty().bind(new AExpression<ABackground>() {
@@ -132,7 +162,7 @@ public class HSplitPanel extends AUserControl {
             {
                 bind(separatorDotColor);
             }
-            
+
             @Override
             public ABackground calculate() {
                 if (separatorDotColor.get() == null) {
@@ -142,7 +172,7 @@ public class HSplitPanel extends AUserControl {
             }
         });
         res.widthProperty().bind(new AExpression<Integer>() {
-            
+
             {
                 bind(separatorWidth);
             }
@@ -159,7 +189,7 @@ public class HSplitPanel extends AUserControl {
             {
                 bind(separatorWidth);
             }
-            
+
             @Override
             public Border calculate() {
                 int quarter = separatorWidth.get() / 4;
@@ -216,6 +246,22 @@ public class HSplitPanel extends AUserControl {
     @Override
     public IntegerProperty heightProperty() {
         return super.heightProperty();
+    }
+
+    public IntegerProperty separatorWidthProperty() {
+        return separatorWidth;
+    }
+
+    public BackgroundProperty separatorBackgroundProperty() {
+        return separatorBackground;
+    }
+
+    public ColorProperty separatorDotColorProperty() {
+        return separatorDotColor;
+    }
+
+    public DoubleProperty separatorPositionProperty() {
+        return separatorPosition;
     }
 
 }

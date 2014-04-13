@@ -9,6 +9,7 @@ import com.eagerlogic.cubee.client.properties.DoubleProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.ext.AlignCenterExp;
 import com.eagerlogic.cubee.client.properties.ext.AlignMiddleExp;
+import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.ABackground;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.Color;
@@ -20,17 +21,46 @@ import com.eagerlogic.cubee.client.style.styles.ECursor;
  * @author dipacs
  */
 public class VSplitPanel extends AUserControl {
-    
+
+    public static class StyleClass<T extends VSplitPanel> extends AUserControl.StyleClass<T> {
+
+        private final Style<Integer> separatorHeight = new Style<Integer>(null, false);
+        private final Style<ABackground> separatorBackground = new Style<ABackground>(null, true);
+        private final Style<Color> separatorDotColor = new Style<Color>(null, true);
+
+        @Override
+        public void apply(T component) {
+            super.apply(component);
+
+            separatorHeight.apply(component.separatorHeightProperty());
+            separatorBackground.apply(component.separatorBackgroundProperty());
+            separatorDotColor.apply(component.separatorDotColorProperty());
+        }
+
+        public Style<Integer> getSeparatorHeight() {
+            return separatorHeight;
+        }
+
+        public Style<ABackground> getSeparatorBackground() {
+            return separatorBackground;
+        }
+
+        public Style<Color> getSeparatorDotColor() {
+            return separatorDotColor;
+        }
+
+    }
+
     private final IntegerProperty separatorHeight = new IntegerProperty(10, false, false);
     private final BackgroundProperty separatorBackground = new BackgroundProperty(new ColorBackground(Color.getRgbColor(
             0xf0f0f0)), true, false);
     private final ColorProperty separatorDotColor = new ColorProperty(Color.GRAY, true, false);
     private final DoubleProperty separatorPosition = new DoubleProperty(0.5, false, false, new SplitPanelSeparatorPositionValidator());
-    
+
     private Panel topPanel;
     private Panel bottomPanel;
     private Panel separatorPanel;
-    
+
     private AFillView topContent;
     private AFillView bottomContent;
 
@@ -41,7 +71,7 @@ public class VSplitPanel extends AUserControl {
             {
                 bind(clientHeightProperty(), separatorHeight, separatorPosition);
             }
-            
+
             @Override
             public Integer calculate() {
                 int fullHeight = clientHeightProperty().get();
@@ -51,19 +81,19 @@ public class VSplitPanel extends AUserControl {
         });
         topPanel.widthProperty().bind(this.clientWidthProperty());
         this.getChildren().add(topPanel);
-        
+
         bottomPanel = new Panel();
         bottomPanel.heightProperty().bind(new AExpression<Integer>() {
 
             {
                 bind(clientHeightProperty(), separatorHeight, separatorPosition);
             }
-            
+
             @Override
             public Integer calculate() {
                 int fullHeight = clientHeightProperty().get();
                 int usableHeight = fullHeight - separatorHeight.get();
-                return  usableHeight - ((int)(usableHeight * separatorPosition.get()));
+                return usableHeight - ((int) (usableHeight * separatorPosition.get()));
             }
         });
         bottomPanel.translateYProperty().bind(new AExpression<Integer>() {
@@ -71,7 +101,7 @@ public class VSplitPanel extends AUserControl {
             {
                 bind(separatorHeight, topPanel.boundsHeightProperty());
             }
-            
+
             @Override
             public Integer calculate() {
                 return separatorHeight.get() + topPanel.boundsHeightProperty().get();
@@ -79,7 +109,7 @@ public class VSplitPanel extends AUserControl {
         });
         bottomPanel.widthProperty().bind(this.clientWidthProperty());
         this.getChildren().add(bottomPanel);
-        
+
         separatorPanel = new Panel();
         separatorPanel.backgroundProperty().bind(separatorBackground);
         separatorPanel.heightProperty().bind(separatorHeight);
@@ -87,43 +117,44 @@ public class VSplitPanel extends AUserControl {
         separatorPanel.cursorProperty().set(ECursor.E_RESIZE);
         separatorPanel.translateYProperty().bind(topPanel.heightProperty());
         this.getChildren().add(separatorPanel);
-        
+
         AComponent dots = createDots();
         dots.translateXProperty().bind(new AlignCenterExp(separatorPanel, dots));
         dots.translateYProperty().bind(new AlignMiddleExp(separatorPanel, dots));
         separatorPanel.getChildren().add(dots);
-        
+
         separatorPanel.onMouseDragEvent().addListener(new IEventListener<MouseDragEventArgs>() {
 
             @Override
             public void onFired(MouseDragEventArgs args) {
                 int componentTop = VSplitPanel.this.getScreenY();
-                separatorPosition.set((args.getScreenY() - componentTop) / ((double)VSplitPanel.this.clientHeightProperty().get()));
+                separatorPosition.set((args.getScreenY() - componentTop)
+                        / ((double) VSplitPanel.this.clientHeightProperty().get()));
             }
         });
     }
-    
+
     private AComponent createDots() {
         HBox res = new HBox();
         res.handlePointerProperty().set(false);
-        
+
         res.getChildren().add(createDot());
-        
+
         AComponent sep = createDot();
         sep.alphaProperty().set(0.0);
         res.getChildren().add(sep);
-        
+
         res.getChildren().add(createDot());
-        
+
         sep = createDot();
         sep.alphaProperty().set(0.0);
         res.getChildren().add(sep);
-        
+
         res.getChildren().add(createDot());
-        
+
         return res;
     }
-    
+
     private AComponent createDot() {
         Panel res = new Panel();
         res.backgroundProperty().bind(new AExpression<ABackground>() {
@@ -131,7 +162,7 @@ public class VSplitPanel extends AUserControl {
             {
                 bind(separatorDotColor);
             }
-            
+
             @Override
             public ABackground calculate() {
                 if (separatorDotColor.get() == null) {
@@ -141,7 +172,7 @@ public class VSplitPanel extends AUserControl {
             }
         });
         res.widthProperty().bind(new AExpression<Integer>() {
-            
+
             {
                 bind(separatorHeight);
             }
@@ -158,7 +189,7 @@ public class VSplitPanel extends AUserControl {
             {
                 bind(separatorHeight);
             }
-            
+
             @Override
             public Border calculate() {
                 int quarter = separatorHeight.get() / 4;
@@ -215,6 +246,22 @@ public class VSplitPanel extends AUserControl {
     @Override
     public IntegerProperty heightProperty() {
         return super.heightProperty();
+    }
+
+    public IntegerProperty separatorHeightProperty() {
+        return separatorHeight;
+    }
+
+    public BackgroundProperty separatorBackgroundProperty() {
+        return separatorBackground;
+    }
+
+    public ColorProperty separatorDotColorProperty() {
+        return separatorDotColor;
+    }
+
+    public DoubleProperty separatorPositionProperty() {
+        return separatorPosition;
     }
 
 }
