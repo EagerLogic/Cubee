@@ -114,7 +114,7 @@ public class VSplitPanel extends AUserControl {
         separatorPanel.backgroundProperty().bind(separatorBackground);
         separatorPanel.heightProperty().bind(separatorHeight);
         separatorPanel.widthProperty().bind(this.clientWidthProperty());
-        separatorPanel.cursorProperty().set(ECursor.E_RESIZE);
+        separatorPanel.cursorProperty().set(ECursor.S_RESIZE);
         separatorPanel.translateYProperty().bind(topPanel.heightProperty());
         this.getChildren().add(separatorPanel);
 
