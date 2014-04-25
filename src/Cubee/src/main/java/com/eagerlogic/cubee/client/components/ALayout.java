@@ -2,6 +2,8 @@ package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.style.styles.Padding;
 import com.google.gwt.dom.client.Element;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -91,4 +93,27 @@ public abstract class ALayout extends AComponent {
      * set the size of this layout if needed and set the positions of the children if needed.
      */
     protected abstract void onLayout();
+    
+    public final List<AComponent> getComponentsAtPosition(int x, int y) {
+        LinkedList<AComponent> res = new LinkedList<AComponent>();
+        getComponentsAtPosition(this, x, y, res);
+        return res;
+    }
+    
+    private void getComponentsAtPosition(ALayout root, int x, int y, LinkedList<AComponent> result) {
+        if (x >= 0 && x < root.boundsWidthProperty().get() && y >= 0 && y <= root.boundsHeightProperty().get()) {
+            result.addFirst(this);
+            for (AComponent component : this.getChildren()) {
+                int tx = x - component.getLeft();
+                int ty = y - component.getTop();
+                if (component instanceof ALayout) {
+                    getComponentsAtPosition((ALayout)component, tx, ty, result);
+                } else {
+                    if (tx >= 0 && tx < component.boundsWidthProperty().get() && y >= 0 && y <= component.boundsHeightProperty().get()) {
+                        result.addFirst(component);
+                    }
+                }
+            }
+        }
+    }
 }
