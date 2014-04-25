@@ -102,10 +102,10 @@ public abstract class ALayout extends AComponent {
     
     private void getComponentsAtPosition(ALayout root, int x, int y, LinkedList<AComponent> result) {
         if (x >= 0 && x < root.boundsWidthProperty().get() && y >= 0 && y <= root.boundsHeightProperty().get()) {
-            result.addFirst(this);
-            for (AComponent component : this.getChildren()) {
-                int tx = x - component.getLeft();
-                int ty = y - component.getTop();
+            result.addFirst(root);
+            for (AComponent component : root.getChildren()) {
+                int tx = x - component.getLeft() - root.translateXProperty().get();
+                int ty = y - component.getTop() - root.translateYProperty().get();
                 if (component instanceof ALayout) {
                     getComponentsAtPosition((ALayout)component, tx, ty, result);
                 } else {
