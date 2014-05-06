@@ -53,7 +53,6 @@ public abstract class AComponent {
         private final Style<Boolean> pointerTransparent = new Style<Boolean>(null, false);
         private final Style<Boolean> handlePointer = new Style<Boolean>(null, false);
         private final Style<Boolean> selectable = new Style<Boolean>(null, false);
-
         private final Style<Padding> padding = new Style<Padding>(null, true);
         private final Style<Border> border = new Style<Border>(null, true);
         private final Style<Integer> minWidth = new Style<Integer>(null, true);
@@ -157,7 +156,6 @@ public abstract class AComponent {
         }
 
     }
-
     private static final LinkedList<MouseDownEventLog> pointerDownEvents = new LinkedList<MouseDownEventLog>();
 
     private static void logPointerDownEvent(MouseDownEventLog item) {
@@ -187,7 +185,6 @@ public abstract class AComponent {
         }
         pointerDownEvents.clear();
     }
-
     private final EventListener nativeEventListener = new EventListener() {
 
         @Override
@@ -200,6 +197,7 @@ public abstract class AComponent {
                         public void run() {
                             ((TextBox) AComponent.this).textProperty().set(getElement().getPropertyString("value"));
                         }
+
                     });
                 }
             }
@@ -293,8 +291,8 @@ public abstract class AComponent {
                     break;
             }
         }
-    };
 
+    };
     private final IntegerProperty translateX = new IntegerProperty(0, false, false);
     private final IntegerProperty translateY = new IntegerProperty(0, false, false);
     private final DoubleProperty rotate = new DoubleProperty(0.0, false, false);
@@ -333,7 +331,6 @@ public abstract class AComponent {
     private final IntegerProperty maxHeight = new IntegerProperty(null, true, false);
     private final BooleanProperty hovered = new BooleanProperty(false, false, true);
     private final BooleanProperty hoveredSetter = new BooleanProperty(false, false, false);
-
     private final Event<ClickEventArgs> onClick = new Event<ClickEventArgs>();
     private final Event<MouseDownEventArgs> onMouseDown = new Event<MouseDownEventArgs>();
     private final Event<MouseDragEventArgs> onMouseDrag = new Event<MouseDragEventArgs>();
@@ -345,18 +342,19 @@ public abstract class AComponent {
     private final Event<KeyEventArgs> onKeyDown = new Event<KeyEventArgs>();
     private final Event<KeyEventArgs> onKeyPress = new Event<KeyEventArgs>();
     private final Event<KeyEventArgs> onKeyUp = new Event<KeyEventArgs>();
-
     private int left = 0;
     private int top = 0;
     private final Element element;
     private ALayout parent;
     boolean needsLayout = true;
     private IChangeListener transformChangedListener = new IChangeListener() {
+
         @Override
         public void onChanged(Object sender) {
             updateTransform();
             requestLayout();
         }
+
     };
 
     /**
@@ -381,6 +379,7 @@ public abstract class AComponent {
         transformCenterY.addChangeListener(transformChangedListener);
         hovered.initReadonlyBind(hoveredSetter);
         padding.addChangeListener(new IChangeListener() {
+
             @Override
             public void onChanged(Object sender) {
                 Padding p = padding.get();
@@ -391,9 +390,11 @@ public abstract class AComponent {
                 }
                 requestLayout();
             }
+
         });
         padding.invalidate();
         border.addChangeListener(new IChangeListener() {
+
             @Override
             public void onChanged(Object sender) {
                 Border b = border.get();
@@ -407,14 +408,18 @@ public abstract class AComponent {
                 }
                 requestLayout();
             }
+
         });
         cursor.addChangeListener(new IChangeListener() {
+
             @Override
             public void onChanged(Object sender) {
                 getElement().getStyle().setProperty("cursor", cursor.get().getCssValue());
             }
+
         });
         visible.addChangeListener(new IChangeListener() {
+
             @Override
             public void onChanged(Object sender) {
                 if (visible.get()) {
@@ -423,8 +428,10 @@ public abstract class AComponent {
                     getElement().getStyle().setVisibility(com.google.gwt.dom.client.Style.Visibility.HIDDEN);
                 }
             }
+
         });
         enabled.addChangeListener(new IChangeListener() {
+
             @Override
             public void onChanged(Object sender) {
                 if (!enabled.get()) {
@@ -433,14 +440,18 @@ public abstract class AComponent {
                     getElement().removeAttribute("disabled");
                 }
             }
+
         });
         alpha.addChangeListener(new IChangeListener() {
+
             @Override
             public void onChanged(Object sender) {
                 getElement().getStyle().setOpacity(alpha.get());
             }
+
         });
         selectable.addChangeListener(new IChangeListener() {
+
             @Override
             public void onChanged(Object sender) {
                 if (selectable.get()) {
@@ -457,6 +468,7 @@ public abstract class AComponent {
                     getElement().getStyle().setProperty("userSelect", "none");
                 }
             }
+
         });
         selectable.invalidate();
         minWidth.addChangeListener(new IChangeListener() {
@@ -470,6 +482,7 @@ public abstract class AComponent {
                 }
                 requestLayout();
             }
+
         });
         minHeight.addChangeListener(new IChangeListener() {
 
@@ -482,6 +495,7 @@ public abstract class AComponent {
                 }
                 requestLayout();
             }
+
         });
         maxWidth.addChangeListener(new IChangeListener() {
 
@@ -494,6 +508,7 @@ public abstract class AComponent {
                 }
                 requestLayout();
             }
+
         });
         maxHeight.addChangeListener(new IChangeListener() {
 
@@ -506,6 +521,7 @@ public abstract class AComponent {
                 }
                 requestLayout();
             }
+
         });
         handlePointer.addChangeListener(new IChangeListener() {
 
@@ -517,6 +533,7 @@ public abstract class AComponent {
                     getElement().getStyle().setProperty("pointerEvents", "none");
                 }
             }
+
         });
 
         measuredWidth.initReadonlyBind(measuredWidthSetter);
@@ -538,6 +555,7 @@ public abstract class AComponent {
             public void onFired(EventArgs args) {
                 hoveredSetter.set(true);
             }
+
         });
         this.onMouseLeave.addListener(new IEventListener<EventArgs>() {
 
@@ -545,6 +563,7 @@ public abstract class AComponent {
             public void onFired(EventArgs args) {
                 hoveredSetter.set(false);
             }
+
         });
 
         this.applyDefaultStyle(AComponent.class);
@@ -631,35 +650,57 @@ public abstract class AComponent {
         double tcx = transformCenterX.get();
         double tcy = transformCenterY.get();
 
-        double sx = scaleX.get();
-        double sy = scaleY.get();
+        int bx = 0;
+        int by = 0;
+        int bw = mw;
+        int bh = mh;
 
-        int bw = (int) (mw * sx);
-        int bh = (int) (mh * sy);
-        int bx = (int) (0 - ((bw - mw) * tcx));
-        int by = (int) (0 - ((bh - mh) * tcy));
+        Point2D tl = new Point2D(0, 0);
+        Point2D tr = new Point2D(mw, 0);
+        Point2D br = new Point2D(mw, mh);
+        Point2D bl = new Point2D(0, mh);
+        
+        int cx = (int) (mw * tcx);
+        int cy = (int) (mh * tcy);
+
         double rot = rotate.get();
         if (rot != 0.0) {
-            int cx = (int) (mw * tcx);
-            int cy = (int) (mh * tcy);
             rot = rot * 360;
-            Point2D tl = rotatePoint(cx, cy, 0, 0, rot);
-            Point2D tr = rotatePoint(cx, cy, bw, 0, rot);
-            Point2D br = rotatePoint(cx, cy, bw, bh, rot);
-            Point2D bl = rotatePoint(cx, cy, 0, bh, rot);
-            int minX = Math.min(Math.min(tl.getX(), tr.getX()), Math.min(br.getX(), bl.getX()));
-            int minY = Math.min(Math.min(tl.getY(), tr.getY()), Math.min(br.getY(), bl.getY()));
-            int maxX = Math.max(Math.max(tl.getX(), tr.getX()), Math.max(br.getX(), bl.getX()));
-            int maxY = Math.max(Math.max(tl.getY(), tr.getY()), Math.max(br.getY(), bl.getY()));
-            bw = maxX - minX;
-            bh = maxY - minY;
-            bx = minX;
-            by = minY;
+            tl = rotatePoint(cx, cy, 0, 0, rot);
+            tr = rotatePoint(cx, cy, bw, 0, rot);
+            br = rotatePoint(cx, cy, bw, bh, rot);
+            bl = rotatePoint(cx, cy, 0, bh, rot);
         }
+        
+        double sx = scaleX.get();
+        double sy = scaleY.get();
+        
+        if (sx != 1.0 || sy != 1.0) {
+            tl = scalePoint(cx, cy, tl.getX(), tl.getY(), sx, sy);
+            tr = scalePoint(cx, cy, tr.getX(), tr.getY(), sx, sy);
+            br = scalePoint(cx, cy, br.getX(), br.getY(), sx, sy);
+            bl = scalePoint(cx, cy, bl.getX(), bl.getY(), sx, sy);
+        }
+
+        int minX = Math.min(Math.min(tl.getX(), tr.getX()), Math.min(br.getX(), bl.getX()));
+        int minY = Math.min(Math.min(tl.getY(), tr.getY()), Math.min(br.getY(), bl.getY()));
+        int maxX = Math.max(Math.max(tl.getX(), tr.getX()), Math.max(br.getX(), bl.getX()));
+        int maxY = Math.max(Math.max(tl.getY(), tr.getY()), Math.max(br.getY(), bl.getY()));
+        bw = maxX - minX;
+        bh = maxY - minY;
+        bx = minX;
+        by = minY;
+
         boundsLeftSetter.set(bx);
         boundsTopSetter.set(by);
         boundsWidthSetter.set(bw);
         boundsHeightSetter.set(bh);
+    }
+
+    private Point2D scalePoint(int centerX, int centerY, int pointX, int pointY, double scaleX, double scaleY) {
+        int resX = (int) (centerX + ((pointX - centerX) * scaleX));
+        int resY = (int) (centerY + ((pointY - centerY) * scaleY));
+        return new Point2D(resX, resY);
     }
 
     private Point2D rotatePoint(int cx, int cy, int x, int y, double angle) {
