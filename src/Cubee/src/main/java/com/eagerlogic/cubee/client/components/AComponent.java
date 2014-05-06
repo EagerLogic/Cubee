@@ -640,14 +640,17 @@ public abstract class AComponent {
         int by = (int) (0 - ((bh - mh) * tcy));
         double rot = rotate.get();
         if (rot != 0.0) {
+            int cx = (int) (mw * tcx);
+            int cy = (int) (mh * tcy);
             rot = rot * 360;
-            Point2D tr = rotatePoint(bw, 0, rot);
-            Point2D br = rotatePoint(bw, bh, rot);
-            Point2D bl = rotatePoint(0, bh, rot);
-            int minX = Math.min(Math.min(0, tr.getX()), Math.min(br.getX(), bl.getX()));
-            int minY = Math.min(Math.min(0, tr.getY()), Math.min(br.getY(), bl.getY()));
-            int maxX = Math.max(Math.max(0, tr.getX()), Math.max(br.getX(), bl.getX()));
-            int maxY = Math.max(Math.max(0, tr.getY()), Math.max(br.getY(), bl.getY()));
+            Point2D tl = rotatePoint(cx, cy, 0, 0, rot);
+            Point2D tr = rotatePoint(cx, cy, bw, 0, rot);
+            Point2D br = rotatePoint(cx, cy, bw, bh, rot);
+            Point2D bl = rotatePoint(cx, cy, 0, bh, rot);
+            int minX = Math.min(Math.min(tl.getX(), tr.getX()), Math.min(br.getX(), bl.getX()));
+            int minY = Math.min(Math.min(tl.getY(), tr.getY()), Math.min(br.getY(), bl.getY()));
+            int maxX = Math.max(Math.max(tl.getX(), tr.getX()), Math.max(br.getX(), bl.getX()));
+            int maxY = Math.max(Math.max(tl.getY(), tr.getY()), Math.max(br.getY(), bl.getY()));
             bw = maxX - minX;
             bh = maxY - minY;
             bx = minX;
@@ -659,13 +662,17 @@ public abstract class AComponent {
         boundsHeightSetter.set(bh);
     }
 
-    private Point2D rotatePoint(int x, int y, double angle) {
+    private Point2D rotatePoint(int cx, int cy, int x, int y, double angle) {
+        x = x - cx;
+        y = y - cy;
         angle = ((angle / 180) * Math.PI);
         double cosAngle = Math.cos(angle);
         double sinAngle = Math.sin(angle);
 
         int resX = (int) ((x * cosAngle) - (y * sinAngle));
         int resY = (int) ((x * sinAngle) + (y * cosAngle));
+        resX += cx;
+        resY += cy;
         return new Point2D(resX, resY);
     }
 
@@ -1157,10 +1164,10 @@ public abstract class AComponent {
         if (rotate.get() != 1.0) {
             int rpx = (int) ((x2 - x1) * transformCenterX.get());
             int rpy = (int) ((y4 - y1) * transformCenterX.get());
-            Point2D tl = rotatePoint(x1 - rpx, y1 - rpy, rotate.get());
-            Point2D tr = rotatePoint(x2 - rpx, y2 - rpy, rotate.get());
-            Point2D br = rotatePoint(x3 - rpx, y3 - rpy, rotate.get());
-            Point2D bl = rotatePoint(x4 - rpx, y4 - rpy, rotate.get());
+            Point2D tl = rotatePoint(0, 0, x1 - rpx, y1 - rpy, rotate.get());
+            Point2D tr = rotatePoint(0, 0, x2 - rpx, y2 - rpy, rotate.get());
+            Point2D br = rotatePoint(0, 0, x3 - rpx, y3 - rpy, rotate.get());
+            Point2D bl = rotatePoint(0, 0, x4 - rpx, y4 - rpy, rotate.get());
             x1 = tl.getX() + rpx;
             y1 = tl.getY() + rpy;
             x2 = tr.getX() + rpx;

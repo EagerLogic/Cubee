@@ -104,8 +104,8 @@ public abstract class ALayout extends AComponent {
         if (x >= 0 && x < root.boundsWidthProperty().get() && y >= 0 && y <= root.boundsHeightProperty().get()) {
             result.addFirst(root);
             for (AComponent component : root.getChildren()) {
-                int tx = x - component.getLeft() - root.translateXProperty().get();
-                int ty = y - component.getTop() - root.translateYProperty().get();
+                int tx = x - component.getLeft() - component.translateXProperty().get();
+                int ty = y - component.getTop() - component.translateYProperty().get();
                 if (component instanceof ALayout) {
                     getComponentsAtPosition((ALayout)component, tx, ty, result);
                 } else {
