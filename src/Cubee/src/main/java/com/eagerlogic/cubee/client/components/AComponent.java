@@ -527,13 +527,24 @@ public abstract class AComponent {
 
             @Override
             public void onChanged(Object sender) {
-                if (handlePointer.get()) {
-                    getElement().getStyle().clearProperty("pointerEvents");
-                } else {
+                if (!handlePointer.get() || pointerTransparentProperty().get()) {
                     getElement().getStyle().setProperty("pointerEvents", "none");
+                } else {
+                    getElement().getStyle().clearProperty("pointerEvents");
                 }
             }
 
+        });
+        pointerTransparent.addChangeListener(new IChangeListener() {
+
+            @Override
+            public void onChanged(Object sender) {
+                if (!handlePointer.get() || pointerTransparentProperty().get()) {
+                    getElement().getStyle().setProperty("pointerEvents", "none");
+                } else {
+                    getElement().getStyle().clearProperty("pointerEvents");
+                }
+            }
         });
 
         measuredWidth.initReadonlyBind(measuredWidthSetter);
