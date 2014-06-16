@@ -307,7 +307,6 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
         } else if (this.isBidirectionalBound()) {
             this.removeChangeListener(bidirectionalChangeListenerThis);
             bidirectionalBindProperty.removeChangeListener(bidirectionalChangeListenerOther);
-            this.removeChangeListener(bidirectionalChangeListenerThis);
             bidirectionalBindProperty.bidirectionalBindProperty = null;
             bidirectionalBindProperty.bidirectionalChangeListenerOther = null;
             bidirectionalBindProperty.bidirectionalChangeListenerThis = null;
@@ -318,7 +317,7 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
     }
 
     @Override
-    public final boolean isBound() {
+    public boolean isBound() {
         return this.bindingSource != null;
     }
 

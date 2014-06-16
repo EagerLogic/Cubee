@@ -14,14 +14,14 @@ import java.util.LinkedList;
 public abstract class AExpression<T> implements IProperty<T>, IObservable {
 
     private LinkedList<IProperty> bindingSources = new LinkedList<IProperty>();
-    private IChangeListener bindingListener = new IChangeListener() {
+    private final IChangeListener bindingListener = new IChangeListener() {
 
         @Override
         public void onChanged(Object sender) {
             invalidate();
         }
     };
-    private LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
+    private final LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
 
     public abstract T calculate();
     private boolean valid = false;
@@ -59,6 +59,13 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
                 return;
             }
         }
+
+        if (changeListeners.size() < 1) {
+            for (IProperty prop : bindingSources) {
+                prop.removeChangeListener(bindingListener);
+            }
+        }
+
         invalidate();
     }
 

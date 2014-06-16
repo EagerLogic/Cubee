@@ -40,18 +40,37 @@ public final class LayoutChildren implements Iterable<AComponent> {
         remove(idx);
     }
 
+    /**
+     * Removes the index'th element from this container. This method does NOT removes the childs' binds automatically.
+     * 
+     * @param index 
+     * The index of the omponent which you want to remove.
+     */
     public void remove(int index) {
+        remove(index, false);
+    }
+    
+    public void remove(int index, boolean removeBinds) {
         AComponent removedComponent = children.remove(index);
         if (removedComponent != null) {
             removedComponent.setParent(null);
+            removedComponent.removeBinds();
         }
         parent.onChildRemoved(removedComponent, index);
     }
 
+    /**
+     * Clears all the childs of this container. This method automatically removes the binds of the child components.
+     */
     public void clear() {
+        clear(true);
+    }
+    
+    public void clear(boolean removeBinds) {
         for (AComponent component : children) {
             if (component != null) {
                 component.setParent(null);
+                component.removeBinds();
             }
         }
         children.clear();

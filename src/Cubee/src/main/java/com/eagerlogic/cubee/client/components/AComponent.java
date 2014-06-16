@@ -670,7 +670,7 @@ public abstract class AComponent {
         Point2D tr = new Point2D(mw, 0);
         Point2D br = new Point2D(mw, mh);
         Point2D bl = new Point2D(0, mh);
-        
+
         int cx = (int) (mw * tcx);
         int cy = (int) (mh * tcy);
 
@@ -682,10 +682,10 @@ public abstract class AComponent {
             br = rotatePoint(cx, cy, bw, bh, rot);
             bl = rotatePoint(cx, cy, 0, bh, rot);
         }
-        
+
         double sx = scaleX.get();
         double sy = scaleY.get();
-        
+
         if (sx != 1.0 || sy != 1.0) {
             tl = scalePoint(cx, cy, tl.getX(), tl.getY(), sx, sy);
             tr = scalePoint(cx, cy, tr.getX(), tr.getY(), sx, sy);
@@ -1283,6 +1283,47 @@ public abstract class AComponent {
 
     public final BooleanProperty hoveredProperty() {
         return this.hovered;
+    }
+
+    public void removeBinds() {
+        translateX.unbind();
+        translateY.unbind();
+        rotate.unbind();
+        scaleX.unbind();
+        scaleY.unbind();
+        transformCenterX.unbind();
+        transformCenterY.unbind();
+        padding.unbind();
+        border.unbind();
+        measuredWidth.unbind();
+        measuredHeight.unbind();
+        clientWidth.unbind();
+        clientHeight.unbind();
+        boundsWidth.unbind();
+        boundsHeight.unbind();
+        boundsLeft.unbind();
+        boundsTop.unbind();
+        measuredWidthSetter.unbind();
+        measuredHeightSetter.unbind();
+        clientWidthSetter.unbind();
+        clientHeightSetter.unbind();
+        boundsWidthSetter.unbind();
+        boundsHeightSetter.unbind();
+        boundsLeftSetter.unbind();
+        boundsTopSetter.unbind();
+        cursor.unbind();
+        pointerTransparent.unbind();
+        handlePointer.unbind();
+        visible.unbind();
+        enabled.unbind();
+        alpha.unbind();
+        selectable.unbind();
+        minWidth.unbind();
+        minHeight.unbind();
+        maxWidth.unbind();
+        maxHeight.unbind();
+        hovered.unbind();
+        hoveredSetter.unbind();
     }
 
 }
