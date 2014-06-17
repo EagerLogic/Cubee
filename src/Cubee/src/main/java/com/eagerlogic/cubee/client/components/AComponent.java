@@ -37,7 +37,7 @@ import java.util.LinkedList;
  *
  * @author dipacs
  */
-public abstract class AComponent {
+public abstract class AComponent extends ADestroyable {
 
     public static class StyleClass<T extends AComponent> extends AStyleClass<T> {
 
@@ -1285,45 +1285,45 @@ public abstract class AComponent {
         return this.hovered;
     }
 
-    public void removeBinds() {
-        translateX.unbind();
-        translateY.unbind();
-        rotate.unbind();
-        scaleX.unbind();
-        scaleY.unbind();
-        transformCenterX.unbind();
-        transformCenterY.unbind();
-        padding.unbind();
-        border.unbind();
-        measuredWidth.unbind();
-        measuredHeight.unbind();
-        clientWidth.unbind();
-        clientHeight.unbind();
-        boundsWidth.unbind();
-        boundsHeight.unbind();
-        boundsLeft.unbind();
-        boundsTop.unbind();
-        measuredWidthSetter.unbind();
-        measuredHeightSetter.unbind();
-        clientWidthSetter.unbind();
-        clientHeightSetter.unbind();
-        boundsWidthSetter.unbind();
-        boundsHeightSetter.unbind();
-        boundsLeftSetter.unbind();
-        boundsTopSetter.unbind();
-        cursor.unbind();
-        pointerTransparent.unbind();
-        handlePointer.unbind();
-        visible.unbind();
-        enabled.unbind();
-        alpha.unbind();
-        selectable.unbind();
-        minWidth.unbind();
-        minHeight.unbind();
-        maxWidth.unbind();
-        maxHeight.unbind();
-        hovered.unbind();
-        hoveredSetter.unbind();
+    protected void onDestroy() {
+        translateX.destroy();
+        translateY.destroy();
+        rotate.destroy();
+        scaleX.destroy();
+        scaleY.destroy();
+        transformCenterX.destroy();
+        transformCenterY.destroy();
+        padding.destroy();
+        border.destroy();
+        measuredWidth.destroy();
+        measuredHeight.destroy();
+        clientWidth.destroy();
+        clientHeight.destroy();
+        boundsWidth.destroy();
+        boundsHeight.destroy();
+        boundsLeft.destroy();
+        boundsTop.destroy();
+        measuredWidthSetter.destroy();
+        measuredHeightSetter.destroy();
+        clientWidthSetter.destroy();
+        clientHeightSetter.destroy();
+        boundsWidthSetter.destroy();
+        boundsHeightSetter.destroy();
+        boundsLeftSetter.destroy();
+        boundsTopSetter.destroy();
+        cursor.destroy();
+        pointerTransparent.destroy();
+        handlePointer.destroy();
+        visible.destroy();
+        enabled.destroy();
+        alpha.destroy();
+        selectable.destroy();
+        minWidth.destroy();
+        minHeight.destroy();
+        maxWidth.destroy();
+        maxHeight.destroy();
+        hovered.destroy();
+        hoveredSetter.destroy();
     }
 
 }

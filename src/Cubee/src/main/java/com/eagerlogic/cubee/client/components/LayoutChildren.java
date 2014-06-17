@@ -50,11 +50,13 @@ public final class LayoutChildren implements Iterable<AComponent> {
         remove(index, false);
     }
     
-    public void remove(int index, boolean removeBinds) {
+    public void remove(int index, boolean destroy) {
         AComponent removedComponent = children.remove(index);
         if (removedComponent != null) {
             removedComponent.setParent(null);
-            removedComponent.removeBinds();
+            if (destroy) {
+                removedComponent.destroy();
+            }
         }
         parent.onChildRemoved(removedComponent, index);
     }
@@ -66,11 +68,13 @@ public final class LayoutChildren implements Iterable<AComponent> {
         clear(true);
     }
     
-    public void clear(boolean removeBinds) {
+    public void clear(boolean destroy) {
         for (AComponent component : children) {
             if (component != null) {
                 component.setParent(null);
-                component.removeBinds();
+                if (destroy) {
+                    component.destroy();
+                }
             }
         }
         children.clear();

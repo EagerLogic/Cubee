@@ -116,4 +116,11 @@ public abstract class ALayout extends AComponent {
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        children.clear(true);
+    }
 }

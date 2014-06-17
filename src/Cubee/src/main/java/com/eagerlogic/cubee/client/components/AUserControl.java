@@ -197,13 +197,13 @@ public abstract class AUserControl extends ALayout {
     }
 
     @Override
-    public void removeBinds() {
-        super.removeBinds();
+    protected void onDestroy() {
+        super.destroy();
         
-        width.unbind();
-        height.unbind();
-        background.unbind();
-        shadow.unbind();
+        width.destroy();
+        height.destroy();
+        background.destroy();
+        shadow.destroy();
     }
 
 }

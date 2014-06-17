@@ -22,7 +22,7 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
     private final boolean nullable;
     private final boolean readonly;
     private IProperty<T> bindingSource;
-    private final IChangeListener bindListener = new IChangeListener() {
+    private IChangeListener bindListener = new IChangeListener() {
         @Override
         public void onChanged(Object sender) {
             invalidate();
@@ -335,5 +335,11 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
 
     PropertyLine<T> createPropertyLine(LinkedList<KeyFrame> keyFrames) {
         return new PropertyLine<T>(keyFrames);
+    }
+    
+    public final void destroy() {
+        unbind();
+        changeListeners.clear();
+        bindListener = null;
     }
 }

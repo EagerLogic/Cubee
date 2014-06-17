@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public abstract class AExpression<T> implements IProperty<T>, IObservable {
 
     private LinkedList<IProperty> bindingSources = new LinkedList<IProperty>();
-    private final IChangeListener bindingListener = new IChangeListener() {
+    private IChangeListener bindingListener = new IChangeListener() {
 
         @Override
         public void onChanged(Object sender) {
@@ -108,6 +108,15 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
         for (IChangeListener listener : changeListeners) {
             listener.onChanged(this);
         }
+    }
+    
+    public final void destroy() {
+        changeListeners.clear();
+        for (IProperty prop : bindingSources) {
+            prop.removeChangeListener(bindingListener);
+        }
+        bindingSources.clear();
+        bindingListener = null;
     }
 
 }
