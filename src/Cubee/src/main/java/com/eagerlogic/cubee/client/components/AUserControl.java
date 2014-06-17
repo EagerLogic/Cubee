@@ -198,7 +198,7 @@ public abstract class AUserControl extends ALayout {
 
     @Override
     protected void onDestroy() {
-        super.destroy();
+        super.onDestroy();
         
         width.destroy();
         height.destroy();
