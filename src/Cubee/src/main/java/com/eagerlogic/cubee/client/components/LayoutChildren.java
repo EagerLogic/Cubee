@@ -4,6 +4,7 @@
  */
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.events.ParentChangedEventArgs;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -26,6 +27,7 @@ public final class LayoutChildren implements Iterable<AComponent> {
                 throw new IllegalStateException("The component is already a child of a layout.");
             }
             component.setParent(parent);
+            component.onParentChangedEvent().fireEvent(new ParentChangedEventArgs(parent, component));
         }
 
         children.add(component);
@@ -54,6 +56,7 @@ public final class LayoutChildren implements Iterable<AComponent> {
         AComponent removedComponent = children.remove(index);
         if (removedComponent != null) {
             removedComponent.setParent(null);
+            removedComponent.onParentChangedEvent().fireEvent(new ParentChangedEventArgs(null, removedComponent));
             if (destroy) {
                 removedComponent.destroy();
             }
@@ -65,13 +68,15 @@ public final class LayoutChildren implements Iterable<AComponent> {
      * Clears all the childs of this container. This method automatically removes the binds of the child components.
      */
     public void clear() {
-        clear(true);
+//        clear(true);
+        clear(false);
     }
     
     public void clear(boolean destroy) {
         for (AComponent component : children) {
             if (component != null) {
                 component.setParent(null);
+                component.onParentChangedEvent().fireEvent(new ParentChangedEventArgs(null, component));
                 if (destroy) {
                     component.destroy();
                 }

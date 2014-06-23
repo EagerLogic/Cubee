@@ -12,6 +12,7 @@ import com.eagerlogic.cubee.client.events.MouseEventTypes;
 import com.eagerlogic.cubee.client.events.MouseMoveEventArgs;
 import com.eagerlogic.cubee.client.events.MouseUpEventArgs;
 import com.eagerlogic.cubee.client.events.MouseWheelEventArgs;
+import com.eagerlogic.cubee.client.events.ParentChangedEventArgs;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.properties.DoubleProperty;
@@ -342,6 +343,7 @@ public abstract class AComponent extends ADestroyable {
     private final Event<KeyEventArgs> onKeyDown = new Event<KeyEventArgs>();
     private final Event<KeyEventArgs> onKeyPress = new Event<KeyEventArgs>();
     private final Event<KeyEventArgs> onKeyUp = new Event<KeyEventArgs>();
+    private final Event<ParentChangedEventArgs> onParentChanged = new Event<ParentChangedEventArgs>();
     private int left = 0;
     private int top = 0;
     private final Element element;
@@ -1028,6 +1030,10 @@ public abstract class AComponent extends ADestroyable {
 
     public final Event<KeyEventArgs> onKeyUpEvent() {
         return onKeyUp;
+    }
+    
+    public final Event<ParentChangedEventArgs> onParentChangedEvent() {
+        return onParentChanged;
     }
 
     public final DoubleProperty alphaProperty() {
