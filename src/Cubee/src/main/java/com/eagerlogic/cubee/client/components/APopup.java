@@ -77,6 +77,7 @@ public abstract class APopup {
             this.popupRoot.getElement().getStyle().setProperty("pointerEvents", "all");
         } else {
             this.popupRoot.getElement().getStyle().setProperty("pointerEvents", "none");
+            this.popupRoot.pointerTransparentProperty().set(true);
         }
         this.popupRoot.widthProperty().bind(CubeePanel.getInstance().boundsWidthProperty());
         this.popupRoot.heightProperty().bind(CubeePanel.getInstance().boundsHeightProperty());

@@ -717,17 +717,37 @@ public abstract class AComponent extends ADestroyable {
     }
 
     private Point2D rotatePoint(int cx, int cy, int x, int y, double angle) {
+//        x = x - cx;
+//        y = y - cy;
+//        angle = ((angle / 2) * Math.PI);
+//        double cosAngle = Math.cos(angle);
+//        double sinAngle = Math.sin(angle);
+//
+//        int resX = (int) ((x * cosAngle) - (y * sinAngle));
+//        int resY = (int) ((x * sinAngle) + (y * cosAngle));
+//        resX += cx;
+//        resY += cy;
+//        return new Point2D(resX, resY);
+        
+        /*
+        angle = (angle ) * (Math.PI/180); // Convert to radians
+var rotatedX = Math.cos(angle) * (point.x - center.x) - Math.sin(angle) * (point.y-center.y) + center.x;
+var rotatedY = Math.sin(angle) * (point.x - center.x) + Math.cos(angle) * (point.y - center.y) + center.y;
+ 
+return new createjs.Point(rotatedX,rotatedY);
+        */
+        
+        angle = (angle * 360) * (Math.PI / 180);
         x = x - cx;
         y = y - cy;
-        angle = ((angle / 180) * Math.PI);
-        double cosAngle = Math.cos(angle);
-        double sinAngle = Math.sin(angle);
-
-        int resX = (int) ((x * cosAngle) - (y * sinAngle));
-        int resY = (int) ((x * sinAngle) + (y * cosAngle));
-        resX += cx;
-        resY += cy;
-        return new Point2D(resX, resY);
+        double sin = Math.sin(angle);
+        double cos = Math.cos(angle);
+        int rx = (int) ((cos * x) - (sin * y));
+        int ry = (int) ((sin * x) + (cos * y));
+        rx = rx + cx;
+        ry = ry + cy;
+        
+        return new Point2D(rx, ry);
     }
 
     /**
@@ -1219,9 +1239,9 @@ public abstract class AComponent extends ADestroyable {
         }
 
         // rotatePoints
-        if (rotate.get() != 1.0) {
-            int rpx = (int) ((x2 - x1) * transformCenterX.get());
-            int rpy = (int) ((y4 - y1) * transformCenterX.get());
+        if (rotate.get() != 0.0) {
+            int rpx = (int) (x1 + ((x2 - x1) * transformCenterX.get()));
+            int rpy = (int) (y1 + ((y4 - y1) * transformCenterX.get()));
             Point2D tl = rotatePoint(0, 0, x1 - rpx, y1 - rpy, rotate.get());
             Point2D tr = rotatePoint(0, 0, x2 - rpx, y2 - rpy, rotate.get());
             Point2D br = rotatePoint(0, 0, x3 - rpx, y3 - rpy, rotate.get());
@@ -1259,7 +1279,7 @@ public abstract class AComponent extends ADestroyable {
         return ((ly1 > py) != (ly2 > py)) && (px < (lx2 - lx1) * ((double) (py - ly1)) / (ly2 - ly1) + lx1);
     }
 
-    public final DoubleProperty rotateProperty() {
+    public DoubleProperty rotateProperty() {
         return rotate;
     }
 

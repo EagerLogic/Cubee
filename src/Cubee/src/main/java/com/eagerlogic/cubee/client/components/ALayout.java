@@ -1,6 +1,7 @@
 package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.style.styles.Padding;
+import com.eagerlogic.cubee.client.utils.Point2D;
 import com.google.gwt.dom.client.Element;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,9 +69,16 @@ public abstract class ALayout extends AComponent {
                         parentY -= p.getTopPadding();
                     }
                     if (child.isIntersectsPoint(parentX, parentY)) {
-                        int childX = parentX - child.getLeft() - child.translateXProperty().get();
-                        int childY = parentY - child.getTop() - child.translateYProperty().get();
-                        // TODO rotate and scale child point
+                        int left = child.getLeft() + child.translateXProperty().get();
+                        int top = child.getTop() + child.translateYProperty().get();
+                        int tcx = (int) (left + child.measuredWidthProperty().get() * child.transformCenterXProperty().get());
+                        int tcy = (int) (top + child.measuredHeightProperty().get() * child.transformCenterYProperty().get());
+                        Point2D childPoint = rotatePoint(tcx, tcy, parentX, parentY, -child.rotateProperty().get());
+                        int childX = childPoint.getX();
+                        int childY =childPoint.getY();
+                        childX = childX - left;
+                        childY = childY - top;
+                        // TODO scale back point
                         if (child.doPointerEventClimbingUp(screenX, screenY, childX, childY, wheelVelocity,
                                 altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
                             return true;
@@ -86,6 +94,20 @@ public abstract class ALayout extends AComponent {
                     ctrlPressed, shiftPressed, metaPressed, type);
         }
 
+    }
+    
+    private Point2D rotatePoint(int cx, int cy, int x, int y, double angle) {
+        angle = (angle * 360) * (Math.PI / 180);
+        x = x - cx;
+        y = y - cy;
+        double sin = Math.sin(angle);
+        double cos = Math.cos(angle);
+        int rx = (int) ((cos * x) - (sin * y));
+        int ry = (int) ((sin * x) + (cos * y));
+        rx = rx + cx;
+        ry = ry + cy;
+        
+        return new Point2D(rx, ry);
     }
 
     /**
