@@ -678,7 +678,6 @@ public abstract class AComponent extends ADestroyable {
 
         double rot = rotate.get();
         if (rot != 0.0) {
-            rot = rot * 360;
             tl = rotatePoint(cx, cy, 0, 0, rot);
             tr = rotatePoint(cx, cy, bw, 0, rot);
             br = rotatePoint(cx, cy, bw, bh, rot);
@@ -729,14 +728,14 @@ public abstract class AComponent extends ADestroyable {
 //        resY += cy;
 //        return new Point2D(resX, resY);
         
-        /*
-        angle = (angle ) * (Math.PI/180); // Convert to radians
-var rotatedX = Math.cos(angle) * (point.x - center.x) - Math.sin(angle) * (point.y-center.y) + center.x;
-var rotatedY = Math.sin(angle) * (point.x - center.x) + Math.cos(angle) * (point.y - center.y) + center.y;
- 
-return new createjs.Point(rotatedX,rotatedY);
-        */
-        
+//        /*
+//        angle = (angle ) * (Math.PI/180); // Convert to radians
+//var rotatedX = Math.cos(angle) * (point.x - center.x) - Math.sin(angle) * (point.y-center.y) + center.x;
+//var rotatedY = Math.sin(angle) * (point.x - center.x) + Math.cos(angle) * (point.y - center.y) + center.y;
+// 
+//return new createjs.Point(rotatedX,rotatedY);
+//        */
+//        
         angle = (angle * 360) * (Math.PI / 180);
         x = x - cx;
         y = y - cy;
