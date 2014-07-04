@@ -25,6 +25,7 @@ public final class HTMLComponent extends AUserControl {
                 } else {
                     getElement().setInnerHTML(html.get());
                 }
+                requestLayout();
             }
         });
     }

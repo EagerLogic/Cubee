@@ -186,6 +186,7 @@ public abstract class AComponent extends ADestroyable {
         }
         pointerDownEvents.clear();
     }
+    
     private final EventListener nativeEventListener = new EventListener() {
 
         @Override
@@ -232,6 +233,10 @@ public abstract class AComponent extends ADestroyable {
                     event.stopPropagation();
                     fireUpEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(), event
                             .getShiftKey(), event.getMetaKey());
+                    break;
+                case com.google.gwt.user.client.Event.ONDBLCLICK:
+                    event.stopPropagation();
+                    onDoubleClick.fireEvent(new ClickEventArgs(event.getScreenX(), event.getScreenY(), x, y, event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(), AComponent.this));
                     break;
                 case com.google.gwt.user.client.Event.ONMOUSEOVER:
                     if (pointerTransparent.get()) {
@@ -333,6 +338,7 @@ public abstract class AComponent extends ADestroyable {
     private final BooleanProperty hovered = new BooleanProperty(false, false, true);
     private final BooleanProperty hoveredSetter = new BooleanProperty(false, false, false);
     private final Event<ClickEventArgs> onClick = new Event<ClickEventArgs>();
+    private final Event<ClickEventArgs> onDoubleClick = new Event<ClickEventArgs>();
     private final Event<MouseDownEventArgs> onMouseDown = new Event<MouseDownEventArgs>();
     private final Event<MouseDragEventArgs> onMouseDrag = new Event<MouseDragEventArgs>();
     private final Event<MouseMoveEventArgs> onMouseMove = new Event<MouseMoveEventArgs>();
@@ -1009,6 +1015,10 @@ public abstract class AComponent extends ADestroyable {
 
     public final Event<ClickEventArgs> onClickEvent() {
         return onClick;
+    }
+    
+    public final Event<ClickEventArgs> onDoubleClickEvent() {
+        return onDoubleClick;
     }
 
     public final Event<MouseDownEventArgs> onMouseDownEvent() {
