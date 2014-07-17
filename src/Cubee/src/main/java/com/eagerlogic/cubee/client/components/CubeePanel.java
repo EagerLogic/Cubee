@@ -1,45 +1,39 @@
 package com.eagerlogic.cubee.client.components;
 
-import com.eagerlogic.cubee.client.properties.BackgroundProperty;
-import com.eagerlogic.cubee.client.style.styles.Color;
-import com.eagerlogic.cubee.client.style.styles.ColorBackground;
+import com.eagerlogic.cubee.client.EventQueue;
+import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.utils.ARunOnce;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 
 /**
  *
  * @author dipacs
  */
-public final class CubeePanel extends ALayout {
-
-    private static CubeePanel instance;
-
-    public static CubeePanel getInstance() {
-        if (instance == null) {
-            instance = new CubeePanel();
-        }
-        return instance;
-    }
+public final class CubeePanel {
 
     private ARunOnce layoutRunOnce;
 
     private final Panel contentPanel;
-    private final Panel popupPanel;
     private AComponent rootComponent;
+    
+    
+    private final Element element;
+    
+    private int left = -1;
+    private int top = -1;
+    private int clientWidth = -1;
+    private int clientHeight = -1;
+    private int offsetWidth = -1;
+    private int offsetHeight = -1;
 
-    private CubeePanel() {
-        super(DOM.createDiv());
-        getElement().getStyle().setPosition(Position.FIXED);
-        getElement().getStyle().setLeft(0, Style.Unit.PX);
-        getElement().getStyle().setTop(0, Style.Unit.PX);
-        getElement().getStyle().setRight(0, Style.Unit.PX);
-        getElement().getStyle().setBottom(0, Style.Unit.PX);
+    public CubeePanel(DivElement element) {
+        this.element = element;
         Window.addResizeHandler(new ResizeHandler() {
 
             @Override
@@ -50,23 +44,55 @@ public final class CubeePanel extends ALayout {
 
         this.contentPanel = new Panel();
         this.contentPanel.getElement().getStyle().setProperty("pointerEvents", "none");
-        this.contentPanel.widthProperty().bind(this.clientWidthProperty());
-        this.contentPanel.heightProperty().bind(this.clientHeightProperty());
         this.contentPanel.pointerTransparentProperty().set(true);
-        this.contentPanel.backgroundProperty().set(new ColorBackground(Color.getRgbColor(0xf0f0f0)));
-        this.getChildren().add(this.contentPanel);
+        element.appendChild(this.contentPanel.getElement());
 
-        this.popupPanel = new Panel();
-        this.popupPanel.getElement().getStyle().setProperty("pointerEvents", "none");
-        this.popupPanel.widthProperty().bind(this.clientWidthProperty());
-        this.popupPanel.heightProperty().bind(this.clientHeightProperty());
-        this.popupPanel.pointerTransparentProperty().set(true);
-        this.getChildren().add(this.popupPanel);
-
+        checkBounds();
         requestLayout();
+        
+        new Timer() {
+
+            @Override
+            public void run() {
+                EventQueue.getInstance().invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        checkBounds();
+                    }
+                });
+            }
+        }.scheduleRepeating(100);
+    }
+    
+    private void checkBounds() {
+        int newLeft = element.getAbsoluteLeft();
+        int newTop = element.getAbsoluteTop();
+        int newClientWidth = element.getClientWidth();
+        int newClientHeight = element.getClientHeight();
+        int newOffsetWidth = element.getOffsetWidth();
+        int newOffsetHeight = element.getOffsetHeight();
+        if (newLeft != left || newTop != top || newClientWidth != clientWidth || newClientHeight != clientHeight
+                || newOffsetWidth != offsetWidth || newOffsetHeight != offsetHeight) {
+            left = newLeft;
+            top = newTop;
+            clientWidth = newClientWidth;
+            clientHeight = newClientHeight;
+            offsetWidth = newOffsetWidth;
+            offsetHeight = newOffsetHeight;
+            this.contentPanel.widthProperty().set(offsetWidth);
+            this.contentPanel.heightProperty().set(offsetHeight);
+            if (Position.ABSOLUTE.getCssName().equals(element.getStyle().getPosition())) {
+                this.contentPanel.translateXProperty().set(0);
+                this.contentPanel.translateYProperty().set(0);
+            } else {
+                this.contentPanel.translateXProperty().set(left);
+                this.contentPanel.translateYProperty().set(top);
+            }
+            requestLayout();
+        }
     }
 
-    @Override
     public void requestLayout() {
         if (layoutRunOnce == null) {
             layoutRunOnce = new ARunOnce() {
@@ -82,6 +108,10 @@ public final class CubeePanel extends ALayout {
         }
         layoutRunOnce.run();
     }
+    
+    private void layout() {
+        this.contentPanel.layout();
+    }
 
     public AComponent getRootComponent() {
         return rootComponent;
@@ -89,52 +119,60 @@ public final class CubeePanel extends ALayout {
 
     public void setRootComponent(AComponent rootComponent) {
         this.contentPanel.getChildren().clear();
+        if (this.rootComponent != null) {
+            this.rootComponent.setCubeePanel(null);
+        }
         this.rootComponent = null;
         if (rootComponent != null) {
             this.contentPanel.getChildren().add(rootComponent);
             this.rootComponent = rootComponent;
+            this.rootComponent.setCubeePanel(this);
         }
     }
 
-    @Override
-    protected final void onChildAdded(AComponent child) {
-        if (child != null) {
-            getElement().appendChild(child.getElement());
+//    void showPopup(APopup popup) {
+//        this.popupPanel.getChildren().add(popup.getPopupRoot());
+//    }
+//
+//    void closePopup(APopup popup) {
+//        this.popupPanel.getChildren().remove(popup.getPopupRoot());
+//    }
+    
+    boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
+            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
+        if (Popups.doPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
+            return true;
         }
-    }
-
-    @Override
-    protected final void onChildRemoved(AComponent child, int index) {
-        if (child != null) {
-            getElement().removeChild(child.getElement());
+        
+        if (!Position.ABSOLUTE.equals(element.getStyle().getPosition())) {
+            x = screenX - left;
+            y = screenY - top;
         }
+        return contentPanel.onPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type);
     }
 
-    @Override
-    protected final void onChildrenCleared() {
-        Element root = getElement();
-        Element e = getElement().getFirstChildElement();
-        while (e != null) {
-            root.removeChild(e);
-            e = root.getFirstChildElement();
-        }
+    public final IntegerProperty clientWidthProperty() {
+        return contentPanel.clientWidthProperty();
     }
 
-    @Override
-    protected void onLayout() {
-        // nothing to do here
+    public final IntegerProperty clientHeightProperty() {
+        return contentPanel.clientHeightProperty();
     }
 
-    void showPopup(APopup popup) {
-        this.popupPanel.getChildren().add(popup.getPopupRoot());
+    public final IntegerProperty boundsWidthProperty() {
+        return contentPanel.boundsWidthProperty();
     }
 
-    void closePopup(APopup popup) {
-        this.popupPanel.getChildren().remove(popup.getPopupRoot());
+    public final IntegerProperty boundsHeightProperty() {
+        return contentPanel.boundsHeightProperty();
     }
 
-    public BackgroundProperty backgroundProperty() {
-        return contentPanel.backgroundProperty();
+    public final IntegerProperty boundsLeftProperty() {
+        return contentPanel.boundsLeftProperty();
+    }
+
+    public final IntegerProperty boundsTopProperty() {
+        return contentPanel.boundsTopProperty();
     }
 
 }

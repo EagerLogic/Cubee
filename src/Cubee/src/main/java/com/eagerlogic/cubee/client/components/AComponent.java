@@ -208,11 +208,15 @@ public abstract class AComponent extends ADestroyable {
             int wheelVelocity = event.getMouseWheelVelocityY();
             AComponent parent;
             KeyEventArgs keyArgs;
+            CubeePanel cp = getCubeePanel();
             switch (event.getTypeInt()) {
                 case com.google.gwt.user.client.Event.ONMOUSEDOWN:
                 case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
                     event.stopPropagation();
-                    CubeePanel.getInstance().doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                    if (cp == null) {
+                        return;
+                    }
+                    getCubeePanel().doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
                             event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
                             event.getTypeInt());
                     break;
@@ -222,7 +226,10 @@ public abstract class AComponent extends ADestroyable {
                         fireDragEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(),
                                 event.getShiftKey(), event.getMetaKey());
                     } else {
-                        CubeePanel.getInstance().doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                        if (cp == null) {
+                            return;
+                        }
+                        getCubeePanel().doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
                                 event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
                                 event.getTypeInt());
                     }
@@ -349,6 +356,7 @@ public abstract class AComponent extends ADestroyable {
     private final Element element;
     private ALayout parent;
     boolean needsLayout = true;
+    private CubeePanel cubeePanel;
     private IChangeListener transformChangedListener = new IChangeListener() {
 
         @Override
@@ -580,6 +588,20 @@ public abstract class AComponent extends ADestroyable {
         });
 
         this.applyDefaultStyle(AComponent.class);
+    }
+    
+    void setCubeePanel(CubeePanel cubeePanel) {
+        this.cubeePanel = cubeePanel;
+    }
+    
+    public final CubeePanel getCubeePanel() {
+        if (this.cubeePanel != null) {
+            return this.cubeePanel;
+        } else if (this.getParent() != null) {
+            return this.getParent().getCubeePanel();
+        } else {
+            return null;
+        }
     }
 
     /**

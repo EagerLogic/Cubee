@@ -9,6 +9,7 @@ import com.eagerlogic.cubee.client.style.AStyleClass;
 import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ColorBackground;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  *
@@ -70,6 +71,11 @@ public abstract class APopup {
         this.autoClose = autoClose;
         this.glassColor = glassColor;
         this.popupRoot = new Panel();
+        this.popupRoot.getElement().getStyle().setLeft(0.0, com.google.gwt.dom.client.Style.Unit.PX);
+        this.popupRoot.getElement().getStyle().setTop(0.0, com.google.gwt.dom.client.Style.Unit.PX);
+        this.popupRoot.getElement().getStyle().setRight(0.0, com.google.gwt.dom.client.Style.Unit.PX);
+        this.popupRoot.getElement().getStyle().setBottom(0.0, com.google.gwt.dom.client.Style.Unit.PX);
+        this.popupRoot.getElement().getStyle().setPosition(com.google.gwt.dom.client.Style.Position.FIXED);
         if (glassColor != null) {
             this.popupRoot.backgroundProperty().set(new ColorBackground(glassColor));
         }
@@ -79,8 +85,6 @@ public abstract class APopup {
             this.popupRoot.getElement().getStyle().setProperty("pointerEvents", "none");
             this.popupRoot.pointerTransparentProperty().set(true);
         }
-        this.popupRoot.widthProperty().bind(CubeePanel.getInstance().boundsWidthProperty());
-        this.popupRoot.heightProperty().bind(CubeePanel.getInstance().boundsHeightProperty());
 
         this.rootComponentContainer = new Panel();
         this.rootComponentContainer.translateXProperty().bind(new AExpression<Integer>() {
@@ -151,7 +155,8 @@ public abstract class APopup {
         if (visible) {
             throw new IllegalStateException("This popup is already shown.");
         }
-        CubeePanel.getInstance().showPopup(this);
+        RootPanel.get().getElement().appendChild(this.popupRoot.getElement());
+        Popups.addPopup(this);
         this.visible = true;
     }
 
@@ -159,7 +164,8 @@ public abstract class APopup {
         if (!visible) {
             throw new IllegalStateException("This popup isn't shown.");
         }
-        CubeePanel.getInstance().closePopup(this);
+        RootPanel.get().getElement().removeChild(this.popupRoot.getElement());
+        Popups.removePopup(this);
         this.visible = false;
         onClosed();
     }
@@ -214,6 +220,11 @@ public abstract class APopup {
 
     protected void setCenter(boolean center) {
         this.centerProperty().set(center);
+    }
+    
+    boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
+            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
+        return this.popupRoot.doPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type);
     }
 
 }
