@@ -18,4 +18,12 @@
                 <performRelease>true</performRelease>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-Deploy Doctusoft</actionName>
+            <displayName>Deploy Doctusoft</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>deploy</goal>
+            </goals>
+        </action>
     </actions>

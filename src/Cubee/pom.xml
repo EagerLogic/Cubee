@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.eagerlogic.cubee</groupId>
     <artifactId>cubee</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Cubee</name>
@@ -46,7 +46,7 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>doctusoft.snapshots.public</id>
+			<id>doctusoft.snapshot.public</id>
 			<url>http://pubrepo.doctusoft.com/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
