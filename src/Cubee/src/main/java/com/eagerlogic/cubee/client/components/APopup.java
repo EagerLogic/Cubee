@@ -1,5 +1,6 @@
 package com.eagerlogic.cubee.client.components;
 
+import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.events.ClickEventArgs;
 import com.eagerlogic.cubee.client.events.IEventListener;
 import com.eagerlogic.cubee.client.properties.AExpression;
@@ -9,6 +10,7 @@ import com.eagerlogic.cubee.client.style.AStyleClass;
 import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ColorBackground;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -132,6 +134,14 @@ public abstract class APopup {
                 }
             });
         }
+        
+        EventQueue.getInstance().invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                layout();
+            }
+        });
     }
 
     final Panel getPopupRoot() {
@@ -225,6 +235,12 @@ public abstract class APopup {
     boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
             boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
         return this.popupRoot.doPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type);
+    }
+    
+    final void layout() {
+        this.popupRoot.widthProperty().set(Window.getClientWidth());
+        this.popupRoot.heightProperty().set(Window.getClientHeight());
+        this.popupRoot.layout();
     }
 
 }

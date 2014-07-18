@@ -35,6 +35,12 @@ class Popups {
         popups.remove(popup);
     }
     
+    static void layout() {
+        for (APopup popup : popups) {
+            popup.layout();
+        }
+    }
+    
     public static boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
             boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
         for (APopup popup : popups) {

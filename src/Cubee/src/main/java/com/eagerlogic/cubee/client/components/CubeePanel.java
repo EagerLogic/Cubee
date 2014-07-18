@@ -45,6 +45,7 @@ public final class CubeePanel {
         this.contentPanel = new Panel();
         this.contentPanel.getElement().getStyle().setProperty("pointerEvents", "none");
         this.contentPanel.pointerTransparentProperty().set(true);
+        this.contentPanel.setCubeePanel(this);
         element.appendChild(this.contentPanel.getElement());
 
         checkBounds();
@@ -86,8 +87,8 @@ public final class CubeePanel {
                 this.contentPanel.translateXProperty().set(0);
                 this.contentPanel.translateYProperty().set(0);
             } else {
-                this.contentPanel.translateXProperty().set(left);
-                this.contentPanel.translateYProperty().set(top);
+                this.contentPanel.translateXProperty().set(0);
+                this.contentPanel.translateYProperty().set(0);
             }
             requestLayout();
         }
@@ -110,6 +111,7 @@ public final class CubeePanel {
     }
     
     private void layout() {
+        Popups.layout();
         this.contentPanel.layout();
     }
 
@@ -119,14 +121,10 @@ public final class CubeePanel {
 
     public void setRootComponent(AComponent rootComponent) {
         this.contentPanel.getChildren().clear();
-        if (this.rootComponent != null) {
-            this.rootComponent.setCubeePanel(null);
-        }
         this.rootComponent = null;
         if (rootComponent != null) {
             this.contentPanel.getChildren().add(rootComponent);
             this.rootComponent = rootComponent;
-            this.rootComponent.setCubeePanel(this);
         }
     }
 
@@ -148,7 +146,7 @@ public final class CubeePanel {
             x = screenX - left;
             y = screenY - top;
         }
-        return contentPanel.onPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type);
+        return contentPanel.doPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type);
     }
 
     public final IntegerProperty clientWidthProperty() {
