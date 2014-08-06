@@ -213,12 +213,16 @@ public abstract class AComponent extends ADestroyable {
                 case com.google.gwt.user.client.Event.ONMOUSEDOWN:
                 case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
                     event.stopPropagation();
-                    if (cp == null) {
-                        return;
+                    if (cp != null) {
+                        cp.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                                event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
+                                event.getTypeInt());
+                    } else {
+                        Popups.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                                event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
+                                event.getTypeInt());
                     }
-                    getCubeePanel().doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
-                            event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
-                            event.getTypeInt());
+
                     break;
                 case com.google.gwt.user.client.Event.ONMOUSEMOVE:
                     event.stopPropagation();
@@ -226,12 +230,15 @@ public abstract class AComponent extends ADestroyable {
                         fireDragEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(),
                                 event.getShiftKey(), event.getMetaKey());
                     } else {
-                        if (cp == null) {
-                            return;
+                        if (cp != null) {
+                            cp.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                                    event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
+                                    event.getTypeInt());
+                        } else {
+                            Popups.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                                    event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
+                                    event.getTypeInt());
                         }
-                        getCubeePanel().doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
-                                event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
-                                event.getTypeInt());
                     }
                     break;
 
@@ -374,7 +381,7 @@ public abstract class AComponent extends ADestroyable {
      */
     public AComponent(Element rootElement) {
         this.element = rootElement;
-        this.element.setAttribute("draggabe", "false");
+        this.element.setAttribute("draggable", "false");
         this.element.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
         getElement().getStyle().setOutlineStyle(com.google.gwt.dom.client.Style.OutlineStyle.NONE);
         getElement().getStyle().setOutlineWidth(0, com.google.gwt.dom.client.Style.Unit.PX);
@@ -589,11 +596,11 @@ public abstract class AComponent extends ADestroyable {
 
         this.applyDefaultStyle(AComponent.class);
     }
-    
+
     void setCubeePanel(CubeePanel cubeePanel) {
         this.cubeePanel = cubeePanel;
     }
-    
+
     public final CubeePanel getCubeePanel() {
         if (this.cubeePanel != null) {
             return this.cubeePanel;
@@ -753,7 +760,7 @@ public abstract class AComponent extends ADestroyable {
 //        resX += cx;
 //        resY += cy;
 //        return new Point2D(resX, resY);
-        
+
 //        /*
 //        angle = (angle ) * (Math.PI/180); // Convert to radians
 //var rotatedX = Math.cos(angle) * (point.x - center.x) - Math.sin(angle) * (point.y-center.y) + center.x;
@@ -771,7 +778,7 @@ public abstract class AComponent extends ADestroyable {
         int ry = (int) ((sin * x) + (cos * y));
         rx = rx + cx;
         ry = ry + cy;
-        
+
         return new Point2D(rx, ry);
     }
 
@@ -1076,7 +1083,7 @@ public abstract class AComponent extends ADestroyable {
     public final Event<KeyEventArgs> onKeyUpEvent() {
         return onKeyUp;
     }
-    
+
     public final Event<ParentChangedEventArgs> onParentChangedEvent() {
         return onParentChanged;
     }

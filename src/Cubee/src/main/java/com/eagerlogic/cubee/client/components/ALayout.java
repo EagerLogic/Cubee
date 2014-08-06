@@ -123,7 +123,7 @@ public abstract class ALayout extends AComponent {
     }
     
     private void getComponentsAtPosition(ALayout root, int x, int y, LinkedList<AComponent> result) {
-        if (x >= 0 && x < root.boundsWidthProperty().get() && y >= 0 && y <= root.boundsHeightProperty().get()) {
+        if (x >= 0 && x <= root.boundsWidthProperty().get() && y >= 0 && y <= root.boundsHeightProperty().get()) {
             result.addFirst(root);
             for (AComponent component : root.getChildren()) {
                 if (component == null) {
@@ -134,7 +134,7 @@ public abstract class ALayout extends AComponent {
                 if (component instanceof ALayout) {
                     getComponentsAtPosition((ALayout)component, tx, ty, result);
                 } else {
-                    if (tx >= 0 && tx < component.boundsWidthProperty().get() && y >= 0 && y <= component.boundsHeightProperty().get()) {
+                    if (tx >= 0 && tx <= component.boundsWidthProperty().get() && y >= 0 && y <= component.boundsHeightProperty().get()) {
                         result.addFirst(component);
                     }
                 }

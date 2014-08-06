@@ -1,6 +1,7 @@
 package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
+import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.Property;
@@ -61,6 +62,7 @@ public abstract class AUserControl extends ALayout {
     private IntegerProperty height = new IntegerProperty(null, true, false);
     private BackgroundProperty background = new BackgroundProperty(new ColorBackground(Color.TRANSPARENT), true, false);
     private Property<BoxShadow> shadow = new Property<BoxShadow>(null, true, false);
+    private BooleanProperty draggable = new BooleanProperty(false);
 
     public AUserControl() {
         super(DOM.createDiv());
@@ -115,6 +117,18 @@ public abstract class AUserControl extends ALayout {
                 }
             }
         });
+        draggable.addChangeListener(new IChangeListener() {
+
+            @Override
+            public void onChanged(Object sender) {
+                if (draggable.get()) {
+                    getElement().setAttribute("draggable", "true");
+                } else {
+                    getElement().setAttribute("draggable", "false");
+                }
+            }
+        });
+        draggable.invalidate();
 
         this.applyDefaultStyle(AUserControl.class);
     }
@@ -133,6 +147,10 @@ public abstract class AUserControl extends ALayout {
 
     protected Property<BoxShadow> shadowProperty() {
         return shadow;
+    }
+    
+    protected BooleanProperty draggableProperty() {
+        return draggable;
     }
 
     @Override
