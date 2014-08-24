@@ -148,4 +148,13 @@ public abstract class ALayout extends AComponent {
         
         children.clear(true);
     }
+    
+    protected void setChildLeft(AComponent child, int left) {
+        child.setLeft(left);
+    }
+    
+    protected void setChildTop(AComponent child, int top) {
+        child.setTop(top);
+    }
+    
 }
