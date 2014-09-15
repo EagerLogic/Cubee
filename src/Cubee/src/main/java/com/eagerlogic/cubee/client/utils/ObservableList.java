@@ -18,6 +18,7 @@ package com.eagerlogic.cubee.client.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -28,7 +29,7 @@ import java.util.ListIterator;
  *
  * @author dipacs
  */
-public final class ObservableList<T> {
+public final class ObservableList<T> implements Iterable<T> {
     
     private final List<IListChangeListener<T>> listeners = new LinkedList<IListChangeListener<T>>();
     
@@ -146,14 +147,6 @@ public final class ObservableList<T> {
             res |= remove(c);
         }
         return res;
-    }
-
-    public void sort(Comparator<? super T> c) {
-        list.sort(c);
-        fireClearedEvent();
-        for (int i = 0; i < list.size(); i++) {
-            fireItemAddedEvent(i, list.get(i));
-        }
     }
 
     public void clear() {
