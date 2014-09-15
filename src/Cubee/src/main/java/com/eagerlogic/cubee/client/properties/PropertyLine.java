@@ -1,5 +1,6 @@
 package com.eagerlogic.cubee.client.properties;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -15,6 +16,7 @@ class PropertyLine<T> {
     private final LinkedList<KeyFrame> keyFrames;
     private final Property<T> property;
     private long startTime = -1;
+    private long lastRunTime = -1;
     private KeyFrame previousFrame = null;
 
     public PropertyLine(LinkedList<KeyFrame> keyFrames) {
@@ -22,7 +24,7 @@ class PropertyLine<T> {
         this.property = keyFrames.get(0).getProperty();
         KeyFrame firstFrame = keyFrames.get(0);
         if (firstFrame.getTime() > 0) {
-            keyFrames.add(new KeyFrame(0, firstFrame.getProperty(), firstFrame.getProperty().get()));
+            keyFrames.add(0, new KeyFrame(0, firstFrame.getProperty(), firstFrame.getProperty().get()));
         }
     }
 
@@ -36,53 +38,42 @@ class PropertyLine<T> {
 
     public boolean animate() {
         long actTime = System.currentTimeMillis();
+        
         if (actTime == startTime) {
-            previousFrame = keyFrames.get(0);
-            return false;
+        	return false;
         }
-        KeyFrame actFrame = keyFrames.getFirst();
+        
+        
         KeyFrame nextFrame = null;
-        KeyFrame prevFrame = null;
-        boolean foundPreviousFrame = false;
+        KeyFrame actFrame = null;
         for (KeyFrame frame : keyFrames) {
-            if (startTime + frame.getTime() >= actTime) {
-                nextFrame = frame;
-                actFrame = prevFrame;
-                break;
-            }
-
-            if (frame == previousFrame) {
-                foundPreviousFrame = true;
-            }
-
-            // notify key frame reached listeners
-            if (foundPreviousFrame && actFrame == null) {
-                if (frame.getKeyFrameReachedListener() != null) {
-                    frame.getKeyFrameReachedListener().run();
-                }
-            }
-
-            prevFrame = frame;
+        	if (actTime >= startTime + frame.getTime()) {
+        		actFrame = frame;
+        	} else {
+        		nextFrame = frame;
+        		break;
+        	}
+        	
+        	if (startTime + frame.getTime() > lastRunTime && startTime + frame.getTime() <= actTime) {
+        		if (frame.getKeyFrameReachedListener() != null) {
+        			frame.getKeyFrameReachedListener().run();
+        		}
+        	}
         }
-
-        if (actFrame == null) {
-            if (keyFrames.getLast().getKeyFrameReachedListener() != null) {
-                keyFrames.getLast().getKeyFrameReachedListener().run();
-            }
+        
+        if (actFrame != null) {
+        	if (nextFrame != null) {
+        		double pos = ((actTime - startTime - actFrame.getTime())) / ((double)(nextFrame.getTime() - actFrame.getTime()));
+        		actFrame.getProperty().set(actFrame.getProperty().animate(pos, actFrame.getEndValue(), nextFrame.getEndValue()));
+        	} else {
+        		actFrame.getProperty().set(actFrame.getEndValue());
+        	}
         }
-
-        if (nextFrame == null || actFrame == null) {
-            property.set((T) keyFrames.getLast().getEndValue());
-            return true;
-        } else {
-            double pos = ((double) (actTime - startTime - actFrame.getTime())) / (nextFrame.getTime() - actFrame.getTime());
-            pos = nextFrame.getInterpolator().interpolate(pos);
-            property.set(property.animate(pos, (T) actFrame.getEndValue(), (T) nextFrame.getEndValue()));
-        }
-
-        previousFrame = actFrame;
-
-        return false;
+        
+        lastRunTime = actTime;
+        
+        return actTime >= startTime + keyFrames.getLast().getTime();
+        
     }
 
 }
