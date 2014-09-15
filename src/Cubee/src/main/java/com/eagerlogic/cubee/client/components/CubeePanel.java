@@ -111,7 +111,7 @@ public final class CubeePanel {
     }
     
     private void layout() {
-        Popups.layout();
+        Popups.requestLayout();
         this.contentPanel.layout();
     }
 

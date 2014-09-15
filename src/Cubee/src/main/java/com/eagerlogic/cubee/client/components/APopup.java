@@ -134,14 +134,6 @@ public abstract class APopup {
                 }
             });
         }
-        
-        EventQueue.getInstance().invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                layout();
-            }
-        });
     }
 
     final Panel getPopupRoot() {
@@ -240,7 +232,7 @@ public abstract class APopup {
     final void layout() {
         this.popupRoot.widthProperty().set(Window.getClientWidth());
         this.popupRoot.heightProperty().set(Window.getClientHeight());
-        this.popupRoot.layout();
+        this.rootComponentContainer.layout();
     }
 
 }

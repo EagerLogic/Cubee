@@ -19,6 +19,8 @@ package com.eagerlogic.cubee.client.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.eagerlogic.cubee.client.utils.ARunOnce;
+
 /**
  *
  * @author dipacs
@@ -26,16 +28,29 @@ import java.util.List;
 class Popups {
     
     private static final List<APopup> popups = new ArrayList<APopup>();
+    private static final ARunOnce layoutRunOnce = new ARunOnce() {
+		
+		@Override
+		protected void onRun() {
+			layout();
+		}
+	};
     
     static void addPopup(APopup popup) {
         popups.add(popup);
+        requestLayout();
     }
     
     static void removePopup(APopup popup) {
         popups.remove(popup);
+        requestLayout();
     }
     
-    static void layout() {
+    static void requestLayout() {
+    	layoutRunOnce.run();
+    }
+    
+    private static void layout() {
         for (APopup popup : popups) {
             popup.layout();
         }

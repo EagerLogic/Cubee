@@ -662,7 +662,7 @@ public abstract class AComponent extends ADestroyable {
             } else if (this.cubeePanel != null) {
                 this.cubeePanel.requestLayout();
             } else {
-                Popups.layout();
+                Popups.requestLayout();
             }
         }
     }
