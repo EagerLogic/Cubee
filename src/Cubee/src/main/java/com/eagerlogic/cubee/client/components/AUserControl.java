@@ -99,7 +99,7 @@ public abstract class AUserControl extends ALayout {
             public void onChanged(Object sender) {
                 getElement().getStyle().clearBackgroundColor();
                 getElement().getStyle().clearBackgroundImage();
-                getElement().getStyle().setProperty("background", "none");
+                getElement().getStyle().clearProperty("background");
                 if (background.get() != null) {
                     background.get().apply(getElement());
                 }
