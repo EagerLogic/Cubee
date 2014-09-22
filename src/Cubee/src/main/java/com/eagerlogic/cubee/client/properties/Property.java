@@ -25,7 +25,7 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
     private IChangeListener bindListener = new IChangeListener() {
         @Override
         public void onChanged(Object sender) {
-            invalidate();
+            invalidateIfNeeded();
         }
     };
 
@@ -186,8 +186,15 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
 
     @Override
     public final void invalidate() {
-        this.valid = false;
+    	this.valid = false;
         fireChangeListeners();
+    }
+    
+    public final void invalidateIfNeeded() {
+    	if (!this.valid) {
+    		return;
+    	}
+    	invalidate();
     }
 
     private void fireChangeListeners() {

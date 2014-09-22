@@ -604,14 +604,6 @@ public abstract class AComponent extends ADestroyable {
         });
 
         this.applyDefaultStyle(AComponent.class);
-        
-        EventQueue.getInstance().invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				postConstruct();
-			}
-		});
     }
     
     protected void invokePostConstruct() {

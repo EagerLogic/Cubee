@@ -19,7 +19,7 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
 
         @Override
         public void onChanged(Object sender) {
-            invalidate();
+            invalidateIfNeeded();
         }
     };
     private final LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
@@ -137,6 +137,13 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
         for (IChangeListener listener : changeListeners) {
             listener.onChanged(this);
         }
+    }
+    
+    public final void invalidateIfNeeded() {
+    	if (!this.valid) {
+    		return;
+    	}
+    	invalidate();
     }
     
     public final void destroy() {
