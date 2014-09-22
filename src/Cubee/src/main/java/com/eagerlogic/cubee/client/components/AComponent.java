@@ -26,10 +26,12 @@ import com.eagerlogic.cubee.client.style.StyleSheet;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.ECursor;
 import com.eagerlogic.cubee.client.style.styles.Padding;
+import com.eagerlogic.cubee.client.utils.ARunOnce;
 import com.eagerlogic.cubee.client.utils.Point2D;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.EventListener;
+
 import java.util.LinkedList;
 
 /**
@@ -373,6 +375,13 @@ public abstract class AComponent extends ADestroyable {
         }
 
     };
+    private final ARunOnce postConstructRunOnce = new ARunOnce() {
+		
+		@Override
+		protected void onRun() {
+			postConstruct();
+		}
+	};
 
     /**
      * Creates a new instance of AComponet.
@@ -595,6 +604,22 @@ public abstract class AComponent extends ADestroyable {
         });
 
         this.applyDefaultStyle(AComponent.class);
+        
+        EventQueue.getInstance().invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				postConstruct();
+			}
+		});
+    }
+    
+    protected void invokePostConstruct() {
+    	postConstructRunOnce.run();
+    }
+    
+    protected void postConstruct() {
+    	
     }
 
     void setCubeePanel(CubeePanel cubeePanel) {
