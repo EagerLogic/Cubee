@@ -15,6 +15,7 @@ import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.DOM;
 
 /**
@@ -93,6 +94,7 @@ public final class FAIcon extends AUserControl {
 
         this.widthProperty().bind(size);
         this.heightProperty().bind(size);
+        this.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         this.icon.set(icon);
 
         iElement = DOM.createElement("i");
@@ -103,7 +105,7 @@ public final class FAIcon extends AUserControl {
         spin.addChangeListener(changeListener);
         this.icon.addChangeListener(changeListener);
 
-        iElement.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
+        //iElement.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
 
         refreshStyle();
     }
