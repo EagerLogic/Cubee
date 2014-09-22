@@ -315,6 +315,11 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
             bidirectionalChangeListenerThis = null;
         }
     }
+    
+    public void unbindTargets() {
+    	// TODO null bindingSource of targets
+    	changeListeners.clear();
+    }
 
     @Override
     public boolean isBound() {

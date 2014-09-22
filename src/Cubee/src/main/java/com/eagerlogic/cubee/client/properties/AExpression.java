@@ -6,6 +6,7 @@ package com.eagerlogic.cubee.client.properties;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -84,13 +85,13 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
         return this.get();
     }
 
-    protected void bind(IProperty property) {
+    public void bind(IProperty property) {
         property.addChangeListener(bindingListener);
         this.bindingSources.add(property);
         this.invalidate();
     }
 
-    protected void bind(IProperty property, IProperty... properties) {
+    public void bind(IProperty property, IProperty... properties) {
         property.addChangeListener(bindingListener);
         this.bindingSources.add(property);
 
@@ -100,6 +101,34 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
         }
 
         this.invalidate();
+    }
+    
+    public void bind(List<IProperty> properties) {
+    	for (IProperty prop : properties) {
+            prop.addChangeListener(bindingListener);
+            this.bindingSources.add(prop);
+        }
+
+        this.invalidate();
+    }
+    
+    public void unbind() {
+    	for (IProperty prop : bindingSources) {
+    		prop.removeChangeListener(bindingListener);
+    	}
+    	bindingSources.clear();
+    	this.invalidate();
+    }
+    
+    public void unbind(IProperty property) {
+    	property.removeChangeListener(bindingListener);
+    	this.bindingSources.remove(property);
+    	this.invalidate();
+    }
+    
+    public void unbindTargets() {
+    	// TODO null bindingSource of targets
+    	changeListeners.clear();
     }
 
     @Override
