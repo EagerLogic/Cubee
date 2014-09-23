@@ -271,12 +271,26 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
     }
 
     public void bidirectionalBind(Property<T> other) {
+    	if (isBound()) {
+            throw new IllegalStateException("This property is already bound.");
+        }
+
+        if (readonly) {
+            throw new IllegalStateException("Can't bind a readonly property.");
+        }
+        
         if (other == null) {
-            throw new NullPointerException("The other parameter can not be null.");
+        	throw new NullPointerException("The other parameter can not be null.");
         }
+        
+        if (other.isReadonly()) {
+        	throw new IllegalArgumentException("Can not bind a property bidirectionally to a readonly property.");
+        }
+        
         if (other == this) {
-            throw new IllegalArgumentException("Can not bound a property bidirectionally for themself.");
+            throw new IllegalArgumentException("Can not bind a property bidirectionally for themself.");
         }
+        
         if (isBound()) {
             throw new IllegalStateException("This property is already bound.");
         }

@@ -30,5 +30,24 @@ public class BooleanProperty extends Property<Boolean> {
     public BooleanProperty(Boolean defaultValue, boolean nullable, boolean readonly, AValidator<Boolean> validator) {
         super(defaultValue, nullable, readonly, validator);
     }
+    
+    public final BooleanProperty not() {
+    	final BooleanProperty res = new BooleanProperty();
+    	res.bind(new AExpression<Boolean>() {
+    		
+    		{
+    			bind(res);
+    		}
+
+			@Override
+			public Boolean calculate() {
+				if (BooleanProperty.this.get() == null || BooleanProperty.this.get() == false) {
+					return true;
+				}
+				return false;
+			}
+		});
+    	return res;
+    }
 
 }
