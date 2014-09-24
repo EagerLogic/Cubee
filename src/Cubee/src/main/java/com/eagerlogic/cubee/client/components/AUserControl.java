@@ -66,15 +66,17 @@ public abstract class AUserControl extends ALayout {
 
     public AUserControl() {
         super(DOM.createDiv());
+        getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
+        getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
         width.addChangeListener(new IChangeListener() {
             @Override
             public void onChanged(Object sender) {
                 if (width.get() == null) {
                     getElement().getStyle().clearWidth();
-                    getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
+                    //getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 } else {
                     getElement().getStyle().setWidth(width.get(), com.google.gwt.dom.client.Style.Unit.PX);
-                    getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
+                    //getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 }
                 requestLayout();
             }
@@ -85,10 +87,10 @@ public abstract class AUserControl extends ALayout {
             public void onChanged(Object sender) {
                 if (height.get() == null) {
                     getElement().getStyle().clearHeight();
-                    getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
+                    //getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 } else {
                     getElement().getStyle().setHeight(height.get(), com.google.gwt.dom.client.Style.Unit.PX);
-                    getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
+                    //getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 }
                 requestLayout();
             }

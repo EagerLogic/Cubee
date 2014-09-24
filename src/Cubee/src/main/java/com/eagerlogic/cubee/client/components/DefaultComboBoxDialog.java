@@ -74,7 +74,7 @@ public final class DefaultComboBoxDialog<T> extends AComboBoxDialog<T> {
         vbMain.getChildren().add(spMain);
 
         this.vbox = new VBox();
-        spMain.setContent(this.vbox);
+        spMain.contentProperty().set(this.vbox);
 
         if (emptySelectionEnabled) {
             vbox.getChildren().add(createItem(emptySelectionText, -1, vbox));
