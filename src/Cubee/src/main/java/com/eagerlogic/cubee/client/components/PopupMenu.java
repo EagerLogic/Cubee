@@ -74,11 +74,11 @@ public final class PopupMenu extends APopup implements ICloseable {
         this(true, true, Color.TRANSPARENT, items);
     }
 
-    public PopupMenu(List<AMenuItem> items) {
+    public PopupMenu(List<? extends AMenuItem> items) {
         this(true, true, Color.TRANSPARENT, items);
     }
 
-    public PopupMenu(boolean modal, boolean autoClose, Color glassColor, List<AMenuItem> items) {
+    public PopupMenu(boolean modal, boolean autoClose, Color glassColor, List<? extends AMenuItem> items) {
         this(modal, autoClose, glassColor, items == null ? null : items.toArray(new AMenuItem[items.size()]));
     }
 
