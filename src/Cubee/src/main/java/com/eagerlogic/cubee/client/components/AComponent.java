@@ -348,6 +348,8 @@ public abstract class AComponent extends ADestroyable {
     private final IntegerProperty maxHeight = new IntegerProperty(null, true, false);
     private final BooleanProperty hovered = new BooleanProperty(false, false, true);
     private final BooleanProperty hoveredSetter = new BooleanProperty(false, false, false);
+    private final BooleanProperty pressed = new BooleanProperty(false, false, true);
+    private final BooleanProperty pressedSetter = new BooleanProperty(false, false, false);
     private final Event<ClickEventArgs> onClick = new Event<ClickEventArgs>();
     private final Event<MouseDownEventArgs> onMouseDown = new Event<MouseDownEventArgs>();
     private final Event<MouseDragEventArgs> onMouseDrag = new Event<MouseDragEventArgs>();
@@ -404,6 +406,7 @@ public abstract class AComponent extends ADestroyable {
         transformCenterX.addChangeListener(transformChangedListener);
         transformCenterY.addChangeListener(transformChangedListener);
         hovered.initReadonlyBind(hoveredSetter);
+        pressed.initReadonlyBind(pressedSetter);
         padding.addChangeListener(new IChangeListener() {
 
             @Override
@@ -602,6 +605,20 @@ public abstract class AComponent extends ADestroyable {
             }
 
         });
+        this.onMouseDown.addListener(new IEventListener<MouseDownEventArgs>() {
+
+			@Override
+			public void onFired(MouseDownEventArgs args) {
+				pressedSetter.set(true);
+			}
+		});
+        this.onMouseUp.addListener(new IEventListener<MouseUpEventArgs>() {
+
+			@Override
+			public void onFired(MouseUpEventArgs args) {
+				pressedSetter.set(false);
+			}
+		});
 
         this.applyDefaultStyle(AComponent.class);
     }
@@ -1358,6 +1375,10 @@ public abstract class AComponent extends ADestroyable {
 
     public final BooleanProperty hoveredProperty() {
         return this.hovered;
+    }
+    
+    public final BooleanProperty pressedProperty() {
+        return this.pressed;
     }
 
     protected void onDestroy() {
