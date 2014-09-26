@@ -1,6 +1,5 @@
 package com.eagerlogic.cubee.client.components;
 
-import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.events.ClickEventArgs;
 import com.eagerlogic.cubee.client.events.IEventListener;
 import com.eagerlogic.cubee.client.properties.AExpression;
@@ -92,7 +91,7 @@ public abstract class APopup {
         this.rootComponentContainer.translateXProperty().bind(new AExpression<Integer>() {
 
             {
-                this.bind(center, popupRoot.boundsWidthProperty(), translateX,
+                this.bind(center, popupRoot.clientWidthProperty(), translateX,
                         rootComponentContainer.boundsWidthProperty());
             }
 
@@ -109,7 +108,7 @@ public abstract class APopup {
         this.rootComponentContainer.translateYProperty().bind(new AExpression<Integer>() {
 
             {
-                this.bind(center, popupRoot.boundsHeightProperty(), translateY,
+                this.bind(center, popupRoot.clientHeightProperty(), translateY,
                         rootComponentContainer.boundsHeightProperty());
             }
 
@@ -117,7 +116,7 @@ public abstract class APopup {
             public Integer calculate() {
                 int baseY = 0;
                 if (center.get()) {
-                    baseY = (popupRoot.boundsHeightProperty().get()
+                    baseY = (popupRoot.clientHeightProperty().get()
                             - rootComponentContainer.boundsHeightProperty().get()) / 2;
                 }
                 return baseY + translateY.get();
@@ -232,7 +231,7 @@ public abstract class APopup {
     final void layout() {
         this.popupRoot.widthProperty().set(Window.getClientWidth());
         this.popupRoot.heightProperty().set(Window.getClientHeight());
-        this.rootComponentContainer.layout();
+        this.popupRoot.layout();
     }
 
 }
