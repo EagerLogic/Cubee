@@ -1,6 +1,5 @@
 package com.eagerlogic.cubee.client.style.styles;
 
-import com.eagerlogic.cubee.client.style.styles.IStyle;
 import com.google.gwt.dom.client.Element;
 
 /**
@@ -44,16 +43,16 @@ public final class Border implements IStyle {
             Color leftBorderColor, Color topBorderColor, Color rightBorderColor, Color bottomBorderColor,
             int topLeftBorderRadius, int topRightBorderRadius, int bottomRightBorderRadius, int bottomLeftBorderRadius) {
         if (leftBorderColor == null) {
-            throw new NullPointerException("The leftBorderColor property can not be null.");
+            leftBorderColor = Color.TRANSPARENT;
         }
         if (topBorderColor == null) {
-            throw new NullPointerException("The topBorderColor property can not be null.");
+        	topBorderColor = Color.TRANSPARENT;
         }
         if (rightBorderColor == null) {
-            throw new NullPointerException("The rightBorderColor property can not be null.");
+        	rightBorderColor = Color.TRANSPARENT;
         }
         if (bottomBorderColor == null) {
-            throw new NullPointerException("The bottomBorderColor property can not be null.");
+        	bottomBorderColor = Color.TRANSPARENT;
         }
         this.leftBorderSize = leftBorderSize;
         this.topBorderSize = topBorderSize;
