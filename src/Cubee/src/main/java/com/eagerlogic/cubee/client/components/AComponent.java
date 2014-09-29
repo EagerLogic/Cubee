@@ -1,7 +1,16 @@
 package com.eagerlogic.cubee.client.components;
 
+import java.util.LinkedList;
+
 import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.events.ClickEventArgs;
+import com.eagerlogic.cubee.client.events.DragEndEventArgs;
+import com.eagerlogic.cubee.client.events.DragEnterEventArgs;
+import com.eagerlogic.cubee.client.events.DragEventArgs;
+import com.eagerlogic.cubee.client.events.DragLeaveEventArgs;
+import com.eagerlogic.cubee.client.events.DragOverEventArgs;
+import com.eagerlogic.cubee.client.events.DragStartEventArgs;
+import com.eagerlogic.cubee.client.events.DropEventArgs;
 import com.eagerlogic.cubee.client.events.Event;
 import com.eagerlogic.cubee.client.events.EventArgs;
 import com.eagerlogic.cubee.client.events.IEventListener;
@@ -31,8 +40,6 @@ import com.eagerlogic.cubee.client.utils.Point2D;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.EventListener;
-
-import java.util.LinkedList;
 
 /**
  * This class is the base class of all the components in Cubee. This class wraps a html element. You can inherite from
@@ -192,29 +199,52 @@ public abstract class AComponent extends ADestroyable {
 
         @Override
         public void onBrowserEvent(com.google.gwt.user.client.Event event) {
-            if (AComponent.this instanceof TextBox) {
-                if ((event.getTypeInt() & com.google.gwt.user.client.Event.ONKEYUP) > 0) {
-                    EventQueue.getInstance().invokePrior(new Runnable() {
+            handleNativeEvent(event);
+        }
 
-                        @Override
-                        public void run() {
-                            ((TextBox) AComponent.this).textProperty().set(getElement().getPropertyString("value"));
-                        }
+    };
+    
+    private void handleNativeEvent(com.google.gwt.user.client.Event event) {
+    	if (this instanceof TextBox) {
+            if ((event.getTypeInt() & com.google.gwt.user.client.Event.ONKEYUP) > 0) {
+                EventQueue.getInstance().invokePrior(new Runnable() {
 
-                    });
-                }
+                    @Override
+                    public void run() {
+                        ((TextBox) AComponent.this).textProperty().set(getElement().getPropertyString("value"));
+                    }
+
+                });
             }
+        }
 
-            int x = event.getClientX();
-            int y = event.getClientY();
-            int wheelVelocity = event.getMouseWheelVelocityY();
-            AComponent parent;
-            KeyEventArgs keyArgs;
-            CubeePanel cp = getCubeePanel();
-            switch (event.getTypeInt()) {
-                case com.google.gwt.user.client.Event.ONMOUSEDOWN:
-                case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
-                    event.stopPropagation();
+        int x = event.getClientX();
+        int y = event.getClientY();
+        int wheelVelocity = event.getMouseWheelVelocityY();
+        AComponent parent;
+        KeyEventArgs keyArgs;
+        CubeePanel cp = getCubeePanel();
+        switch (event.getTypeInt()) {
+            case com.google.gwt.user.client.Event.ONMOUSEDOWN:
+            case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
+                event.stopPropagation();
+                if (cp != null) {
+                    cp.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                            event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
+                            event.getTypeInt());
+                } else {
+                    Popups.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                            event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
+                            event.getTypeInt());
+                }
+
+                break;
+            case com.google.gwt.user.client.Event.ONMOUSEMOVE:
+                event.stopPropagation();
+                if (pointerDownEvents.size() > 0) {
+                    fireDragEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(),
+                            event.getShiftKey(), event.getMetaKey());
+                } else {
                     if (cp != null) {
                         cp.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
                                 event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
@@ -224,92 +254,74 @@ public abstract class AComponent extends ADestroyable {
                                 event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
                                 event.getTypeInt());
                     }
+                }
+                break;
 
-                    break;
-                case com.google.gwt.user.client.Event.ONMOUSEMOVE:
-                    event.stopPropagation();
-                    if (pointerDownEvents.size() > 0) {
-                        fireDragEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(),
-                                event.getShiftKey(), event.getMetaKey());
-                    } else {
-                        if (cp != null) {
-                            cp.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
-                                    event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
-                                    event.getTypeInt());
-                        } else {
-                            Popups.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
-                                    event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
-                                    event.getTypeInt());
-                        }
-                    }
-                    break;
+            case com.google.gwt.user.client.Event.ONMOUSEUP:
+                event.stopPropagation();
+                fireUpEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(), event
+                        .getShiftKey(), event.getMetaKey());
+                break;
+            case com.google.gwt.user.client.Event.ONMOUSEOVER:
+                if (pointerTransparent.get()) {
+                    return;
+                }
 
-                case com.google.gwt.user.client.Event.ONMOUSEUP:
-                    event.stopPropagation();
-                    fireUpEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(), event
-                            .getShiftKey(), event.getMetaKey());
-                    break;
-                case com.google.gwt.user.client.Event.ONMOUSEOVER:
-                    if (pointerTransparent.get()) {
+                // check handle pointer
+                parent = AComponent.this;
+                while (parent != null) {
+                    if (!parent.handlePointer.get()) {
                         return;
                     }
+                    parent = parent.getParent();
+                }
+                if (!hoveredProperty().get()) {
+                    onMouseEnter.fireEvent(new EventArgs(AComponent.this));
+                }
+                break;
+            case com.google.gwt.user.client.Event.ONMOUSEOUT:
+                if (pointerTransparent.get()) {
+                    return;
+                }
 
-                    // check handle pointer
-                    parent = AComponent.this;
-                    while (parent != null) {
-                        if (!parent.handlePointer.get()) {
-                            return;
-                        }
-                        parent = parent.getParent();
-                    }
-                    if (!hoveredProperty().get()) {
-                        onMouseEnter.fireEvent(new EventArgs(AComponent.this));
-                    }
-                    break;
-                case com.google.gwt.user.client.Event.ONMOUSEOUT:
-                    if (pointerTransparent.get()) {
+                // check handle pointer
+                parent = AComponent.this;
+                while (parent != null) {
+                    if (!parent.handlePointer.get()) {
                         return;
                     }
-
-                    // check handle pointer
-                    parent = AComponent.this;
-                    while (parent != null) {
-                        if (!parent.handlePointer.get()) {
-                            return;
-                        }
-                        parent = parent.getParent();
-                    }
-                    if (hoveredProperty().get()) {
-                        /*int compX = getLeft();
-                         int compY = getTop();
-                         if (x >= compX && y >= compY && x <= compX + boundsWidthProperty().get() && y <= compY + boundsHeightProperty().get()) {
-                         return;
-                         }*/
-                        onMouseLeave.fireEvent(new EventArgs(AComponent.this));
-                    }
-                    break;
-                case com.google.gwt.user.client.Event.ONKEYDOWN:
-                    event.stopPropagation();
-                    keyArgs = new KeyEventArgs((char) event.getKeyCode(), event.getAltKey(), event.getCtrlKey(),
-                            event.getShiftKey(), event.getMetaKey(), AComponent.this);
-                    onKeyDown.fireEvent(keyArgs);
-                    break;
-                case com.google.gwt.user.client.Event.ONKEYPRESS:
-                    event.stopPropagation();
-                    keyArgs = new KeyEventArgs((char) event.getKeyCode(), event.getAltKey(), event.getCtrlKey(),
-                            event.getShiftKey(), event.getMetaKey(), AComponent.this);
-                    onKeyPress.fireEvent(keyArgs);
-                    break;
-                case com.google.gwt.user.client.Event.ONKEYUP:
-                    event.stopPropagation();
-                    keyArgs = new KeyEventArgs((char) event.getKeyCode(), event.getAltKey(), event.getCtrlKey(),
-                            event.getShiftKey(), event.getMetaKey(), AComponent.this);
-                    onKeyUp.fireEvent(keyArgs);
-                    break;
-            }
+                    parent = parent.getParent();
+                }
+                if (hoveredProperty().get()) {
+                    /*int compX = getLeft();
+                     int compY = getTop();
+                     if (x >= compX && y >= compY && x <= compX + boundsWidthProperty().get() && y <= compY + boundsHeightProperty().get()) {
+                     return;
+                     }*/
+                    onMouseLeave.fireEvent(new EventArgs(AComponent.this));
+                }
+                break;
+            case com.google.gwt.user.client.Event.ONKEYDOWN:
+                event.stopPropagation();
+                keyArgs = new KeyEventArgs((char) event.getKeyCode(), event.getAltKey(), event.getCtrlKey(),
+                        event.getShiftKey(), event.getMetaKey(), AComponent.this);
+                onKeyDown.fireEvent(keyArgs);
+                break;
+            case com.google.gwt.user.client.Event.ONKEYPRESS:
+                event.stopPropagation();
+                keyArgs = new KeyEventArgs((char) event.getKeyCode(), event.getAltKey(), event.getCtrlKey(),
+                        event.getShiftKey(), event.getMetaKey(), AComponent.this);
+                onKeyPress.fireEvent(keyArgs);
+                break;
+            case com.google.gwt.user.client.Event.ONKEYUP:
+                event.stopPropagation();
+                keyArgs = new KeyEventArgs((char) event.getKeyCode(), event.getAltKey(), event.getCtrlKey(),
+                        event.getShiftKey(), event.getMetaKey(), AComponent.this);
+                onKeyUp.fireEvent(keyArgs);
+                break;
         }
-
-    };
+    }
+    
     private final IntegerProperty translateX = new IntegerProperty(0, false, false);
     private final IntegerProperty translateY = new IntegerProperty(0, false, false);
     private final DoubleProperty rotate = new DoubleProperty(0.0, false, false);
@@ -361,6 +373,13 @@ public abstract class AComponent extends ADestroyable {
     private final Event<KeyEventArgs> onKeyDown = new Event<KeyEventArgs>();
     private final Event<KeyEventArgs> onKeyPress = new Event<KeyEventArgs>();
     private final Event<KeyEventArgs> onKeyUp = new Event<KeyEventArgs>();
+    private final Event<DragStartEventArgs> onDragStart = new Event<DragStartEventArgs>();
+    private final Event<DragEventArgs> onDrag = new Event<DragEventArgs>();
+    private final Event<DragEnterEventArgs> onDragEnter = new Event<DragEnterEventArgs>();
+    private final Event<DragLeaveEventArgs> onDragLeave = new Event<DragLeaveEventArgs>();
+    private final Event<DragOverEventArgs> onDragOver = new Event<DragOverEventArgs>();
+    private final Event<DropEventArgs> onDrop = new Event<DropEventArgs>();
+    private final Event<DragEndEventArgs> onDragEnd = new Event<DragEndEventArgs>();
     private final Event<ParentChangedEventArgs> onParentChanged = new Event<ParentChangedEventArgs>();
     private int left = 0;
     private int top = 0;
@@ -368,7 +387,7 @@ public abstract class AComponent extends ADestroyable {
     private ALayout parent;
     boolean needsLayout = true;
     private CubeePanel cubeePanel;
-    private IChangeListener transformChangedListener = new IChangeListener() {
+    private final IChangeListener transformChangedListener = new IChangeListener() {
 
         @Override
         public void onChanged(Object sender) {
@@ -585,9 +604,9 @@ public abstract class AComponent extends ADestroyable {
         boundsLeft.initReadonlyBind(boundsLeftSetter);
         boundsTop.initReadonlyBind(boundsTopSetter);
 
-        DOM.setEventListener((com.google.gwt.user.client.Element) getElement(), nativeEventListener);
+        DOM.setEventListener(getElement(), nativeEventListener);
         // sinking all the events
-        DOM.sinkEvents((com.google.gwt.user.client.Element) getElement(), -1);
+        DOM.sinkEvents(getElement(), -1);
 
         this.onMouseEnter.addListener(new IEventListener<EventArgs>() {
 
@@ -1118,7 +1137,35 @@ public abstract class AComponent extends ADestroyable {
         return onKeyUp;
     }
 
-    public final Event<ParentChangedEventArgs> onParentChangedEvent() {
+    public Event<DragStartEventArgs> onDragStartEvent() {
+		return onDragStart;
+	}
+
+	public Event<DragEventArgs> onDragEvent() {
+		return onDrag;
+	}
+
+	public Event<DragEnterEventArgs> onDragEnterEvent() {
+		return onDragEnter;
+	}
+
+	public Event<DragLeaveEventArgs> onDragLeaveEvent() {
+		return onDragLeave;
+	}
+
+	public Event<DragOverEventArgs> onDragOverEvent() {
+		return onDragOver;
+	}
+
+	public Event<DropEventArgs> onDropEvent() {
+		return onDrop;
+	}
+
+	public Event<DragEndEventArgs> onDragEndEvent() {
+		return onDragEnd;
+	}
+
+	public final Event<ParentChangedEventArgs> onParentChangedEvent() {
         return onParentChanged;
     }
 
@@ -1381,7 +1428,8 @@ public abstract class AComponent extends ADestroyable {
         return this.pressed;
     }
 
-    protected void onDestroy() {
+    @Override
+	protected void onDestroy() {
         translateX.destroy();
         translateY.destroy();
         rotate.destroy();
