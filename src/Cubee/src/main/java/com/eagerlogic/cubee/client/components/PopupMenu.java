@@ -1,5 +1,7 @@
 package com.eagerlogic.cubee.client.components;
 
+import java.util.List;
+
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
@@ -12,7 +14,6 @@ import com.eagerlogic.cubee.client.style.styles.BoxShadow;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ColorBackground;
 import com.eagerlogic.cubee.client.style.styles.Padding;
-import java.util.List;
 
 public final class PopupMenu extends APopup implements ICloseable {
 
@@ -123,8 +124,8 @@ public final class PopupMenu extends APopup implements ICloseable {
     }
 
     @Override
-    public void close() {
-        super.close();
+    public boolean close() {
+        return super.close();
     }
 
     @Override

@@ -161,14 +161,22 @@ public abstract class APopup {
         this.visible = true;
     }
 
-    protected void close() {
+    protected boolean close() {
         if (!visible) {
             throw new IllegalStateException("This popup isn't shown.");
+        }
+        if (!isCloseAllowed()) {
+        	return false;
         }
         RootPanel.get().getElement().removeChild(this.popupRoot.getElement());
         Popups.removePopup(this);
         this.visible = false;
         onClosed();
+        return true;
+    }
+    
+    protected boolean isCloseAllowed() {
+    	return true;
     }
 
     protected void onClosed() {
