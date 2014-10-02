@@ -46,7 +46,7 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>doctusoft.snapshot.public</id>
+			<id>doctusoft.snapshots.public</id>
 			<url>http://pubrepo.doctusoft.com/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
