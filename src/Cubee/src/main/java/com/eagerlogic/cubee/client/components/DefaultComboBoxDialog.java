@@ -2,7 +2,8 @@ package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.events.ClickEventArgs;
 import com.eagerlogic.cubee.client.events.IEventListener;
-import com.eagerlogic.cubee.client.properties.AExpression;
+import com.eagerlogic.cubee.client.properties.ext.CondExp;
+import com.eagerlogic.cubee.client.style.styles.ABackground;
 import com.eagerlogic.cubee.client.style.styles.Border;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.eagerlogic.cubee.client.style.styles.ColorBackground;
@@ -22,35 +23,30 @@ public final class DefaultComboBoxDialog<T> extends AComboBoxDialog<T> {
 
     public DefaultComboBoxDialog() {
         super(false);
-
     }
 
     private AComponent createItem(String title, final int result, final VBox root) {
+    	Panel res = new Panel();
+    	res.cursorProperty().set(ECursor.POINTER);
+    	res.backgroundProperty().bind(new CondExp<ABackground>(res.hoveredProperty(), new ColorBackground(Color.FUNKY_BLUE), (ABackground)null));
+    	res.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
+    		
+    		@Override
+    		public void onFired(ClickEventArgs args) {
+    			DefaultComboBoxDialog.this.result = result;
+    			close();
+    		}
+    	});
+    	
         Label label = new Label();
-        label.paddingProperty().set(new Padding(5));
+        label.paddingProperty().set(new Padding(25, 3, 25, 3));
         label.textProperty().set(title.toString());
-        label.minWidthProperty().bind(new AExpression<Integer>() {
-
-            {
-                this.bind(root.clientWidthProperty());
-            }
-
-            @Override
-            public Integer calculate() {
-                return root.clientWidthProperty().get() - 10;
-            }
-        });
+        label.minWidthProperty().bind(root.clientWidthProperty().subtract(50));
         label.textAlignProperty().set(ETextAlign.CENTER);
-        label.cursorProperty().set(ECursor.POINTER);
-        label.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
-
-            @Override
-            public void onFired(ClickEventArgs args) {
-                DefaultComboBoxDialog.this.result = result;
-                close();
-            }
-        });
-        return label;
+        label.handlePointerProperty().set(false);
+        res.getChildren().add(label);
+        
+        return res;
     }
 
     @Override
@@ -70,10 +66,11 @@ public final class DefaultComboBoxDialog<T> extends AComboBoxDialog<T> {
 
         ScrollPanel spMain = new ScrollPanel();
         spMain.maxHeightProperty().set(400);
-        spMain.minWidthProperty().bind(vbMain.clientWidthProperty());
         vbMain.getChildren().add(spMain);
 
         this.vbox = new VBox();
+        spMain.widthProperty().bind(vbox.boundsWidthProperty());
+        spMain.heightProperty().bind(vbox.boundsHeightProperty().add(20));
         spMain.contentProperty().set(this.vbox);
 
         if (emptySelectionEnabled) {
@@ -83,6 +80,7 @@ public final class DefaultComboBoxDialog<T> extends AComboBoxDialog<T> {
         int i = 0;
         for (T item : items) {
             vbox.getChildren().add(createItem(item.toString(), i, vbox));
+            vbox.setLastCellHAlign(EHAlign.CENTER);
             i++;
         }
 
@@ -103,6 +101,6 @@ public final class DefaultComboBoxDialog<T> extends AComboBoxDialog<T> {
         });
         btnPanel.getChildren().add(btnCancel);
         vbMain.getChildren().add(btnPanel);
-        vbMain.setCellHAlign(vbox.getChildren().size() - 1, EHAlign.CENTER);
+        vbMain.setLastCellHAlign(EHAlign.CENTER);
     }
 }

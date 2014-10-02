@@ -217,6 +217,7 @@ public final class ComboBox<T> extends AUserControl {
             public void onChanged(Object sender) {
                 if (selectedIndex.get() < 0) {
                     selectedItem.set(null);
+                    return;
                 }
                 int index = selectedIndex.get();
                 if (index > items.length - 1) {

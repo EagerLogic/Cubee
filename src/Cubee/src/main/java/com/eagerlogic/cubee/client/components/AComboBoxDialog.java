@@ -34,12 +34,15 @@ public abstract class AComboBoxDialog<T> extends ADialog {
     }
 
     @Override
-    protected final void close() {
+    protected final boolean close() {
         this.resultIndex = onClose();
-        super.close();
-        if (this.closeListener != null) {
-            this.closeListener.run();
+        boolean res = super.close();
+        if (res) {
+	        if (this.closeListener != null) {
+	            this.closeListener.run();
+	        }
         }
+        return res;
     }
 
     protected final void cancel() {
