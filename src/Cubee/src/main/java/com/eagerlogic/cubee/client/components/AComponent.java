@@ -4,16 +4,12 @@ import java.util.LinkedList;
 
 import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.events.ClickEventArgs;
-import com.eagerlogic.cubee.client.events.DragEndEventArgs;
-import com.eagerlogic.cubee.client.events.DragEnterEventArgs;
-import com.eagerlogic.cubee.client.events.DragEventArgs;
-import com.eagerlogic.cubee.client.events.DragLeaveEventArgs;
-import com.eagerlogic.cubee.client.events.DragOverEventArgs;
-import com.eagerlogic.cubee.client.events.DragStartEventArgs;
-import com.eagerlogic.cubee.client.events.DropEventArgs;
+import com.eagerlogic.cubee.client.events.DragAndDropEventArgs;
 import com.eagerlogic.cubee.client.events.Event;
 import com.eagerlogic.cubee.client.events.EventArgs;
+import com.eagerlogic.cubee.client.events.IDragAndDropEventListener;
 import com.eagerlogic.cubee.client.events.IEventListener;
+import com.eagerlogic.cubee.client.events.INativeEventListener;
 import com.eagerlogic.cubee.client.events.KeyEventArgs;
 import com.eagerlogic.cubee.client.events.MouseDownEventArgs;
 import com.eagerlogic.cubee.client.events.MouseDragEventArgs;
@@ -37,6 +33,7 @@ import com.eagerlogic.cubee.client.style.styles.ECursor;
 import com.eagerlogic.cubee.client.style.styles.Padding;
 import com.eagerlogic.cubee.client.utils.ARunOnce;
 import com.eagerlogic.cubee.client.utils.Point2D;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.EventListener;
@@ -195,6 +192,20 @@ public abstract class AComponent extends ADestroyable {
         }
         pointerDownEvents.clear();
     }
+    
+    public static native void addNativeEvent(Element element, String eventName, INativeEventListener nativeEventListener, boolean capturingPhase) /*-{
+    	var f = function (e) {
+    		nativeEventListener.@com.eagerlogic.cubee.client.events.INativeEventListener::onFired(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
+    	};
+    	nativeEventListener.$jsFunction = f;
+    	element.addEventListener(eventName, f, capturingPhase);
+    	
+    }-*/;
+    
+    public static native void removeNativeEvent(Element element, String eventName, INativeEventListener nativeEventListener, boolean capturingPhase) /*-{
+		element.removeEventListener(eventName, nativeEventListener.$jsFunction, capturingPhase);
+	}-*/;
+    
     private final EventListener nativeEventListener = new EventListener() {
 
         @Override
@@ -373,14 +384,21 @@ public abstract class AComponent extends ADestroyable {
     private final Event<KeyEventArgs> onKeyDown = new Event<KeyEventArgs>();
     private final Event<KeyEventArgs> onKeyPress = new Event<KeyEventArgs>();
     private final Event<KeyEventArgs> onKeyUp = new Event<KeyEventArgs>();
-    private final Event<DragStartEventArgs> onDragStart = new Event<DragStartEventArgs>();
-    private final Event<DragEventArgs> onDrag = new Event<DragEventArgs>();
-    private final Event<DragEnterEventArgs> onDragEnter = new Event<DragEnterEventArgs>();
-    private final Event<DragLeaveEventArgs> onDragLeave = new Event<DragLeaveEventArgs>();
-    private final Event<DragOverEventArgs> onDragOver = new Event<DragOverEventArgs>();
-    private final Event<DropEventArgs> onDrop = new Event<DropEventArgs>();
-    private final Event<DragEndEventArgs> onDragEnd = new Event<DragEndEventArgs>();
     private final Event<ParentChangedEventArgs> onParentChanged = new Event<ParentChangedEventArgs>();
+    private IDragAndDropEventListener dragStartListener;
+    private IDragAndDropEventListener dragListener;
+    private IDragAndDropEventListener dragEnterListener;
+    private IDragAndDropEventListener dragLeaveListener;
+    private IDragAndDropEventListener dragOverListener;
+    private IDragAndDropEventListener dropListener;
+    private IDragAndDropEventListener dragEndListener;
+    private INativeEventListener dragStartNativeListener;
+    private INativeEventListener dragNativeListener;
+    private INativeEventListener dragEnterNativeListener;
+    private INativeEventListener dragLeaveNativeListener;
+    private INativeEventListener dragOverNativeListener;
+    private INativeEventListener dropNativeListener;
+    private INativeEventListener dragEndNativeListener;
     private int left = 0;
     private int top = 0;
     private final Element element;
@@ -1137,32 +1155,151 @@ public abstract class AComponent extends ADestroyable {
         return onKeyUp;
     }
 
-    public Event<DragStartEventArgs> onDragStartEvent() {
-		return onDragStart;
+	public IDragAndDropEventListener getDragStartListener() {
+		return dragStartListener;
 	}
 
-	public Event<DragEventArgs> onDragEvent() {
-		return onDrag;
+	public void setDragStartListener(final IDragAndDropEventListener listener) {
+		if (dragStartNativeListener != null) {
+			AComponent.removeNativeEvent(getElement(), "dragstart", dragStartNativeListener, false);
+		}
+		if (listener != null) {
+			dragStartNativeListener = new INativeEventListener() {
+				
+				@Override
+				public void onFired(JavaScriptObject jsObj) {
+					listener.onFired(new DragAndDropEventArgs(jsObj));
+				}
+			};
+			AComponent.addNativeEvent(getElement(), "dragstart", dragStartNativeListener, false);
+		}
+		this.dragStartListener = listener;
 	}
 
-	public Event<DragEnterEventArgs> onDragEnterEvent() {
-		return onDragEnter;
+	public IDragAndDropEventListener getDragListener() {
+		return dragListener;
 	}
 
-	public Event<DragLeaveEventArgs> onDragLeaveEvent() {
-		return onDragLeave;
+	public void setDragListener(final IDragAndDropEventListener listener) {
+		if (dragNativeListener != null) {
+			AComponent.removeNativeEvent(getElement(), "drag", dragNativeListener, false);
+		}
+		if (listener != null) {
+			dragNativeListener = new INativeEventListener() {
+				
+				@Override
+				public void onFired(JavaScriptObject jsObj) {
+					listener.onFired(new DragAndDropEventArgs(jsObj));
+				}
+			};
+			AComponent.addNativeEvent(getElement(), "drag", dragNativeListener, false);
+		}
+		this.dragListener = listener;
 	}
 
-	public Event<DragOverEventArgs> onDragOverEvent() {
-		return onDragOver;
+	public IDragAndDropEventListener getDragEnterListener() {
+		return dragEnterListener;
 	}
 
-	public Event<DropEventArgs> onDropEvent() {
-		return onDrop;
+	public void setDragEnterListener(final IDragAndDropEventListener listener) {
+		if (dragEnterNativeListener != null) {
+			AComponent.removeNativeEvent(getElement(), "dragenter", dragEnterNativeListener, false);
+		}
+		if (listener != null) {
+			dragEnterNativeListener = new INativeEventListener() {
+				
+				@Override
+				public void onFired(JavaScriptObject jsObj) {
+					listener.onFired(new DragAndDropEventArgs(jsObj));
+				}
+			};
+			AComponent.addNativeEvent(getElement(), "dragenter", dragEnterNativeListener, false);
+		}
+		this.dragEnterListener = listener;
 	}
 
-	public Event<DragEndEventArgs> onDragEndEvent() {
-		return onDragEnd;
+	public IDragAndDropEventListener getDragLeaveListener() {
+		return dragLeaveListener;
+	}
+
+	public void setDragLeaveListener(final IDragAndDropEventListener listener) {
+		if (dragLeaveNativeListener != null) {
+			AComponent.removeNativeEvent(getElement(), "dragleave", dragLeaveNativeListener, false);
+		}
+		if (listener != null) {
+			dragLeaveNativeListener = new INativeEventListener() {
+				
+				@Override
+				public void onFired(JavaScriptObject jsObj) {
+					listener.onFired(new DragAndDropEventArgs(jsObj));
+				}
+			};
+			AComponent.addNativeEvent(getElement(), "dragleave", dragLeaveNativeListener, false);
+		}
+		this.dragLeaveListener = listener;
+	}
+
+	public IDragAndDropEventListener getDragOverListener() {
+		return dragOverListener;
+	}
+
+	public void setDragOverListener(final IDragAndDropEventListener listener) {
+		if (dragOverNativeListener != null) {
+			AComponent.removeNativeEvent(getElement(), "dragover", dragOverNativeListener, false);
+		}
+		if (listener != null) {
+			dragOverNativeListener = new INativeEventListener() {
+				
+				@Override
+				public void onFired(JavaScriptObject jsObj) {
+					listener.onFired(new DragAndDropEventArgs(jsObj));
+				}
+			};
+			AComponent.addNativeEvent(getElement(), "dragover", dragOverNativeListener, false);
+		}
+		this.dragOverListener = listener;
+	}
+
+	public IDragAndDropEventListener getDropListener() {
+		return dropListener;
+	}
+
+	public void setDropListener(final IDragAndDropEventListener listener) {
+		if (dropNativeListener != null) {
+			AComponent.removeNativeEvent(getElement(), "drop", dropNativeListener, false);
+		}
+		if (listener != null) {
+			dropNativeListener = new INativeEventListener() {
+				
+				@Override
+				public void onFired(JavaScriptObject jsObj) {
+					listener.onFired(new DragAndDropEventArgs(jsObj));
+				}
+			};
+			AComponent.addNativeEvent(getElement(), "drop", dropNativeListener, false);
+		}
+		this.dropListener = listener;
+	}
+
+	public IDragAndDropEventListener getDragEndListener() {
+		return dragEndListener;
+	}
+
+	public void setDragEndListener(final IDragAndDropEventListener listener) {
+		if (dragEndNativeListener != null) {
+			AComponent.removeNativeEvent(getElement(), "dragend", dragEndNativeListener, false);
+		}
+		if (listener != null) {
+			dragEndNativeListener = new INativeEventListener() {
+				
+				@Override
+				public void onFired(JavaScriptObject jsObj) {
+					listener.onFired(new DragAndDropEventArgs(jsObj));
+				}
+			};
+			AComponent.addNativeEvent(getElement(), "dragend", dragEndNativeListener, false);
+		}
+		this.dragEndListener = listener;
 	}
 
 	public final Event<ParentChangedEventArgs> onParentChangedEvent() {
