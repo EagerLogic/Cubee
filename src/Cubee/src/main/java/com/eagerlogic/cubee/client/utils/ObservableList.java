@@ -18,8 +18,6 @@ package com.eagerlogic.cubee.client.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,11 +27,22 @@ import java.util.ListIterator;
  *
  * @author dipacs
  */
-public final class ObservableList<T> implements Iterable<T> {
+public final class ObservableList<T> implements List<T> {
     
     private final List<IListChangeListener<T>> listeners = new LinkedList<IListChangeListener<T>>();
     
-    private final List<T> list = new ArrayList<T>();
+    private final List<T> list;
+    
+    public ObservableList() {
+        this(new ArrayList<T>());
+    }
+    
+    private ObservableList(List<T> list) {
+        if (list == null) {
+            throw new NullPointerException("The 'list' property can not be null.");
+        }
+        this.list = list;
+    }
     
     public void addListener(IListChangeListener<T> listener) {
         if (hasListener(listener)) {
@@ -77,36 +86,44 @@ public final class ObservableList<T> implements Iterable<T> {
         }
     }
 
+    @Override
     public int size() {
         return list.size();
     }
 
+    @Override
     public boolean isEmpty() {
         return list.isEmpty();
     }
 
-    public boolean contains(T o) {
+    @Override
+    public boolean contains(Object o) {
         return list.contains(o);
     }
 
+    @Override
     public Iterator<T> iterator() {
         return list.iterator();
     }
 
+    @Override
     public Object[] toArray() {
         return list.toArray();
     }
 
+    @Override
     public <T> T[] toArray(T[] a) {
         return list.toArray(a);
     }
 
+    @Override
     public boolean add(T e) {
         boolean res = list.add(e);
         fireItemAddedEvent(list.size() - 1, e);
         return res;
     }
 
+    @Override
     public boolean remove(Object o) {
         int index = list.indexOf(o);
         if (index < 0) {
@@ -117,10 +134,12 @@ public final class ObservableList<T> implements Iterable<T> {
         return true;
     }
 
+    @Override
     public boolean containsAll(Collection<?> c) {
         return list.containsAll(c);
     }
 
+    @Override
     public boolean addAll(Collection<? extends T> c) {
         int index = list.size();
         boolean res = list.addAll(c);
@@ -131,6 +150,7 @@ public final class ObservableList<T> implements Iterable<T> {
         return res;
     }
 
+    @Override
     public boolean addAll(int index, Collection<? extends T> c) {
         int startIndex = index;
         boolean res = list.addAll(index, c);
@@ -141,14 +161,16 @@ public final class ObservableList<T> implements Iterable<T> {
         return res;
     }
 
-    public boolean removeAll(Collection<? extends T> c) {
+    @Override
+    public boolean removeAll(Collection<?> c) {
         boolean res = false;
-        for (T t : c) {
+        for (Object o : c) {
             res |= remove(c);
         }
         return res;
     }
 
+    @Override
     public void clear() {
         list.clear();
         fireClearedEvent();
@@ -164,41 +186,61 @@ public final class ObservableList<T> implements Iterable<T> {
         return list.hashCode();
     }
 
+    @Override
     public T get(int index) {
         return list.get(index);
     }
 
+    @Override
     public T set(int index, T element) {
         T res = list.set(index, element);
         fireItemUpdatedEvent(index, res, element);
         return res;
     }
 
+    @Override
     public void add(int index, T element) {
         list.add(index, element);
         fireItemAddedEvent(index, element);
     }
 
+    @Override
     public T remove(int index) {
         T res = list.remove(index);
         fireItemRemovedEvent(index, res);
         return res;
     }
 
+    @Override
     public int indexOf(Object o) {
         return list.indexOf(o);
     }
 
+    @Override
     public int lastIndexOf(Object o) {
         return list.lastIndexOf(o);
     }
 
+    @Override
     public ListIterator<T> listIterator() {
         return list.listIterator();
     }
 
+    @Override
     public ListIterator<T> listIterator(int index) {
         return list.listIterator(index);
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        // TODO implementálni
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<T> subList(int fromIndex, int toIndex) {
+        // TODO implementálni
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
