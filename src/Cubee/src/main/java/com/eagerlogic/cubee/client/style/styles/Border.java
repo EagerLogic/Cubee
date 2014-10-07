@@ -22,21 +22,7 @@ public final class Border implements IStyle {
     private final int bottomLeftBorderRadius;
 
     public Border(int size, Color color, int radius) {
-        if (color == null) {
-            throw new NullPointerException("The color property can not be null.");
-        }
-        this.leftBorderSize = size;
-        this.topBorderSize = size;
-        this.rightBorderSize = size;
-        this.bottomBorderSize = size;
-        this.leftBorderColor = color;
-        this.topBorderColor = color;
-        this.rightBorderColor = color;
-        this.bottomBorderColor = color;
-        this.topLeftBorderRadius = radius;
-        this.topRightBorderRadius = radius;
-        this.bottomRightBorderRadius = radius;
-        this.bottomLeftBorderRadius = radius;
+    	this(size, size, size, size, color, color, color, color, radius, radius, radius, radius);
     }
 
     public Border(int leftBorderSize, int topBorderSize, int rightBorderSize, int bottomBorderSize,
