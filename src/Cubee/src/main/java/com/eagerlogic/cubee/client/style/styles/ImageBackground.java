@@ -1,10 +1,6 @@
 package com.eagerlogic.cubee.client.style.styles;
 
-import com.eagerlogic.cubee.client.style.styles.ABackground;
-import com.eagerlogic.cubee.client.style.styles.EHAlign;
-import com.eagerlogic.cubee.client.style.styles.EVAlign;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.ui.Image;
 
 /**
  *
@@ -58,7 +54,7 @@ public final class ImageBackground extends ABackground {
         this.vRepeat = vRepeat;
     }
 
-    public Image getImage() {
+	public Image getImage() {
         return image;
     }
 
@@ -74,7 +70,11 @@ public final class ImageBackground extends ABackground {
         if (image == null) {
             element.getStyle().clearBackgroundImage();
         } else {
-            element.getStyle().setBackgroundImage(image.getUrl());
+        	if (image.isFromResource()) {
+        		element.getStyle().setBackgroundImage("url('" + image.getImageResource().getSafeUri().asString() + "')");
+            } else {
+            	element.getStyle().setBackgroundImage("url('" + image.getUrl() + "')");
+            }
         }
     }
 
