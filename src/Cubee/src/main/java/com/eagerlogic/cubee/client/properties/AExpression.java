@@ -14,7 +14,7 @@ import java.util.List;
  */
 public abstract class AExpression<T> implements IProperty<T>, IObservable {
 
-    private LinkedList<IProperty> bindingSources = new LinkedList<IProperty>();
+    private final LinkedList<IProperty> bindingSources = new LinkedList<IProperty>();
     private IChangeListener bindingListener = new IChangeListener() {
 
         @Override
@@ -27,6 +27,18 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
     public abstract T calculate();
     private boolean valid = false;
     private T value;
+    
+    public AExpression() {
+    	
+    }
+    
+    public AExpression(IProperty<?> property, IProperty<?>... properties) {
+    	this.bind(property, properties);
+    }
+    
+    public AExpression(List<? extends IProperty<?>> properties) {
+    	bind(properties);
+    }
 
     public T get() {
         if (!valid) {
@@ -85,13 +97,13 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
         return this.get();
     }
 
-    public void bind(IProperty property) {
+    public void bind(IProperty<?> property) {
         property.addChangeListener(bindingListener);
         this.bindingSources.add(property);
         this.invalidate();
     }
 
-    public void bind(IProperty property, IProperty... properties) {
+    public void bind(IProperty<?> property, IProperty<?>... properties) {
         property.addChangeListener(bindingListener);
         this.bindingSources.add(property);
 
@@ -103,7 +115,7 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
         this.invalidate();
     }
     
-    public void bind(List<IProperty> properties) {
+    public void bind(List<? extends IProperty<?>> properties) {
     	for (IProperty prop : properties) {
             prop.addChangeListener(bindingListener);
             this.bindingSources.add(prop);
