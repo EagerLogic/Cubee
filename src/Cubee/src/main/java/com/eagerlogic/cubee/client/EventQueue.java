@@ -4,10 +4,11 @@
  */
 package com.eagerlogic.cubee.client;
 
-import com.google.gwt.user.client.Timer;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.google.gwt.user.client.Timer;
 
 /**
  *
@@ -32,7 +33,7 @@ public final class EventQueue {
         timer = new Timer() {
             @Override
             public void run() {
-                int size = queue.size();
+            	int size = queue.size();
                 try {
                     for (int i = 0; i < size; i++) {
                         // pollFirst() method isn't part of the GWT API
@@ -48,9 +49,9 @@ public final class EventQueue {
                     LOG.log(Level.SEVERE, t.getMessage(), t);
                 }
 
-                if (queue.size() > 0) {
-                    // if there is some other task than we need to act fast
-                    timer.schedule(1);
+                if (size > 0) {
+                    // if there were some task than we need to check fast if more tasks are received
+                    timer.schedule(0);
                 } else {
                     // if there isn't any task than we can relax a bit
                     timer.schedule(50);

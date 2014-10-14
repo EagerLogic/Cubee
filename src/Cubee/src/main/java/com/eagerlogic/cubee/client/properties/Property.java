@@ -4,10 +4,11 @@
  */
 package com.eagerlogic.cubee.client.properties;
 
-import com.eagerlogic.cubee.shared.utils.AValidator;
-import com.eagerlogic.cubee.shared.utils.ValidationException;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import com.eagerlogic.cubee.shared.utils.AValidator;
+import com.eagerlogic.cubee.shared.utils.ValidationException;
 
 /**
  *
@@ -15,8 +16,8 @@ import java.util.LinkedList;
  * @param <T> The type of the value which is boxed in this property.
  */
 public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IProperty<T>> {
-
-    private final LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
+	
+	private final LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
     private T value;
     private boolean valid = false;
     private final boolean nullable;

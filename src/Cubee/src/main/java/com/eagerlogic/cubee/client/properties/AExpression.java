@@ -8,11 +8,21 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.eagerlogic.cubee.client.utils.ARunOnce;
+
 /**
  *
  * @author dipacs
  */
 public abstract class AExpression<T> implements IProperty<T>, IObservable {
+	
+	private final ARunOnce notifyListenersOnce = new ARunOnce() {
+		
+		@Override
+		protected void onRun() {
+			fireChangeListeners();
+		}
+	};
 
     private final LinkedList<IProperty> bindingSources = new LinkedList<IProperty>();
     private IChangeListener bindingListener = new IChangeListener() {
@@ -146,9 +156,7 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
     @Override
     public final void invalidate() {
         this.valid = false;
-        for (IChangeListener listener : changeListeners) {
-            listener.onChanged(this);
-        }
+        notifyListenersOnce.run();
     }
     
     public final void invalidateIfNeeded() {
@@ -156,6 +164,12 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
     		return;
     	}
     	invalidate();
+    }
+    
+    private void fireChangeListeners() {
+    	for (IChangeListener listener : changeListeners) {
+            listener.onChanged(this);
+        }
     }
     
     public final void destroy() {
