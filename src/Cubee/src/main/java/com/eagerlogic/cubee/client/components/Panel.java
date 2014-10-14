@@ -1,6 +1,7 @@
 package com.eagerlogic.cubee.client.components;
 
 import com.eagerlogic.cubee.client.properties.BackgroundProperty;
+import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.BorderProperty;
 import com.eagerlogic.cubee.client.properties.IntegerProperty;
 import com.eagerlogic.cubee.client.properties.PaddingProperty;
@@ -125,5 +126,10 @@ public final class Panel extends AUserControl {
     public IntegerProperty maxHeightProperty() {
         return super.maxHeightProperty();
     }
+
+	@Override
+	public BooleanProperty draggableProperty() {
+		return super.draggableProperty();
+	}
 
 }
