@@ -1,10 +1,11 @@
 package com.eagerlogic.cubee.client.components;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.eagerlogic.cubee.client.style.styles.Padding;
 import com.eagerlogic.cubee.client.utils.Point2D;
 import com.google.gwt.dom.client.Element;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -61,8 +62,8 @@ public abstract class ALayout extends AComponent {
             for (int i = getChildren().size() - 1; i >= 0; i--) {
                 AComponent child = getChildren().get(i);
                 if (child != null) {
-                    int parentX = x;
-                    int parentY = y;
+                    int parentX = x + getElement().getScrollLeft();
+                    int parentY = y + getElement().getScrollTop();
                     Padding p = this.paddingProperty().get();
                     if (p != null) {
                         parentX -= p.getLeftPadding();

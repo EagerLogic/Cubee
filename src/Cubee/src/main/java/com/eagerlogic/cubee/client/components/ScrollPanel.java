@@ -185,10 +185,12 @@ public final class ScrollPanel extends AUserControl {
 		vScrollPolicy.invalidate();
 	}
 
+	@Override
 	public IntegerProperty widthProperty() {
 		return width;
 	}
 
+	@Override
 	public IntegerProperty heightProperty() {
 		return height;
 	}

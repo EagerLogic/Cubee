@@ -99,11 +99,7 @@ public final class CubeePanel {
             layoutRunOnce = new ARunOnce() {
                 @Override
                 protected void onRun() {
-                    // TODO remove sout
-                    //long ss = System.currentTimeMillis();
                     layout();
-                    //long es = System.currentTimeMillis();
-                    //System.out.println("!!! LAYING OUT !!!" + (es - ss) + "ms.");
                 }
             };
         }
@@ -127,26 +123,18 @@ public final class CubeePanel {
             this.rootComponent = rootComponent;
         }
     }
-
-//    void showPopup(APopup popup) {
-//        this.popupPanel.getChildren().add(popup.getPopupRoot());
-//    }
-//
-//    void closePopup(APopup popup) {
-//        this.popupPanel.getChildren().remove(popup.getPopupRoot());
-//    }
     
-    boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
+    boolean doPointerEventClimbingUp(int screenX, int screenY, int wheelVelocity,
             boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
-        if (Popups.doPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
+    	if (Popups.doPointerEventClimbingUp(screenX, screenY, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
             return true;
         }
         
         if (!Position.ABSOLUTE.equals(element.getStyle().getPosition())) {
-            x = screenX - left;
-            y = screenY - top;
+        	screenX = screenX + Window.getScrollLeft() - left;
+        	screenY = screenY + Window.getScrollTop() - top;
         }
-        return contentPanel.doPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type);
+        return contentPanel.doPointerEventClimbingUp(screenX, screenY, screenX, screenY, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type);
     }
 
     public final IntegerProperty clientWidthProperty() {

@@ -56,10 +56,10 @@ class Popups {
         }
     }
     
-    public static boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
+    public static boolean doPointerEventClimbingUp(int x, int y, int wheelVelocity,
             boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
         for (APopup popup : popups) {
-            if (popup.doPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
+            if (popup.doPointerEventClimbingUp(x, y, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
                 return true;
             }
         }

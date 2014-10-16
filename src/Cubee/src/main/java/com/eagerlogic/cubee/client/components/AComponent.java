@@ -229,7 +229,7 @@ public abstract class AComponent extends ADestroyable {
             }
         }
 
-        int x = event.getClientX();
+    	int x = event.getClientX();
         int y = event.getClientY();
         int wheelVelocity = event.getMouseWheelVelocityY();
         AComponent parent;
@@ -240,11 +240,11 @@ public abstract class AComponent extends ADestroyable {
             case com.google.gwt.user.client.Event.ONMOUSEWHEEL:
                 event.stopPropagation();
                 if (cp != null) {
-                    cp.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                    cp.doPointerEventClimbingUp(x, y, wheelVelocity,
                             event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
                             event.getTypeInt());
                 } else {
-                    Popups.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                    Popups.doPointerEventClimbingUp(x, y, wheelVelocity,
                             event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
                             event.getTypeInt());
                 }
@@ -257,11 +257,11 @@ public abstract class AComponent extends ADestroyable {
                             event.getShiftKey(), event.getMetaKey());
                 } else {
                     if (cp != null) {
-                        cp.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                        cp.doPointerEventClimbingUp(x, y, wheelVelocity,
                                 event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
                                 event.getTypeInt());
                     } else {
-                        Popups.doPointerEventClimbingUp(x, y, x, y, wheelVelocity,
+                        Popups.doPointerEventClimbingUp(x, y, wheelVelocity,
                                 event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
                                 event.getTypeInt());
                     }
