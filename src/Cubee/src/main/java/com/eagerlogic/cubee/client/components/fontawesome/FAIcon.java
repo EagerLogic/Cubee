@@ -5,7 +5,6 @@
  */
 package com.eagerlogic.cubee.client.components.fontawesome;
 
-import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.components.AUserControl;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.ColorProperty;
@@ -16,6 +15,7 @@ import com.eagerlogic.cubee.client.style.Style;
 import com.eagerlogic.cubee.client.style.styles.Color;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.DOM;
 
 /**
@@ -75,9 +75,9 @@ public final class FAIcon extends AUserControl {
     private final BooleanProperty spin = new BooleanProperty(false, false, false);
     private final Property<EIcon> icon = new Property<EIcon>(EIcon.RUB, false, false);
 
-    private Element iElement;
+    private final Element iElement;
 
-    private IChangeListener changeListener = new IChangeListener() {
+    private final IChangeListener changeListener = new IChangeListener() {
 
         @Override
         public void onChanged(Object sender) {
@@ -105,8 +105,6 @@ public final class FAIcon extends AUserControl {
         spin.addChangeListener(changeListener);
         this.icon.addChangeListener(changeListener);
 
-        //iElement.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
-
         refreshStyle();
     }
 
@@ -121,18 +119,7 @@ public final class FAIcon extends AUserControl {
         if (spin.get()) {
             iElement.addClassName("fa-spin");
         }
-
-        final int s = size.get();
-        final int width = iElement.getClientWidth();
-        EventQueue.getInstance().invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-//                iElement.getStyle().setProperty("transform", "translate(" + ((s - width) / 2) + "px, 0px)");
-//                iElement.getStyle().setProperty("msTransform", "translate(" + ((s - width) / 2) + "px, 0px)");
-//                iElement.getStyle().setProperty("webkitTransform", "translate(" + ((s - width) / 2) + "px, 0px)");
-            }
-        });
+        this.getElement().getStyle().setLineHeight(size.get(), Unit.PX);
 
         iElement.getStyle().setProperty("webkitBackfaceVisibility", "hidden");
     }
