@@ -4,9 +4,10 @@
  */
 package com.eagerlogic.cubee.client.components;
 
-import com.eagerlogic.cubee.client.events.ParentChangedEventArgs;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import com.eagerlogic.cubee.client.events.ParentChangedEventArgs;
 
 /**
  *
@@ -32,6 +33,26 @@ public final class LayoutChildren implements Iterable<AComponent> {
 
         children.add(component);
         parent.onChildAdded(component);
+    }
+    
+    public void add(int index, AComponent component) {
+    	if (component != null) {
+            if (component.getParent() != null) {
+                throw new IllegalStateException("The component is already a child of a layout.");
+            }
+        }
+    	
+    	LinkedList<AComponent> newChildren = new LinkedList<AComponent>();
+    	for (AComponent c : children) {
+    		newChildren.add(c);
+    	}
+    	newChildren.add(index, component);
+    	
+    	clear();
+    	
+    	for (AComponent c : newChildren) {
+    		add(c);
+    	}
     }
 
     public void remove(AComponent component) {
