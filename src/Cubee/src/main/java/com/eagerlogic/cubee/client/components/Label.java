@@ -190,6 +190,14 @@ public final class Label extends AComponent {
             @Override
             public void onChanged(Object sender) {
                 textOverFlow.get().apply(getElement());
+                if (textOverFlow.get() == ETextOverflow.ELLIPSIS) {
+                	getElement().getStyle().setProperty("whiteSpace", "nowrap");
+                	getElement().getStyle().setProperty("owerflow", "hidden");
+                } else {
+                	getElement().getStyle().clearProperty("whiteSpace");
+                	width.invalidate();
+                	height.invalidate();
+                }
                 requestLayout();
             }
         });

@@ -23,7 +23,7 @@ public enum ETextOverflow implements IStyle {
 
     @Override
     public void apply(Element element) {
-        element.getStyle().setProperty("textOverflow", css);
+    	element.getStyle().setProperty("textOverflow", css);
     }
 
 }
