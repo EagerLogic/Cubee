@@ -820,26 +820,6 @@ public abstract class AComponent extends ADestroyable {
     }
 
     private Point2D rotatePoint(int cx, int cy, int x, int y, double angle) {
-//        x = x - cx;
-//        y = y - cy;
-//        angle = ((angle / 2) * Math.PI);
-//        double cosAngle = Math.cos(angle);
-//        double sinAngle = Math.sin(angle);
-//
-//        int resX = (int) ((x * cosAngle) - (y * sinAngle));
-//        int resY = (int) ((x * sinAngle) + (y * cosAngle));
-//        resX += cx;
-//        resY += cy;
-//        return new Point2D(resX, resY);
-
-//        /*
-//        angle = (angle ) * (Math.PI/180); // Convert to radians
-//var rotatedX = Math.cos(angle) * (point.x - center.x) - Math.sin(angle) * (point.y-center.y) + center.x;
-//var rotatedY = Math.sin(angle) * (point.x - center.x) + Math.cos(angle) * (point.y - center.y) + center.y;
-// 
-//return new createjs.Point(rotatedX,rotatedY);
-//        */
-//        
         angle = (angle * 360) * (Math.PI / 180);
         x = x - cx;
         y = y - cy;
