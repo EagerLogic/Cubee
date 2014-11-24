@@ -429,6 +429,7 @@ public abstract class AComponent extends ADestroyable {
      */
     public AComponent(Element rootElement) {
         this.element = rootElement;
+        this.element.getStyle().setProperty("boxSizing", "content-box");
         this.element.setAttribute("draggable", "false");
         this.element.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
         getElement().getStyle().setOutlineStyle(com.google.gwt.dom.client.Style.OutlineStyle.NONE);
