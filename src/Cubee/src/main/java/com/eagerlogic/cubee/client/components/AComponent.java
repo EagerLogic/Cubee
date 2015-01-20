@@ -192,20 +192,20 @@ public abstract class AComponent extends ADestroyable {
         }
         pointerDownEvents.clear();
     }
-    
+
     public static native void addNativeEvent(Element element, String eventName, INativeEventListener nativeEventListener, boolean capturingPhase) /*-{
     	var f = function (e) {
     		nativeEventListener.@com.eagerlogic.cubee.client.events.INativeEventListener::onFired(Lcom/google/gwt/core/client/JavaScriptObject;)(e);
     	};
     	nativeEventListener.$jsFunction = f;
     	element.addEventListener(eventName, f, capturingPhase);
-    	
+
     }-*/;
-    
+
     public static native void removeNativeEvent(Element element, String eventName, INativeEventListener nativeEventListener, boolean capturingPhase) /*-{
 		element.removeEventListener(eventName, nativeEventListener.$jsFunction, capturingPhase);
 	}-*/;
-    
+
     private final EventListener nativeEventListener = new EventListener() {
 
         @Override
@@ -214,7 +214,7 @@ public abstract class AComponent extends ADestroyable {
         }
 
     };
-    
+
     private void handleNativeEvent(com.google.gwt.user.client.Event event) {
     	if (this instanceof TextBox) {
             if ((event.getTypeInt() & com.google.gwt.user.client.Event.ONKEYUP) > 0) {
@@ -332,7 +332,7 @@ public abstract class AComponent extends ADestroyable {
                 break;
         }
     }
-    
+
     private final IntegerProperty translateX = new IntegerProperty(0, false, false);
     private final IntegerProperty translateY = new IntegerProperty(0, false, false);
     private final DoubleProperty rotate = new DoubleProperty(0.0, false, false);
@@ -415,7 +415,7 @@ public abstract class AComponent extends ADestroyable {
 
     };
     private final ARunOnce postConstructRunOnce = new ARunOnce() {
-		
+
 		@Override
 		protected void onRun() {
 			postConstruct();
@@ -429,7 +429,7 @@ public abstract class AComponent extends ADestroyable {
      */
     public AComponent(Element rootElement) {
         this.element = rootElement;
-        this.element.getStyle().setProperty("boxSizing", "content-box");
+        this.element.getStyle().setProperty("boxSizing", "border-box");
         this.element.setAttribute("draggable", "false");
         this.element.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
         getElement().getStyle().setOutlineStyle(com.google.gwt.dom.client.Style.OutlineStyle.NONE);
@@ -660,13 +660,13 @@ public abstract class AComponent extends ADestroyable {
 
         this.applyDefaultStyle(AComponent.class);
     }
-    
+
     protected void invokePostConstruct() {
     	postConstructRunOnce.run();
     }
-    
+
     protected void postConstruct() {
-    	
+
     }
 
     void setCubeePanel(CubeePanel cubeePanel) {
@@ -1146,7 +1146,7 @@ public abstract class AComponent extends ADestroyable {
 		}
 		if (listener != null) {
 			dragStartNativeListener = new INativeEventListener() {
-				
+
 				@Override
 				public void onFired(JavaScriptObject jsObj) {
 					listener.onFired(new DragAndDropEventArgs(jsObj));
@@ -1167,7 +1167,7 @@ public abstract class AComponent extends ADestroyable {
 		}
 		if (listener != null) {
 			dragNativeListener = new INativeEventListener() {
-				
+
 				@Override
 				public void onFired(JavaScriptObject jsObj) {
 					listener.onFired(new DragAndDropEventArgs(jsObj));
@@ -1188,7 +1188,7 @@ public abstract class AComponent extends ADestroyable {
 		}
 		if (listener != null) {
 			dragEnterNativeListener = new INativeEventListener() {
-				
+
 				@Override
 				public void onFired(JavaScriptObject jsObj) {
 					listener.onFired(new DragAndDropEventArgs(jsObj));
@@ -1209,7 +1209,7 @@ public abstract class AComponent extends ADestroyable {
 		}
 		if (listener != null) {
 			dragLeaveNativeListener = new INativeEventListener() {
-				
+
 				@Override
 				public void onFired(JavaScriptObject jsObj) {
 					listener.onFired(new DragAndDropEventArgs(jsObj));
@@ -1230,7 +1230,7 @@ public abstract class AComponent extends ADestroyable {
 		}
 		if (listener != null) {
 			dragOverNativeListener = new INativeEventListener() {
-				
+
 				@Override
 				public void onFired(JavaScriptObject jsObj) {
 					listener.onFired(new DragAndDropEventArgs(jsObj));
@@ -1251,7 +1251,7 @@ public abstract class AComponent extends ADestroyable {
 		}
 		if (listener != null) {
 			dropNativeListener = new INativeEventListener() {
-				
+
 				@Override
 				public void onFired(JavaScriptObject jsObj) {
 					listener.onFired(new DragAndDropEventArgs(jsObj));
@@ -1272,7 +1272,7 @@ public abstract class AComponent extends ADestroyable {
 		}
 		if (listener != null) {
 			dragEndNativeListener = new INativeEventListener() {
-				
+
 				@Override
 				public void onFired(JavaScriptObject jsObj) {
 					listener.onFired(new DragAndDropEventArgs(jsObj));
@@ -1352,10 +1352,10 @@ public abstract class AComponent extends ADestroyable {
                 ctrlPressed, shiftPressed, metaPressed, type);
     }
 
-//	boolean doPointerEventFallingDown(int screenX, int screenY, int parentScreenX, int parentScreenY, 
-//			int x, int y, int wheelVelocity, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, 
+//	boolean doPointerEventFallingDown(int screenX, int screenY, int parentScreenX, int parentScreenY,
+//			int x, int y, int wheelVelocity, boolean altPressed, boolean ctrlPressed, boolean shiftPressed,
 //			boolean metaPressed, int type) {
-//		return onPointerEventFallingDown(screenX, screenY, parentScreenX, parentScreenY, x, y, wheelVelocity, altPressed, 
+//		return onPointerEventFallingDown(screenX, screenY, parentScreenX, parentScreenY, x, y, wheelVelocity, altPressed,
 //				ctrlPressed, shiftPressed, metaPressed, type);
 //	}
     /**
@@ -1541,7 +1541,7 @@ public abstract class AComponent extends ADestroyable {
     public final BooleanProperty hoveredProperty() {
         return this.hovered;
     }
-    
+
     public final BooleanProperty pressedProperty() {
         return this.pressed;
     }
