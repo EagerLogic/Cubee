@@ -26,48 +26,49 @@ import com.eagerlogic.cubee.client.utils.ARunOnce;
  * @author dipacs
  */
 class Popups {
-    
+
     private static final List<APopup> popups = new ArrayList<APopup>();
     private static final ARunOnce layoutRunOnce = new ARunOnce() {
-		
+
 		@Override
 		protected void onRun() {
 			layout();
 		}
 	};
-    
+
     static void addPopup(APopup popup) {
         popups.add(popup);
         requestLayout();
     }
-    
+
     static void removePopup(APopup popup) {
         popups.remove(popup);
         requestLayout();
     }
-    
+
     static void requestLayout() {
     	layoutRunOnce.run();
     }
-    
+
     private static void layout() {
         for (APopup popup : popups) {
             popup.layout();
         }
     }
-    
+
     public static boolean doPointerEventClimbingUp(int x, int y, int wheelVelocity,
-            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
-        for (APopup popup : popups) {
-            if (popup.doPointerEventClimbingUp(x, y, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
+            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type, int button, com.google.gwt.user.client.Event nativeEvent) {
+        for (int i = popups.size() - 1; i >= 0; i--) {
+			APopup popup = popups.get(i);
+            if (popup.doPointerEventClimbingUp(x, y, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type, button, nativeEvent)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     private Popups() {
-        
+
     }
-    
+
 }

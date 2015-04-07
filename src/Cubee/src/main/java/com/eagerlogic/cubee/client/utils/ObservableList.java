@@ -28,58 +28,58 @@ import java.util.ListIterator;
  * @author dipacs
  */
 public final class ObservableList<T> implements List<T> {
-    
+
     private final List<IListChangeListener<T>> listeners = new LinkedList<IListChangeListener<T>>();
-    
+
     private final List<T> list;
-    
+
     public ObservableList() {
         this(new ArrayList<T>());
     }
-    
-    private ObservableList(List<T> list) {
+
+    public ObservableList(List<T> list) {
         if (list == null) {
             throw new NullPointerException("The 'list' property can not be null.");
         }
         this.list = list;
     }
-    
+
     public void addListener(IListChangeListener<T> listener) {
         if (hasListener(listener)) {
             throw new IllegalArgumentException("This listener already added.");
         }
         listeners.add(listener);
     }
-    
+
     public void removeListener(IListChangeListener<T> listener) {
         listeners.remove(listener);
     }
-    
+
     public boolean hasListener(IListChangeListener<T> listener) {
         if (listener == null) {
             throw new NullPointerException("The 'listener' parameter can not be null.");
         }
         return listeners.contains(listener);
     }
-    
+
     private void fireItemAddedEvent(int index, T item) {
         for (IListChangeListener<T> listener : listeners) {
             listener.onItemAdded(index, item, this);
         }
     }
-    
+
     private void fireItemRemovedEvent(int index, T item) {
         for (IListChangeListener<T> listener : listeners) {
             listener.onItemRemoved(index, item, this);
         }
     }
-    
+
     private void fireItemUpdatedEvent(int index, T oldItem, T newItem) {
         for (IListChangeListener<T> listener : listeners) {
             listener.onItemUpdated(index, oldItem, newItem, this);
         }
     }
-    
+
     private void fireClearedEvent() {
         for (IListChangeListener<T> listener : listeners) {
             listener.onCleared(this);
@@ -242,5 +242,5 @@ public final class ObservableList<T> implements List<T> {
         // TODO implementálni
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

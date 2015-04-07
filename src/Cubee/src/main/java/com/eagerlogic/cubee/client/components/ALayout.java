@@ -47,7 +47,7 @@ public abstract class ALayout extends AComponent {
 
     @Override
     final boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
-            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
+            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type, int button, com.google.gwt.user.client.Event nativeEvent) {
         if (!handlePointerProperty().get()) {
             return false;
         }
@@ -58,7 +58,7 @@ public abstract class ALayout extends AComponent {
             return false;
         }
         if (onPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed,
-                ctrlPressed, shiftPressed, metaPressed, type)) {
+                ctrlPressed, shiftPressed, metaPressed, type, button)) {
             for (int i = getChildren().size() - 1; i >= 0; i--) {
                 AComponent child = getChildren().get(i);
                 if (child != null) {
@@ -81,7 +81,7 @@ public abstract class ALayout extends AComponent {
                         childY = childY - top;
                         // TODO scale back point
                         if (child.doPointerEventClimbingUp(screenX, screenY, childX, childY, wheelVelocity,
-                                altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
+                                altPressed, ctrlPressed, shiftPressed, metaPressed, type, button, nativeEvent)) {
                             return true;
                         }
                     }
@@ -92,11 +92,11 @@ public abstract class ALayout extends AComponent {
             return false;
         } else {
             return onPointerEventFallingDown(screenX, screenY, x, y, wheelVelocity, altPressed,
-                    ctrlPressed, shiftPressed, metaPressed, type);
+                    ctrlPressed, shiftPressed, metaPressed, type, button, nativeEvent);
         }
 
     }
-    
+
     private Point2D rotatePoint(int cx, int cy, int x, int y, double angle) {
         angle = (angle * 360) * (Math.PI / 180);
         x = x - cx;
@@ -107,7 +107,7 @@ public abstract class ALayout extends AComponent {
         int ry = (int) ((sin * x) + (cos * y));
         rx = rx + cx;
         ry = ry + cy;
-        
+
         return new Point2D(rx, ry);
     }
 
@@ -116,13 +116,13 @@ public abstract class ALayout extends AComponent {
      * set the size of this layout if needed and set the positions of the children if needed.
      */
     protected abstract void onLayout();
-    
+
     public final List<AComponent> getComponentsAtPosition(int x, int y) {
         LinkedList<AComponent> res = new LinkedList<AComponent>();
         getComponentsAtPosition(this, x, y, res);
         return res;
     }
-    
+
     private void getComponentsAtPosition(ALayout root, int x, int y, LinkedList<AComponent> result) {
         if (x >= 0 && x <= root.boundsWidthProperty().get() && y >= 0 && y <= root.boundsHeightProperty().get()) {
             result.addFirst(root);
@@ -146,16 +146,16 @@ public abstract class ALayout extends AComponent {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        
+
         children.clear(true);
     }
-    
+
     protected void setChildLeft(AComponent child, int left) {
         child.setLeft(left);
     }
-    
+
     protected void setChildTop(AComponent child, int top) {
         child.setTop(top);
     }
-    
+
 }

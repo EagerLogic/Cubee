@@ -174,7 +174,7 @@ public abstract class APopup {
         onClosed();
         return true;
     }
-    
+
     protected boolean isCloseAllowed() {
     	return true;
     }
@@ -230,12 +230,12 @@ public abstract class APopup {
     protected void setCenter(boolean center) {
         this.centerProperty().set(center);
     }
-    
+
     boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
-            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
-        return this.popupRoot.doPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type);
+            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type, int button, com.google.gwt.user.client.Event nativeEvent) {
+        return this.popupRoot.doPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type, button, nativeEvent);
     }
-    
+
     final void layout() {
         this.popupRoot.widthProperty().set(Window.getClientWidth());
         this.popupRoot.heightProperty().set(Window.getClientHeight());

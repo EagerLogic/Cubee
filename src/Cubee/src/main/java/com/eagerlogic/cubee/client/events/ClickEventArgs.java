@@ -14,8 +14,9 @@ public class ClickEventArgs extends EventArgs {
     private final boolean ctrlPressed;
     private final boolean shiftPressed;
     private final boolean metaPressed;
+    private final int button;
 
-    public ClickEventArgs(int screenX, int screenY, int x, int y, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, Object sender) {
+    public ClickEventArgs(int screenX, int screenY, int x, int y, boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int button, Object sender) {
         super(sender);
         this.screenX = screenX;
         this.screenY = screenY;
@@ -25,6 +26,7 @@ public class ClickEventArgs extends EventArgs {
         this.ctrlPressed = ctrlPressed;
         this.shiftPressed = shiftPressed;
         this.metaPressed = metaPressed;
+        this.button = button;
     }
 
     public int getScreenX() {
@@ -57,6 +59,10 @@ public class ClickEventArgs extends EventArgs {
 
     public boolean isMetaPressed() {
         return metaPressed;
+    }
+
+    public int getButton() {
+        return button;
     }
 
 }

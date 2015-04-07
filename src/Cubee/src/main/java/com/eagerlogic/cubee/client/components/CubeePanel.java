@@ -21,10 +21,10 @@ public final class CubeePanel {
 
     private final Panel contentPanel;
     private AComponent rootComponent;
-    
-    
+
+
     private final Element element;
-    
+
     private int left = -1;
     private int top = -1;
     private int clientWidth = -1;
@@ -50,7 +50,7 @@ public final class CubeePanel {
 
         checkBounds();
         requestLayout();
-        
+
         new Timer() {
 
             @Override
@@ -65,7 +65,7 @@ public final class CubeePanel {
             }
         }.scheduleRepeating(100);
     }
-    
+
     private void checkBounds() {
         int newLeft = element.getAbsoluteLeft();
         int newTop = element.getAbsoluteTop();
@@ -105,7 +105,7 @@ public final class CubeePanel {
         }
         layoutRunOnce.run();
     }
-    
+
     private void layout() {
         Popups.requestLayout();
         this.contentPanel.layout();
@@ -123,18 +123,18 @@ public final class CubeePanel {
             this.rootComponent = rootComponent;
         }
     }
-    
+
     boolean doPointerEventClimbingUp(int screenX, int screenY, int wheelVelocity,
-            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
-    	if (Popups.doPointerEventClimbingUp(screenX, screenY, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type)) {
+            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type, int button, com.google.gwt.user.client.Event nativeEvent) {
+    	if (Popups.doPointerEventClimbingUp(screenX, screenY, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type, button, nativeEvent)) {
             return true;
         }
-        
+
         if (!Position.ABSOLUTE.equals(element.getStyle().getPosition())) {
         	screenX = screenX + Window.getScrollLeft() - left;
         	screenY = screenY + Window.getScrollTop() - top;
         }
-        return contentPanel.doPointerEventClimbingUp(screenX, screenY, screenX, screenY, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type);
+        return contentPanel.doPointerEventClimbingUp(screenX, screenY, screenX, screenY, wheelVelocity, altPressed, ctrlPressed, shiftPressed, metaPressed, type, button, nativeEvent);
     }
 
     public final IntegerProperty clientWidthProperty() {

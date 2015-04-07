@@ -126,6 +126,7 @@ public class TextBox extends AComponent {
     private final BooleanProperty underline = new BooleanProperty(false, false, false);
     private final IntegerProperty fontSize = new IntegerProperty(12, false, false);
     private final Property<FontFamily> fontFamily = new Property<FontFamily>(FontFamily.Arial, false, false);
+	private final StringProperty placeholder = new StringProperty(null, true);
 
     public TextBox() {
         this(DOM.createInputText());
@@ -275,6 +276,18 @@ public class TextBox extends AComponent {
         });
         background.invalidate();
 
+		placeholder.addChangeListener(new IChangeListener() {
+
+			@Override
+			public void onChanged(Object sender) {
+				if (placeholder.get() == null) {
+					getElement().removeAttribute("placeholder");
+				} else {
+					getElement().setAttribute("placeholder", placeholder.get());
+				}
+			}
+		});
+
         this.applyDefaultStyle(TextBox.class);
     }
 
@@ -343,5 +356,9 @@ public class TextBox extends AComponent {
     public final Property<FontFamily> fontFamilyProperty() {
         return fontFamily;
     }
+
+	public StringProperty placeholderProperty() {
+		return placeholder;
+	}
 
 }

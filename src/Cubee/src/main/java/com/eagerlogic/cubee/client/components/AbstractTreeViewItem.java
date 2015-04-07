@@ -11,7 +11,6 @@ import com.eagerlogic.cubee.client.events.IEventListener;
 import com.eagerlogic.cubee.client.properties.BooleanProperty;
 import com.eagerlogic.cubee.client.properties.IChangeListener;
 import com.eagerlogic.cubee.client.properties.KeyFrame;
-import com.eagerlogic.cubee.client.properties.Property;
 import com.eagerlogic.cubee.client.properties.Timeline;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,19 +20,19 @@ import java.util.List;
  * @author dipacs
  */
 public abstract class AbstractTreeViewItem<T> extends AUserControl {
-    
+
     static final class ItemClickedEventArgs extends EventArgs {
 
         public ItemClickedEventArgs(AbstractTreeViewItem<?> sender) {
             super(sender);
         }
-        
+
         public final AbstractTreeViewItem<?> getItem() {
             return (AbstractTreeViewItem<?>) getSender();
         }
-        
+
     }
-    
+
     private final Event<ItemClickedEventArgs> onItemClicked = new Event<ItemClickedEventArgs>();
     private final Event<EventArgs> onChildrenChanged = new Event<EventArgs>();
 
@@ -44,16 +43,16 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
     private final BooleanProperty leafWriter = new BooleanProperty(true, false, false);
     private final List<AbstractTreeViewItem<?>> items = new ArrayList<AbstractTreeViewItem<?>>();
     private final T value;
-    
+
     private VBox root;
     private Panel rootComponentHolder;
     private Panel childrenPanel;
     private VBox childrenHolder;
     private AComponent rootComponent;
-    
+
     private Timeline timeline;
-    
-    
+
+
     private final IEventListener<ItemClickedEventArgs> onItemClickedEventListener = new IEventListener<ItemClickedEventArgs>() {
 
         @Override
@@ -64,29 +63,29 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
 
     public AbstractTreeViewItem(T value) {
         this.value = value;
-        
+
         selected.initReadonlyBind(selectedWriter);
         leaf.initReadonlyBind(leafWriter);
-        
+
         root = new VBox();
         root.pointerTransparentProperty().set(true);
         super.getChildren().add(root);
-        
+
         rootComponentHolder = new Panel();
         rootComponentHolder.pointerTransparentProperty().set(Boolean.TRUE);
         root.getChildren().add(rootComponentHolder);
-        
+
         childrenPanel = new Panel();
         childrenPanel.transformCenterYProperty().set(0.0);
         childrenPanel.scaleYProperty().set(0.0);
         childrenPanel.pointerTransparentProperty().set(true);
         root.getChildren().add(childrenPanel);
-        
+
         childrenHolder = new VBox();
         childrenHolder.translateXProperty().set(20);
         childrenHolder.pointerTransparentProperty().set(true);
         childrenPanel.getChildren().add(childrenHolder);
-        
+
         expanded.addChangeListener(new IChangeListener() {
 
             @Override
@@ -95,12 +94,12 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
             }
         });
     }
-    
+
     private void startAnimation() {
         if (timeline != null) {
             timeline.stop();
         }
-        
+
         if (expanded.get()) {
             timeline = new Timeline(new KeyFrame(0, childrenPanel.scaleYProperty(), 0.0)
                     , new KeyFrame(200, childrenPanel.scaleYProperty(), 1.0));
@@ -110,7 +109,7 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
         }
         timeline.start();
     }
-    
+
     private void refreshChildren() {
         childrenHolder.getChildren().clear();
         if (getItems() != null) {
@@ -141,7 +140,7 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
     public final BooleanProperty selectedProperty() {
         return selected;
     }
-    
+
     final BooleanProperty selectedWriterProperty() {
         return selectedWriter;
     }
@@ -170,11 +169,11 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
     final Event<ItemClickedEventArgs> onItemClickedEvent() {
         return onItemClicked;
     }
-    
+
     protected final void fireItemClickedEvent(AbstractTreeViewItem item) {
         this.onItemClicked.fireEvent(new ItemClickedEventArgs(item));
     }
-    
+
     public final void addChildren(AbstractTreeViewItem item) {
         if (item == null) {
             throw new NullPointerException("The item property can not be null.");
@@ -184,7 +183,7 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
         refreshChildren();
         onChildrenChanged.fireEvent(new EventArgs(this));
     }
-    
+
     public final AbstractTreeViewItem<?> removeChildren(int index) {
         AbstractTreeViewItem<?> res = items.remove(index);
         res.onItemClicked.removeListener(onItemClickedEventListener);
@@ -192,14 +191,14 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
         onChildrenChanged.fireEvent(new EventArgs(this));
         return res;
     }
-    
+
     public final void removeChildren(AbstractTreeViewItem<?> item) {
         item.onItemClicked.removeListener(onItemClickedEventListener);
         items.remove(item);
         refreshChildren();
         onChildrenChanged.fireEvent(new EventArgs(this));
     }
-    
+
     public final void insertChildren(AbstractTreeViewItem<?> item, int index) {
         if (item == null) {
             throw new NullPointerException("The item property can not be null.");
@@ -209,7 +208,7 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
         refreshChildren();
         onChildrenChanged.fireEvent(new EventArgs(this));
     }
-    
+
     public final void clearChildren() {
         for (AbstractTreeViewItem item : items) {
             item.onItemClicked.removeListener(onItemClickedEventListener);
@@ -218,7 +217,7 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
         refreshChildren();
         onChildrenChanged.fireEvent(new EventArgs(this));
     }
-    
+
     public final int getChildrenCount() {
         return items.size();
     }
@@ -226,7 +225,7 @@ public abstract class AbstractTreeViewItem<T> extends AUserControl {
     public Event<EventArgs> onChildrenChangedEvent() {
         return onChildrenChanged;
     }
-    
+
     void deselect() {
         this.selectedWriter.set(false);
         for (AbstractTreeViewItem item : items) {

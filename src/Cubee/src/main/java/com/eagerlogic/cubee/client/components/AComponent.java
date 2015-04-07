@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.eagerlogic.cubee.client.EventQueue;
 import com.eagerlogic.cubee.client.events.ClickEventArgs;
+import com.eagerlogic.cubee.client.events.ContextMenuEventArgs;
 import com.eagerlogic.cubee.client.events.DragAndDropEventArgs;
 import com.eagerlogic.cubee.client.events.Event;
 import com.eagerlogic.cubee.client.events.EventArgs;
@@ -179,15 +180,15 @@ public abstract class AComponent extends ADestroyable {
     }
 
     private static void fireUpEvents(int screenX, int screenY, boolean altPressed, boolean ctrlPressed,
-            boolean shiftPressed, boolean metaPressed) {
+            boolean shiftPressed, boolean metaPressed, int button, com.google.gwt.user.client.Event nativeEvent) {
         long stamp = System.currentTimeMillis();
         for (MouseDownEventLog log : pointerDownEvents) {
             MouseUpEventArgs args = new MouseUpEventArgs(screenX, screenY, screenX - log.getScreenX(),
-                    screenY - log.getScreenY(), altPressed, ctrlPressed, shiftPressed, metaPressed, log.getComponent());
+                    screenY - log.getScreenY(), altPressed, ctrlPressed, shiftPressed, metaPressed, button, nativeEvent, log.getComponent());
             log.getComponent().onMouseUp.fireEvent(args);
             if (stamp - log.getTimeStamp() < 500) {
                 log.getComponent().onClick.fireEvent(new ClickEventArgs(screenX, screenY, log.getX(), log.getY(),
-                        altPressed, ctrlPressed, shiftPressed, metaPressed, log.getComponent()));
+                        altPressed, ctrlPressed, shiftPressed, metaPressed, button, log.getComponent()));
             }
         }
         pointerDownEvents.clear();
@@ -242,11 +243,11 @@ public abstract class AComponent extends ADestroyable {
                 if (cp != null) {
                     cp.doPointerEventClimbingUp(x, y, wheelVelocity,
                             event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
-                            event.getTypeInt());
+                            event.getTypeInt(), event.getButton(), event);
                 } else {
                     Popups.doPointerEventClimbingUp(x, y, wheelVelocity,
                             event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
-                            event.getTypeInt());
+                            event.getTypeInt(), event.getButton(), event);
                 }
 
                 break;
@@ -259,11 +260,11 @@ public abstract class AComponent extends ADestroyable {
                     if (cp != null) {
                         cp.doPointerEventClimbingUp(x, y, wheelVelocity,
                                 event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
-                                event.getTypeInt());
+                                event.getTypeInt(), event.getButton(), event);
                     } else {
                         Popups.doPointerEventClimbingUp(x, y, wheelVelocity,
                                 event.getAltKey(), event.getCtrlKey(), event.getShiftKey(), event.getMetaKey(),
-                                event.getTypeInt());
+                                event.getTypeInt(), event.getButton(), event);
                     }
                 }
                 break;
@@ -271,7 +272,7 @@ public abstract class AComponent extends ADestroyable {
             case com.google.gwt.user.client.Event.ONMOUSEUP:
                 event.stopPropagation();
                 fireUpEvents(event.getClientX(), event.getClientY(), event.getAltKey(), event.getCtrlKey(), event
-                        .getShiftKey(), event.getMetaKey());
+                        .getShiftKey(), event.getMetaKey(), event.getButton(), event);
                 break;
             case com.google.gwt.user.client.Event.ONMOUSEOVER:
                 if (pointerTransparent.get()) {
@@ -330,6 +331,9 @@ public abstract class AComponent extends ADestroyable {
                         event.getShiftKey(), event.getMetaKey(), AComponent.this);
                 onKeyUp.fireEvent(keyArgs);
                 break;
+            case com.google.gwt.user.client.Event.ONCONTEXTMENU:
+                onContextMenu.fireEvent(new ContextMenuEventArgs(event, AComponent.this));
+                break;
         }
     }
 
@@ -385,6 +389,7 @@ public abstract class AComponent extends ADestroyable {
     private final Event<KeyEventArgs> onKeyPress = new Event<KeyEventArgs>();
     private final Event<KeyEventArgs> onKeyUp = new Event<KeyEventArgs>();
     private final Event<ParentChangedEventArgs> onParentChanged = new Event<ParentChangedEventArgs>();
+    private final Event<ContextMenuEventArgs> onContextMenu = new Event<ContextMenuEventArgs>();
     private IDragAndDropEventListener dragStartListener;
     private IDragAndDropEventListener dragListener;
     private IDragAndDropEventListener dragEnterListener;
@@ -429,7 +434,7 @@ public abstract class AComponent extends ADestroyable {
      */
     public AComponent(Element rootElement) {
         this.element = rootElement;
-        this.element.getStyle().setProperty("boxSizing", "border-box");
+        this.element.getStyle().setProperty("boxSizing", "content-box");
         this.element.setAttribute("draggable", "false");
         this.element.getStyle().setPosition(com.google.gwt.dom.client.Style.Position.ABSOLUTE);
         getElement().getStyle().setOutlineStyle(com.google.gwt.dom.client.Style.OutlineStyle.NONE);
@@ -1096,6 +1101,10 @@ public abstract class AComponent extends ADestroyable {
         return onClick;
     }
 
+    public Event<ContextMenuEventArgs> onContextMenuEvent() {
+        return onContextMenu;
+    }
+
     public final Event<MouseDownEventArgs> onMouseDownEvent() {
         return onMouseDown;
     }
@@ -1333,7 +1342,7 @@ public abstract class AComponent extends ADestroyable {
      * underlaying components can handle this event.
      */
     boolean doPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
-            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
+            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type, int button, com.google.gwt.user.client.Event nativeEvent) {
         if (!handlePointer.get()) {
             return false;
         }
@@ -1347,9 +1356,9 @@ public abstract class AComponent extends ADestroyable {
             return false;
         }
         onPointerEventClimbingUp(screenX, screenY, x, y, wheelVelocity, altPressed,
-                ctrlPressed, shiftPressed, metaPressed, type);
+                ctrlPressed, shiftPressed, metaPressed, type, button);
         return onPointerEventFallingDown(screenX, screenY, x, y, wheelVelocity, altPressed,
-                ctrlPressed, shiftPressed, metaPressed, type);
+                ctrlPressed, shiftPressed, metaPressed, type, button, nativeEvent);
     }
 
 //	boolean doPointerEventFallingDown(int screenX, int screenY, int parentScreenX, int parentScreenY,
@@ -1378,7 +1387,7 @@ public abstract class AComponent extends ADestroyable {
      * climbing up event.
      */
     protected boolean onPointerEventClimbingUp(int screenX, int screenY, int x, int y, int wheelVelocity,
-            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
+            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type, int button) {
         return true;
     }
 
@@ -1402,11 +1411,11 @@ public abstract class AComponent extends ADestroyable {
      * underlaying components can also get the falling down event.
      */
     protected boolean onPointerEventFallingDown(int screenX, int screenY, int x, int y, int wheelVelocity,
-            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type) {
+            boolean altPressed, boolean ctrlPressed, boolean shiftPressed, boolean metaPressed, int type, int button, com.google.gwt.user.client.Event nativeEvent) {
         switch (type) {
             case MouseEventTypes.TYPE_MOUSE_DOWN:
                 MouseDownEventArgs mdea = new MouseDownEventArgs(screenX, screenY, x, y, altPressed, ctrlPressed,
-                        shiftPressed, metaPressed, this);
+                        shiftPressed, metaPressed, button, nativeEvent, this);
                 registerDownEvent(screenX, screenY, x, y, altPressed, ctrlPressed, shiftPressed, metaPressed);
                 onMouseDown.fireEvent(mdea);
                 break;

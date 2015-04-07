@@ -24,11 +24,11 @@ import com.eagerlogic.cubee.client.style.styles.FontFamily;
  * @author dipacs
  */
 public final class SimpleTreeViewItem<T> extends AbstractTreeViewItem<T> {
-    
+
     public static interface ValueConverter<T> {
-        
+
         public String convert(T value);
-        
+
     }
 
     private final ColorProperty textForeColor = new ColorProperty(Color.BLACK, false, false);
@@ -40,7 +40,7 @@ public final class SimpleTreeViewItem<T> extends AbstractTreeViewItem<T> {
             0x8000c0ff)), true, false);
     private AbstractTreeViewItemGliph gliph;
     private HBox root;
-    
+
     private final IEventListener<EventArgs> onChildrenChangedEventListener = new IEventListener<EventArgs>() {
 
         @Override
@@ -48,9 +48,9 @@ public final class SimpleTreeViewItem<T> extends AbstractTreeViewItem<T> {
             refresh();
         }
     };
-    
+
     private final ValueConverter<T> valueConverter;
-    
+
     public SimpleTreeViewItem(T value) {
         this(value, null);
     }
@@ -59,24 +59,25 @@ public final class SimpleTreeViewItem<T> extends AbstractTreeViewItem<T> {
         super(value);
         this.valueConverter = valueConverter;
         Panel rootPanel = new Panel();
+        rootPanel.pointerTransparentProperty().set(true);
         rootPanel.cursorProperty().set(ECursor.POINTER);
         this.setRootComponent(rootPanel);
-        
+
         root = new HBox();
         root.pointerTransparentProperty().set(true);
         rootPanel.getChildren().add(root);
         this.onChildrenChangedEvent().addListener(onChildrenChangedEventListener);
-        
-        rootPanel.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
+
+        this.onClickEvent().addListener(new IEventListener<ClickEventArgs>() {
 
             @Override
             public void onFired(ClickEventArgs args) {
                 fireItemClickedEvent(SimpleTreeViewItem.this);
             }
         });
-        
+
         rootPanel.backgroundProperty().bind(new AExpression<ABackground>() {
-            
+
             {
                 bind(selectedProperty());
             }
@@ -86,7 +87,7 @@ public final class SimpleTreeViewItem<T> extends AbstractTreeViewItem<T> {
                 return selectedProperty().get() ? selectedBackground.get() : null;
             }
         });
-        
+
         refresh();
     }
 
