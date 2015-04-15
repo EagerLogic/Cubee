@@ -140,10 +140,8 @@ public class TextBox extends AComponent {
             public void onChanged(Object sender) {
                 if (width.get() == null) {
                     getElement().getStyle().clearWidth();
-                    getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.AUTO);
                 } else {
                     getElement().getStyle().setWidth(width.get(), com.google.gwt.dom.client.Style.Unit.PX);
-                    getElement().getStyle().setOverflowX(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 }
                 requestLayout();
             }
@@ -153,10 +151,8 @@ public class TextBox extends AComponent {
             public void onChanged(Object sender) {
                 if (height.get() == null) {
                     getElement().getStyle().clearHeight();
-                    getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.AUTO);
                 } else {
                     getElement().getStyle().setHeight(height.get(), com.google.gwt.dom.client.Style.Unit.PX);
-                    getElement().getStyle().setOverflowY(com.google.gwt.dom.client.Style.Overflow.HIDDEN);
                 }
                 requestLayout();
             }

@@ -58,4 +58,24 @@ public final class HTMLComponent extends AUserControl {
         return super.borderProperty();
     }
 
+    @Override
+    public IntegerProperty maxHeightProperty() {
+        return super.maxHeightProperty();
+    }
+
+    @Override
+    public IntegerProperty maxWidthProperty() {
+        return super.maxWidthProperty();
+    }
+
+    @Override
+    public IntegerProperty minHeightProperty() {
+        return super.minHeightProperty();
+    }
+
+    @Override
+    public IntegerProperty minWidthProperty() {
+        return super.minWidthProperty();
+    }
+
 }

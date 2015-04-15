@@ -32,8 +32,6 @@ public final class SimpleTreeViewItem<T> extends AbstractTreeViewItem<T> {
     }
 
     private final ColorProperty textForeColor = new ColorProperty(Color.BLACK, false, false);
-    private final ColorProperty iconColor = new ColorProperty(Color.BLACK, false, false);
-    private final IntegerProperty iconSize = new IntegerProperty(12, false, false);
     private final IntegerProperty fontSize = new IntegerProperty(12, false, false);
     private final Property<FontFamily> fontFamily = new Property<FontFamily>(FontFamily.Arial, false, false);
     private final BackgroundProperty selectedBackground = new BackgroundProperty(new ColorBackground(Color.getArgbColor(
@@ -152,14 +150,6 @@ public final class SimpleTreeViewItem<T> extends AbstractTreeViewItem<T> {
 
     public ColorProperty textForeColorProperty() {
         return textForeColor;
-    }
-
-    public ColorProperty iconColorProperty() {
-        return iconColor;
-    }
-
-    public IntegerProperty iconSizeProperty() {
-        return iconSize;
     }
 
     public IntegerProperty fontSizeProperty() {

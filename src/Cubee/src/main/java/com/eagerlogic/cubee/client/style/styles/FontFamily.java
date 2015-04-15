@@ -21,17 +21,17 @@ public class FontFamily implements IStyle {
     public static final FontFamily Verdana = new FontFamily("Verdana, Geneva, sans-serif");
     public static final FontFamily CourierNew = new FontFamily("'Courier New', Courier, monospace");
     public static final FontFamily LucidaConsole = new FontFamily("'Lucida Console', Monaco, monospace");
-    
+
     static {
         initFontContainerStyle();
     }
-    
+
     private static native void initFontContainerStyle() /*-{
         $wnd.fontsStyle = document.createElement('style');
         $wnd.fontsStyle.type = "text/css";
         $doc.getElementsByTagName('head')[0].appendChild($wnd.fontsStyle);
     }-*/;
-    
+
     public static native void registerFont(String name, String src, String extra) /*-{
         var ex = extra;
         if (ex == null) {

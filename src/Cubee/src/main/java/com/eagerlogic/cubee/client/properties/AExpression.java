@@ -15,9 +15,9 @@ import com.eagerlogic.cubee.client.utils.ARunOnce;
  * @author dipacs
  */
 public abstract class AExpression<T> implements IProperty<T>, IObservable {
-	
+
 	private final ARunOnce notifyListenersOnce = new ARunOnce() {
-		
+
 		@Override
 		protected void onRun() {
 			fireChangeListeners();
@@ -37,15 +37,15 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
     public abstract T calculate();
     private boolean valid = false;
     private T value;
-    
+
     public AExpression() {
-    	
+
     }
-    
+
     public AExpression(IProperty<?> property, IProperty<?>... properties) {
     	this.bind(property, properties);
     }
-    
+
     public AExpression(List<? extends IProperty<?>> properties) {
     	bind(properties);
     }
@@ -70,7 +70,8 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
         }
 
         changeListeners.add(listener);
-        invalidate();
+
+        get();
     }
 
     @Override
@@ -124,7 +125,7 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
 
         this.invalidate();
     }
-    
+
     public void bind(List<? extends IProperty<?>> properties) {
     	for (IProperty prop : properties) {
             prop.addChangeListener(bindingListener);
@@ -133,7 +134,7 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
 
         this.invalidate();
     }
-    
+
     public void unbind() {
     	for (IProperty prop : bindingSources) {
     		prop.removeChangeListener(bindingListener);
@@ -141,13 +142,13 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
     	bindingSources.clear();
     	this.invalidate();
     }
-    
+
     public void unbind(IProperty property) {
     	property.removeChangeListener(bindingListener);
     	this.bindingSources.remove(property);
     	this.invalidate();
     }
-    
+
     public void unbindTargets() {
     	// TODO null bindingSource of targets
     	changeListeners.clear();
@@ -158,20 +159,20 @@ public abstract class AExpression<T> implements IProperty<T>, IObservable {
         this.valid = false;
         notifyListenersOnce.run();
     }
-    
+
     public final void invalidateIfNeeded() {
     	if (!this.valid) {
     		return;
     	}
     	invalidate();
     }
-    
+
     private void fireChangeListeners() {
     	for (IChangeListener listener : changeListeners) {
             listener.onChanged(this);
         }
     }
-    
+
     public final void destroy() {
         changeListeners.clear();
         for (IProperty prop : bindingSources) {

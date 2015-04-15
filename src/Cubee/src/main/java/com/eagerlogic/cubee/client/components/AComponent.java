@@ -316,19 +316,19 @@ public abstract class AComponent extends ADestroyable {
             case com.google.gwt.user.client.Event.ONKEYDOWN:
                 event.stopPropagation();
                 keyArgs = new KeyEventArgs((char) event.getKeyCode(), event.getAltKey(), event.getCtrlKey(),
-                        event.getShiftKey(), event.getMetaKey(), AComponent.this);
+                        event.getShiftKey(), event.getMetaKey(), AComponent.this, event);
                 onKeyDown.fireEvent(keyArgs);
                 break;
             case com.google.gwt.user.client.Event.ONKEYPRESS:
                 event.stopPropagation();
                 keyArgs = new KeyEventArgs((char) event.getKeyCode(), event.getAltKey(), event.getCtrlKey(),
-                        event.getShiftKey(), event.getMetaKey(), AComponent.this);
+                        event.getShiftKey(), event.getMetaKey(), AComponent.this, event);
                 onKeyPress.fireEvent(keyArgs);
                 break;
             case com.google.gwt.user.client.Event.ONKEYUP:
                 event.stopPropagation();
                 keyArgs = new KeyEventArgs((char) event.getKeyCode(), event.getAltKey(), event.getCtrlKey(),
-                        event.getShiftKey(), event.getMetaKey(), AComponent.this);
+                        event.getShiftKey(), event.getMetaKey(), AComponent.this, event);
                 onKeyUp.fireEvent(keyArgs);
                 break;
             case com.google.gwt.user.client.Event.ONCONTEXTMENU:

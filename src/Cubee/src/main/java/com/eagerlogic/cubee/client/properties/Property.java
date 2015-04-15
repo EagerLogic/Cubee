@@ -16,7 +16,7 @@ import com.eagerlogic.cubee.shared.utils.ValidationException;
  * @param <T> The type of the value which is boxed in this property.
  */
 public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IProperty<T>> {
-	
+
 	private final LinkedList<IChangeListener> changeListeners = new LinkedList<IChangeListener>();
     private T value;
     private boolean valid = false;
@@ -190,7 +190,7 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
     	this.valid = false;
         fireChangeListeners();
     }
-    
+
     public final void invalidateIfNeeded() {
     	if (!this.valid) {
     		return;
@@ -220,6 +220,9 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
         }
 
         changeListeners.add(listener);
+
+        // validate the component
+        get();
     }
 
     @Override
@@ -279,19 +282,19 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
         if (readonly) {
             throw new IllegalStateException("Can't bind a readonly property.");
         }
-        
+
         if (other == null) {
         	throw new NullPointerException("The other parameter can not be null.");
         }
-        
+
         if (other.isReadonly()) {
         	throw new IllegalArgumentException("Can not bind a property bidirectionally to a readonly property.");
         }
-        
+
         if (other == this) {
             throw new IllegalArgumentException("Can not bind a property bidirectionally for themself.");
         }
-        
+
         if (isBound()) {
             throw new IllegalStateException("This property is already bound.");
         }
@@ -337,7 +340,7 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
             bidirectionalChangeListenerThis = null;
         }
     }
-    
+
     public void unbindTargets() {
     	// TODO null bindingSource of targets
     	changeListeners.clear();
@@ -363,7 +366,7 @@ public class Property<T> implements IProperty<T>, IAnimateable<T>, IBindable<IPr
     PropertyLine<T> createPropertyLine(LinkedList<KeyFrame> keyFrames) {
         return new PropertyLine<T>(keyFrames);
     }
-    
+
     public final void destroy() {
         unbind();
         changeListeners.clear();
